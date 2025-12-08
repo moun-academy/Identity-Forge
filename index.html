@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gratitude Reflections</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --font-scale: 1;
+      --bg: #f9fafb;
+      --card: #ffffff;
+      --text: #1f2933;
+      --muted: #52606d;
+      --accent: #3c79e6;
+      --border: #d9e2ec;
+      --shadow: 0 10px 30px rgba(31, 41, 51, 0.08);
+      --focus: 2px solid #3c79e6;
+      --transition: 180ms ease;
+    }
+
+    body.high-contrast {
+      color-scheme: light dark;
+      --bg: #0b0c0f;
+      --card: #1a1d23;
+      --text: #f4f5f7;
+      --muted: #e5e7eb;
+      --accent: #ffd166;
+      --border: #3b4554;
+      --shadow: none;
+      --focus: 3px solid #ffd166;
+    }
+
+    body.reduced-motion {
+      --transition: 0ms;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, Segoe UI, sans-serif;
+      font-size: calc(16px * var(--font-scale));
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      transition: background-color var(--transition), color var(--transition);
+      display: flex;
+      justify-content: center;
+      padding: 32px 16px 48px;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -999px;
+      top: 12px;
+      background: var(--accent);
+      color: #0b0c0f;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .skip-link:focus-visible {
+      left: 12px;
+      outline: var(--focus);
+    }
+
+    .container {
+      width: min(960px, 100%);
+      background: var(--card);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      transition: background-color var(--transition), border-color var(--transition), box-shadow var(--transition);
+    }
+
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      justify-content: space-between;
+    }
+
+    .title {
+      font-size: 1.7rem;
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .pill {
+      border: 1px solid var(--border);
+      background: transparent;
+      border-radius: 999px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color var(--transition), color var(--transition), border-color var(--transition);
+    }
+
+    .pill:focus-visible,
+    .toggle:focus-visible,
+    .action:focus-visible,
+    textarea:focus-visible,
+    select:focus-visible {
+      outline: var(--focus);
+      outline-offset: 2px;
+    }
+
+    .toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 12px;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      transition: background-color var(--transition), border-color var(--transition);
+    }
+
+    .toggle[aria-pressed="true"],
+    .pill.active {
+      background: var(--accent);
+      color: #0b0c0f;
+      border-color: var(--accent);
+    }
+
+    .section {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .prompt {
+      font-size: 1.1rem;
+      margin: 0 0 12px;
+      color: var(--text);
+    }
+
+    .hint {
+      color: var(--muted);
+      margin: 0 0 16px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 140px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 14px;
+      font-size: 1rem;
+      color: var(--text);
+      background: transparent;
+      transition: border-color var(--transition), background-color var(--transition);
+      resize: vertical;
+    }
+
+    .action {
+      margin-top: 12px;
+      padding: 12px 18px;
+      border-radius: 12px;
+      border: none;
+      background: var(--accent);
+      color: #0b0c0f;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .action:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .action:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    .status {
+      margin-top: 12px;
+      color: var(--muted);
+    }
+
+    .flex-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .contrast-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      background: rgba(60, 121, 230, 0.12);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .contrast-banner strong {
+      color: var(--accent);
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 24px 12px;
+      }
+
+      .controls {
+        width: 100%;
+      }
+
+      .header {
+        gap: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#gratitude-entry">Skip to reflection form</a>
+  <div class="container" role="main">
+    <header class="header">
+      <div>
+        <h1 class="title">Gentle Gratitude Check-In</h1>
+        <p class="hint">Choose the options that help you feel most comfortable engaging today.</p>
+      </div>
+      <div class="controls" aria-label="Accessibility settings">
+        <button class="toggle" id="contrastToggle" aria-pressed="false" aria-label="Toggle high contrast theme">
+          🌓 High contrast
+        </button>
+        <label class="toggle" for="textSize" aria-label="Adjust text size">
+          <span aria-hidden="true">🔍 Text size</span>
+          <input id="textSize" type="range" min="0.9" max="1.3" step="0.05" value="1" aria-label="Text size slider" />
+        </label>
+        <button class="toggle" id="motionToggle" aria-pressed="false" aria-label="Reduce motion and animation">
+          🕊️ Reduce motion
+        </button>
+      </div>
+    </header>
+
+    <section class="section" aria-labelledby="prompts">
+      <div class="contrast-banner" role="status" aria-live="polite">
+        <strong>Tip:</strong> You are welcome to move at a pace that feels kind to your body and mind.
+      </div>
+      <div class="flex-stack" id="prompts">
+        <div>
+          <p class="prompt">What is one small kindness you noticed today — from yourself or someone else?</p>
+          <p class="hint">Feel free to celebrate the tiniest gestures; they matter.</p>
+        </div>
+        <div>
+          <p class="prompt">How would you like to support yourself with compassion tonight?</p>
+          <p class="hint">You deserve care that matches your energy level.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="gratitude-entry">
+      <h2 id="gratitude-entry" class="prompt">Your gentle reflection</h2>
+      <p class="hint">Share as much or as little as you want. This space is just for you.</p>
+      <label class="hint" for="gratitudeInput">Reflection text</label>
+      <textarea id="gratitudeInput" aria-label="Write your gratitude or gentle thoughts"></textarea>
+      <button class="action" id="saveButton" aria-label="Save your reflection">Save this moment</button>
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+    </section>
+  </div>
+
+  <script>
+    const body = document.body;
+    const contrastToggle = document.getElementById('contrastToggle');
+    const motionToggle = document.getElementById('motionToggle');
+    const textSize = document.getElementById('textSize');
+    const status = document.getElementById('status');
+
+    const updateStatus = (message) => {
+      status.textContent = message;
+    };
+
+    const setContrast = (enabled) => {
+      body.classList.toggle('high-contrast', enabled);
+      contrastToggle.setAttribute('aria-pressed', String(enabled));
+      updateStatus(enabled ? 'High contrast theme on.' : 'High contrast theme off.');
+      localStorage.setItem('highContrast', String(enabled));
+    };
+
+    const setMotion = (reduced) => {
+      body.classList.toggle('reduced-motion', reduced);
+      motionToggle.setAttribute('aria-pressed', String(reduced));
+      updateStatus(reduced ? 'Motion reduced for calmer visuals.' : 'Motion set to standard levels.');
+      localStorage.setItem('reducedMotion', String(reduced));
+    };
+
+    const setTextSize = (scale) => {
+      document.documentElement.style.setProperty('--font-scale', scale);
+      updateStatus(`Text size set to ${Math.round(scale * 100)}%`);
+      localStorage.setItem('textScale', scale);
+    };
+
+    contrastToggle.addEventListener('click', () => {
+      const enabled = contrastToggle.getAttribute('aria-pressed') !== 'true';
+      setContrast(enabled);
+    });
+
+    motionToggle.addEventListener('click', () => {
+      const reduced = motionToggle.getAttribute('aria-pressed') !== 'true';
+      setMotion(reduced);
+    });
+
+    textSize.addEventListener('input', (event) => {
+      const value = Number(event.target.value);
+      setTextSize(value.toFixed(2));
+    });
+
+    document.getElementById('saveButton').addEventListener('click', () => {
+      updateStatus('Reflection saved. Thank you for honoring your experience.');
+    });
+
+    const storedContrast = localStorage.getItem('highContrast') === 'true';
+    const storedMotion = localStorage.getItem('reducedMotion') === 'true';
+    const storedScale = localStorage.getItem('textScale');
+
+    setContrast(storedContrast);
+    setMotion(storedMotion);
+    if (storedScale) {
+      textSize.value = storedScale;
+      setTextSize(storedScale);
+    }
+  </script>
+</body>
+</html>
