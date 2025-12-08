@@ -51,10 +51,26 @@ export const usePromptStore = create<PromptState & PromptActions>()(
       lastCompletedOn: undefined,
       completedToday: false,
       setPrompts: (prompts) => {
-        const today = new Date();
-        const { lastCompletedOn } = get();
-        const completedToday = isSameDay(lastCompletedOn, today.toISOString());
-        set({ prompts, responses: completedToday ? get().responses : [], completedToday });
+        const todayIso = new Date().toISOString();
+        const { lastCompletedOn, responses: existingResponses, currentIndex } = get();
+        const isToday = isSameDay(lastCompletedOn, todayIso);
+
+        const filteredResponses = isToday
+          ? existingResponses.filter((response) => prompts.some((prompt) => prompt.id === response.promptId))
+          : [];
+
+        const completedToday = isToday && filteredResponses.length === prompts.length;
+
+        const maxIndex = Math.max(prompts.length - 1, 0);
+        const safeIndex = isToday ? Math.min(currentIndex, maxIndex) : 0;
+
+        set({
+          prompts,
+          responses: filteredResponses,
+          completedToday,
+          lastCompletedOn: isToday ? lastCompletedOn : undefined,
+          currentIndex: safeIndex,
+        });
       },
       next: () => {
         const { currentIndex, prompts } = get();
