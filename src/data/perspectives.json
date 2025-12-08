@@ -1,0 +1,42 @@
+[
+  {
+    "promptId": "gratitude",
+    "options": {
+      "nature": "Noticing how the outdoors steadies you shows your resilience in grounding moments.",
+      "people": "Appreciating someone today reinforces the support network you can lean on.",
+      "self": "Recognizing your own progress honors the effort you've invested in growth."
+    }
+  },
+  {
+    "promptId": "energy",
+    "options": {
+      "high": "High energy can be channeled into creating momentum on what matters most.",
+      "steady": "Steady energy is a reminder that consistency often beats intensity.",
+      "low": "Lower energy invites gentle pacing and self-compassion so you can recover fully."
+    }
+  },
+  {
+    "promptId": "connection",
+    "options": {
+      "friend": "Reaching out to a friend highlights your capacity to nurture relationships.",
+      "family": "Family touchpoints remind you of your roots and the stories that shaped you.",
+      "community": "Choosing community shows how belonging helps you feel anchored."
+    }
+  },
+  {
+    "promptId": "focus",
+    "options": {
+      "create": "Leaning into creating gives you a tangible way to express what's inside.",
+      "learn": "Learning something new keeps your curiosity alive and adaptive.",
+      "rest": "Resting intentionally is an active choice to protect your attention and clarity."
+    }
+  },
+  {
+    "promptId": "emotion",
+    "options": {
+      "joy": "Joy arriving unannounced is evidence that you can hold lightness even on tough days.",
+      "calm": "Calm is a clue that your routines are quietly supporting you.",
+      "tension": "Feeling tension means your values want some attention; listening is the first step."
+    }
+  }
+]
