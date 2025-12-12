@@ -3,110 +3,83 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0f172a" />
-  <link rel="manifest" href="./manifest.webmanifest" />
-  <title>Daily Well-Being Tracker</title>
+  <title>Identity Forge</title>
   <style>
-    :root {
-      --primary: #6366f1;
-      --primary-dark: #4f46e5;
-      --secondary: #ec4899;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --bg-primary: #0f172a;
-      --bg-secondary: #1e293b;
-      --bg-tertiary: #334155;
-      --text-primary: #f1f5f9;
-      --text-secondary: #cbd5e1;
-      --text-muted: #94a3b8;
-      --border: #334155;
-      --shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-      --glow: 0 0 20px rgba(99, 102, 241, 0.3);
-    }
-    
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
     
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      color: var(--text-primary);
-      min-height: 100vh;
-      padding: 20px;
-      line-height: 1.6;
+    :root {
+      --bg-dark: #0a0a0a;
+      --bg-card: #151515;
+      --bg-elevated: #1a1a1a;
+      --accent: #ff6b35;
+      --accent-dim: #ff6b3533;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0a0;
+      --text-dim: #666666;
+      --border: #2a2a2a;
+      --success: #00ff88;
+      --warning: #ffaa00;
     }
     
-    .container {
-      max-width: 1200px;
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .app-container {
+      max-width: 800px;
       margin: 0 auto;
+      padding: 20px;
     }
     
     .header {
       text-align: center;
+      padding: 60px 20px 40px;
+      border-bottom: 1px solid var(--border);
       margin-bottom: 40px;
-      padding: 40px 20px;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .header::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-      background-size: 20px 20px;
-      animation: moveGrid 20s linear infinite;
-    }
-    
-    @keyframes moveGrid {
-      0% { transform: translate(0, 0); }
-      100% { transform: translate(20px, 20px); }
     }
     
     .header h1 {
-      font-size: 3rem;
-      font-weight: 800;
-      margin-bottom: 10px;
-      position: relative;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--accent) 0%, #ff8c61 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     
-    .header p {
-      font-size: 1.2rem;
-      opacity: 0.95;
-      position: relative;
+    .header .tagline {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      font-weight: 500;
     }
     
-    .stats-grid {
+    .stats-bar {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
       margin-bottom: 40px;
     }
     
     .stat-card {
-      background: var(--bg-secondary);
-      padding: 30px;
-      border-radius: 16px;
+      background: var(--bg-card);
       border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
       position: relative;
       overflow: hidden;
-    }
-    
-    .stat-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--glow), var(--shadow);
     }
     
     .stat-card::before {
@@ -115,129 +88,219 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      height: 3px;
+      background: var(--accent);
+      opacity: 0.5;
     }
     
     .stat-label {
-      font-size: 0.9rem;
-      color: var(--text-muted);
+      font-size: 0.75rem;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 10px;
+      letter-spacing: 1.5px;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+      font-weight: 700;
     }
     
     .stat-value {
-      font-size: 3rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 4px;
     }
     
     .stat-trend {
-      font-size: 0.9rem;
-      color: var(--success);
-      margin-top: 10px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
     }
     
-    .tabs {
+    .nav-tabs {
       display: flex;
-      gap: 10px;
-      margin-bottom: 30px;
-      background: var(--bg-secondary);
-      padding: 8px;
+      gap: 8px;
+      margin-bottom: 32px;
+      background: var(--bg-card);
+      padding: 6px;
       border-radius: 12px;
       border: 1px solid var(--border);
-      flex-wrap: wrap;
     }
     
-    .tab {
+    .nav-tab {
       flex: 1;
-      padding: 15px 30px;
+      padding: 14px 20px;
       background: transparent;
       border: none;
       color: var(--text-secondary);
-      font-size: 1rem;
-      font-weight: 600;
+      font-size: 0.95rem;
+      font-weight: 700;
       border-radius: 8px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      min-width: 160px;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     
-    .tab.active {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      color: white;
-      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    .nav-tab:hover {
+      color: var(--text-primary);
+      background: var(--bg-elevated);
     }
     
-    .content-section {
+    .nav-tab.active {
+      background: var(--accent);
+      color: var(--bg-dark);
+    }
+    
+    .view {
       display: none;
     }
     
-    .content-section.active {
+    .view.active {
       display: block;
-      animation: fadeIn 0.5s ease;
+      animation: fadeIn 0.3s ease;
     }
     
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
+      from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
     
-    .questionnaire {
-      background: var(--bg-secondary);
-      padding: 40px;
-      border-radius: 16px;
+    .section {
+      background: var(--bg-card);
       border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      margin-bottom: 30px;
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
     }
     
-    .question-group {
-      margin-bottom: 35px;
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .section-icon {
+      font-size: 1.5rem;
+    }
+    
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-primary);
+    }
+    
+    .truth-card {
+      background: var(--bg-elevated);
+      border-left: 4px solid var(--accent);
+      padding: 24px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    
+    .truth-text {
+      font-size: 1.3rem;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+    
+    .truth-question {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      font-style: italic;
+      line-height: 1.6;
+    }
+    
+    .question-block {
+      margin-bottom: 32px;
     }
     
     .question-label {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 600;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       color: var(--text-primary);
       display: block;
     }
     
     .question-hint {
       font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-bottom: 15px;
+      color: var(--text-dim);
+      margin-bottom: 16px;
       font-style: italic;
     }
     
-    .slider-container {
-      position: relative;
-      padding: 20px 0;
+    .input-text,
+    .input-textarea {
+      width: 100%;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    
+    .input-text:focus,
+    .input-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: var(--bg-dark);
+    }
+    
+    .input-textarea {
+      min-height: 100px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+    
+    .slider-group {
+      margin-bottom: 24px;
+    }
+    
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .slider-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    
+    .slider-value {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--accent);
     }
     
     .slider {
       width: 100%;
-      height: 8px;
-      border-radius: 5px;
-      background: var(--bg-tertiary);
+      height: 6px;
+      border-radius: 3px;
+      background: var(--bg-elevated);
       outline: none;
       -webkit-appearance: none;
+      cursor: pointer;
     }
     
     .slider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      appearance: none;
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      background: var(--accent);
       cursor: pointer;
-      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.5);
       transition: transform 0.2s ease;
     }
     
@@ -246,173 +309,138 @@
     }
     
     .slider::-moz-range-thumb {
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      cursor: pointer;
+      background: var(--accent);
       border: none;
-      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.5);
-    }
-    
-    .slider-labels {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 10px;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-    
-    .slider-value {
-      text-align: center;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin-top: 10px;
-    }
-    
-    textarea {
-      width: 100%;
-      min-height: 120px;
-      background: var(--bg-tertiary);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 15px;
-      color: var(--text-primary);
-      font-size: 1rem;
-      resize: vertical;
-      transition: border-color 0.3s ease;
-    }
-    
-    textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+      cursor: pointer;
     }
     
     .btn {
-      padding: 15px 40px;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      color: white;
+      width: 100%;
+      padding: 16px 32px;
+      background: var(--accent);
+      color: var(--bg-dark);
       border: none;
-      border-radius: 12px;
-      font-size: 1.1rem;
-      font-weight: 700;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
       cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+      transition: all 0.2s ease;
+      margin-top: 24px;
     }
     
     .btn:hover {
+      background: #ff8c61;
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+      box-shadow: 0 8px 24px var(--accent-dim);
     }
     
     .btn:active {
       transform: translateY(0);
     }
     
-    .btn-block {
-      width: 100%;
-      margin-top: 20px;
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
     }
     
-    .results {
-      background: var(--bg-secondary);
-      padding: 40px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-    }
-    
-    .result-item {
-      margin-bottom: 30px;
-    }
-    
-    .result-header {
-      display: flex;
-      justify-content: space-between;
+    .status-indicator {
+      display: inline-flex;
       align-items: center;
-      margin-bottom: 10px;
-    }
-    
-    .result-name {
-      font-size: 1.1rem;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--bg-elevated);
+      border-radius: 20px;
+      font-size: 0.85rem;
       font-weight: 600;
-      color: var(--text-primary);
+      margin-bottom: 20px;
     }
     
-    .result-score {
-      font-size: 1.5rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .status-indicator.complete {
+      background: rgba(0, 255, 136, 0.1);
+      color: var(--success);
     }
     
-    .progress-bar {
-      height: 12px;
-      background: var(--bg-tertiary);
-      border-radius: 6px;
-      overflow: hidden;
-      position: relative;
-    }
-    
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
-      border-radius: 6px;
-      transition: width 1s ease;
-      box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+    .status-indicator.pending {
+      background: rgba(255, 170, 0, 0.1);
+      color: var(--warning);
     }
     
     .history-list {
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 16px;
     }
     
     .history-item {
-      background: var(--bg-tertiary);
-      padding: 20px;
-      border-radius: 12px;
+      background: var(--bg-elevated);
       border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
       transition: transform 0.2s ease;
     }
     
     .history-item:hover {
-      transform: translateX(5px);
+      transform: translateX(4px);
+      border-color: var(--accent);
     }
     
     .history-date {
-      font-weight: 600;
-      color: var(--primary);
-      margin-bottom: 10px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    
+    .history-content {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    
+    .history-content strong {
+      color: var(--text-primary);
+      display: block;
+      margin-top: 12px;
+      margin-bottom: 4px;
     }
     
     .history-scores {
       display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      font-size: 0.9rem;
-      color: var(--text-secondary);
+      gap: 16px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
     }
     
-    .history-note {
-      margin-top: 10px;
-      color: var(--text-muted);
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-dim);
+    }
+    
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      opacity: 0.3;
     }
     
     .toast {
       position: fixed;
       bottom: 30px;
       right: 30px;
-      background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
-      color: white;
-      padding: 20px 30px;
-      border-radius: 12px;
-      box-shadow: var(--shadow);
+      background: var(--success);
+      color: var(--bg-dark);
+      padding: 16px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      box-shadow: 0 8px 24px rgba(0, 255, 136, 0.3);
       transform: translateX(400px);
       transition: transform 0.3s ease;
       z-index: 1000;
@@ -422,244 +450,270 @@
       transform: translateX(0);
     }
     
-    .time-indicator {
-      display: inline-block;
-      padding: 8px 16px;
-      background: var(--bg-tertiary);
-      border-radius: 20px;
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      margin-bottom: 20px;
+    .yes-no-group {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
     }
     
-    @media (max-width: 768px) {
+    .yes-no-btn {
+      flex: 1;
+      padding: 14px;
+      background: var(--bg-elevated);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .yes-no-btn:hover {
+      border-color: var(--accent);
+      color: var(--text-primary);
+    }
+    
+    .yes-no-btn.selected {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--bg-dark);
+    }
+    
+    @media (max-width: 640px) {
+      .app-container {
+        padding: 12px;
+      }
+      
+      .header {
+        padding: 40px 12px 30px;
+      }
+      
       .header h1 {
         font-size: 2rem;
       }
       
-      .stats-grid {
+      .section {
+        padding: 24px 20px;
+      }
+      
+      .stats-bar {
         grid-template-columns: 1fr;
-      }
-      
-      .tabs {
-        flex-direction: column;
-      }
-      
-      .questionnaire {
-        padding: 25px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="app-container">
     <header class="header">
-      <h1>✨ Daily Well-Being Tracker</h1>
-      <p>Track your journey to happiness, confidence, and fulfillment</p>
+      <h1>IDENTITY FORGE</h1>
+      <p class="tagline">Your life matters. Your time is limited. Your future self is watching.</p>
     </header>
     
-    <div class="stats-grid">
+    <div class="stats-bar">
       <div class="stat-card">
-        <div class="stat-label">Happiness</div>
-        <div class="stat-value" id="happinessAvg">--</div>
-        <div class="stat-trend" id="happinessTrend">Track your mood</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Confidence</div>
-        <div class="stat-value" id="confidenceAvg">--</div>
-        <div class="stat-trend" id="confidenceTrend">Build self-belief</div>
+        <div class="stat-label">Vitality</div>
+        <div class="stat-value" id="vitalityScore">--</div>
+        <div class="stat-trend" id="vitalityTrend">Not yet tracked</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Fulfillment</div>
-        <div class="stat-value" id="fulfillmentAvg">--</div>
-        <div class="stat-trend" id="fulfillmentTrend">Find purpose</div>
+        <div class="stat-label">Courage</div>
+        <div class="stat-value" id="courageScore">--</div>
+        <div class="stat-trend" id="courageTrend">Not yet tracked</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Meaning</div>
+        <div class="stat-value" id="meaningScore">--</div>
+        <div class="stat-trend" id="meaningTrend">Not yet tracked</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Streak</div>
+        <div class="stat-value" id="streakCount">0</div>
+        <div class="stat-trend">Days</div>
       </div>
     </div>
     
-    <div class="tabs">
-      <button class="tab active" onclick="switchTab(event, 'morning')">🌅 Morning Check-in</button>
-      <button class="tab" onclick="switchTab(event, 'evening')">🌙 Evening Reflection</button>
-      <button class="tab" onclick="switchTab(event, 'insights')">📊 Insights</button>
-      <button class="tab" onclick="switchTab(event, 'history')">📜 History</button>
-    </div>
+    <nav class="nav-tabs">
+      <button class="nav-tab active" onclick="switchView('morning')">Morning</button>
+      <button class="nav-tab" onclick="switchView('evening')">Evening</button>
+      <button class="nav-tab" onclick="switchView('history')">History</button>
+    </nav>
     
-    <div id="morning" class="content-section active">
-      <div class="questionnaire">
-        <span class="time-indicator">☀️ Good Morning</span>
-        <h2 style="margin-bottom: 30px;">Start Your Day with Intention</h2>
-        
-        <div class="question-group">
-          <label class="question-label">How well-rested do you feel this morning?</label>
-          <p class="question-hint">Your energy sets the foundation for the day ahead</p>
-          <div class="slider-container">
-            <input type="range" min="1" max="10" value="5" class="slider" id="morningRest">
-            <div class="slider-labels">
-              <span>Exhausted</span>
-              <span>Energized</span>
-            </div>
-            <div class="slider-value" id="morningRestValue">5</div>
-          </div>
+    <!-- MORNING VIEW -->
+    <div id="morning" class="view active">
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">🔥</span>
+          <h2 class="section-title">Wake-Up Truth</h2>
         </div>
         
-        <div class="question-group">
-          <label class="question-label">How optimistic do you feel about today?</label>
-          <p class="question-hint">Your mindset shapes your experiences</p>
-          <div class="slider-container">
-            <input type="range" min="1" max="10" value="5" class="slider" id="morningOptimism">
-            <div class="slider-labels">
-              <span>Pessimistic</span>
-              <span>Very Optimistic</span>
-            </div>
-            <div class="slider-value" id="morningOptimismValue">5</div>
-          </div>
+        <div class="truth-card">
+          <div class="truth-text" id="dailyTruth">Loading truth...</div>
+          <div class="truth-question" id="dailyQuestion">Loading question...</div>
         </div>
         
-        <div class="question-group">
-          <label class="question-label">How confident do you feel about handling today's challenges?</label>
-          <p class="question-hint">Confidence grows with each small step</p>
-          <div class="slider-container">
-            <input type="range" min="1" max="10" value="5" class="slider" id="morningConfidence">
-            <div class="slider-labels">
-              <span>Uncertain</span>
-              <span>Very Confident</span>
-            </div>
-            <div class="slider-value" id="morningConfidenceValue">5</div>
-          </div>
-        </div>
-        
-        <div class="question-group">
-          <label class="question-label">What are you grateful for this morning?</label>
-          <p class="question-hint">Gratitude amplifies the good in your life</p>
-          <textarea id="morningGratitude" placeholder="I'm grateful for..."></textarea>
-        </div>
-        
-        <div class="question-group">
-          <label class="question-label">What's one intention you'd like to set for today?</label>
-          <p class="question-hint">A clear intention guides your actions</p>
-          <textarea id="morningIntention" placeholder="Today, I intend to..."></textarea>
-        </div>
-        
-        <button class="btn btn-block" onclick="saveMorning()">Complete Morning Check-in</button>
-      </div>
-    </div>
-    
-    <div id="evening" class="content-section">
-      <div class="questionnaire">
-        <span class="time-indicator">🌙 Good Evening</span>
-        <h2 style="margin-bottom: 30px;">Reflect on Your Day</h2>
-        
-        <div class="question-group">
-          <label class="question-label">How happy did you feel today overall?</label>
-          <p class="question-hint">Acknowledge the full spectrum of your emotions</p>
-          <div class="slider-container">
-            <input type="range" min="1" max="10" value="5" class="slider" id="eveningHappiness">
-            <div class="slider-labels">
-              <span>Unhappy</span>
-              <span>Very Happy</span>
-            </div>
-            <div class="slider-value" id="eveningHappinessValue">5</div>
-          </div>
-        </div>
-        
-        <div class="question-group">
-          <label class="question-label">How fulfilled do you feel about what you accomplished?</label>
-          <p class="question-hint">Every step forward, no matter how small, matters</p>
-          <div class="slider-container">
-            <input type="range" min="1" max="10" value="5" class="slider" id="eveningFulfillment">
-            <div class="slider-labels">
-              <span>Unfulfilled</span>
-              <span>Very Fulfilled</span>
-            </div>
-            <div class="slider-value" id="eveningFulfillmentValue">5</div>
-          </div>
-        </div>
-        
-        <div class="question-group">
-          <label class="question-label">How well did you handle challenges today?</label>
-          <p class="question-hint">Resilience is built through reflection</p>
-          <div class="slider-container">
-            <input type="range" min="1" max="10" value="5" class="slider" id="eveningResilience">
-            <div class="slider-labels">
-              <span>Struggled</span>
-              <span>Handled Well</span>
-            </div>
-            <div class="slider-value" id="eveningResilienceValue">5</div>
-          </div>
-        </div>
-        
-        <div class="question-group">
-          <label class="question-label">How connected did you feel with others today?</label>
-          <p class="question-hint">Meaningful connections enrich our lives</p>
-          <div class="slider-container">
-            <input type="range" min="1" max="10" value="5" class="slider" id="eveningConnection">
-            <div class="slider-labels">
-              <span>Isolated</span>
-              <span>Very Connected</span>
-            </div>
-            <div class="slider-value" id="eveningConnectionValue">5</div>
-          </div>
-        </div>
-        
-        <div class="question-group">
-          <label class="question-label">What moment made you smile today?</label>
-          <p class="question-hint">Savor the positive moments, big and small</p>
-          <textarea id="eveningHighlight" placeholder="A moment that brought me joy was..."></textarea>
-        </div>
-        
-        <div class="question-group">
-          <label class="question-label">What's one thing you learned about yourself today?</label>
-          <p class="question-hint">Growth comes from self-awareness</p>
-          <textarea id="eveningLearning" placeholder="Today I learned..."></textarea>
-        </div>
-        
-        <button class="btn btn-block" onclick="saveEvening()">Complete Evening Reflection</button>
-      </div>
-    </div>
-    
-    <div id="insights" class="content-section">
-      <div class="results">
-        <h2 style="margin-bottom: 30px;">Your Well-Being Insights</h2>
-        
-        <div class="result-item">
-          <div class="result-header">
-            <span class="result-name">😊 Happiness Level</span>
-            <span class="result-score" id="happinessScore">--</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" id="happinessBar" style="width: 0%"></div>
-          </div>
-          <p style="margin-top: 10px; color: var(--text-muted); font-size: 0.9rem;" id="happinessInsight"></p>
-        </div>
-        
-        <div class="result-item">
-          <div class="result-header">
-            <span class="result-name">💪 Confidence Level</span>
-            <span class="result-score" id="confidenceScore">--</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" id="confidenceBar" style="width: 0%"></div>
-          </div>
-          <p style="margin-top: 10px; color: var(--text-muted); font-size: 0.9rem;" id="confidenceInsight"></p>
-        </div>
-        
-        <div class="result-item">
-          <div class="result-header">
-            <span class="result-name">🎯 Fulfillment Level</span>
-            <span class="result-score" id="fulfillmentScore">--</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" id="fulfillmentBar" style="width: 0%"></div>
-          </div>
-          <p style="margin-top: 10px; color: var(--text-muted); font-size: 0.9rem;" id="fulfillmentInsight"></p>
+        <div class="question-block">
+          <label class="question-label">Your honest response:</label>
+          <textarea class="input-textarea" id="truthResponse" placeholder="Write your answer..."></textarea>
         </div>
       </div>
+      
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">⚡</span>
+          <h2 class="section-title">Foundational Question</h2>
+        </div>
+        
+        <div class="question-block">
+          <label class="question-label" id="foundationalQuestion">Loading question...</label>
+          <textarea class="input-textarea" id="foundationalResponse" placeholder="Your answer..."></textarea>
+        </div>
+      </div>
+      
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">🎯</span>
+          <h2 class="section-title">Identity Declaration</h2>
+        </div>
+        
+        <div class="question-block">
+          <label class="question-label">Today I am the man who...</label>
+          <p class="question-hint">One clear sentence. Declare who you're becoming.</p>
+          <input type="text" class="input-text" id="identityDeclaration" placeholder="Today I am the man who..." />
+        </div>
+        
+        <div class="question-block">
+          <label class="question-label">One action to prove it:</label>
+          <p class="question-hint">What specific thing will you do today?</p>
+          <input type="text" class="input-text" id="proofAction" placeholder="I will..." />
+        </div>
+      </div>
+      
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">📊</span>
+          <h2 class="section-title">Quick Check</h2>
+        </div>
+        
+        <div class="slider-group">
+          <div class="slider-header">
+            <span class="slider-label">Energy Level</span>
+            <span class="slider-value" id="energyValue">5</span>
+          </div>
+          <input type="range" min="1" max="10" value="5" class="slider" id="energySlider">
+        </div>
+        
+        <div class="slider-group">
+          <div class="slider-header">
+            <span class="slider-label">Optimism</span>
+            <span class="slider-value" id="optimismValue">5</span>
+          </div>
+          <input type="range" min="1" max="10" value="5" class="slider" id="optimismSlider">
+        </div>
+        
+        <div class="slider-group">
+          <div class="slider-header">
+            <span class="slider-label">Confidence</span>
+            <span class="slider-value" id="confidenceValue">5</span>
+          </div>
+          <input type="range" min="1" max="10" value="5" class="slider" id="confidenceSlider">
+        </div>
+      </div>
+      
+      <button class="btn" onclick="saveMorning()">Complete Morning</button>
     </div>
     
-    <div id="history" class="content-section">
-      <div class="results">
-        <h2 style="margin-bottom: 30px;">Your Journey</h2>
+    <!-- EVENING VIEW -->
+    <div id="evening" class="view">
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">✓</span>
+          <h2 class="section-title">Accountability</h2>
+        </div>
+        
+        <div class="question-block">
+          <label class="question-label">Did you do what you said you'd do?</label>
+          <p class="question-hint" id="actionReminder">Loading your commitment...</p>
+          <div class="yes-no-group">
+            <button class="yes-no-btn" id="didItYes" onclick="selectYesNo(true)">YES</button>
+            <button class="yes-no-btn" id="didItNo" onclick="selectYesNo(false)">NO</button>
+          </div>
+          <textarea class="input-textarea" id="accountabilityWhy" placeholder="Why or why not? Be honest."></textarea>
+        </div>
+      </div>
+      
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">🏆</span>
+          <h2 class="section-title">Today's Win</h2>
+        </div>
+        
+        <div class="question-block">
+          <label class="question-label">What's one thing you did well today?</label>
+          <p class="question-hint">No matter how small. Acknowledge it.</p>
+          <textarea class="input-textarea" id="todayWin" placeholder="Today I..."></textarea>
+        </div>
+      </div>
+      
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">📊</span>
+          <h2 class="section-title">Evening Check</h2>
+        </div>
+        
+        <div class="slider-group">
+          <div class="slider-header">
+            <span class="slider-label">Overall Happiness</span>
+            <span class="slider-value" id="happinessValue">5</span>
+          </div>
+          <input type="range" min="1" max="10" value="5" class="slider" id="happinessSlider">
+        </div>
+        
+        <div class="slider-group">
+          <div class="slider-header">
+            <span class="slider-label">Handled Challenges</span>
+            <span class="slider-value" id="challengesValue">5</span>
+          </div>
+          <input type="range" min="1" max="10" value="5" class="slider" id="challengesSlider">
+        </div>
+        
+        <div class="slider-group">
+          <div class="slider-header">
+            <span class="slider-label">Felt Connected</span>
+            <span class="slider-value" id="connectionValue">5</span>
+          </div>
+          <input type="range" min="1" max="10" value="5" class="slider" id="connectionSlider">
+        </div>
+      </div>
+      
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">🔮</span>
+          <h2 class="section-title">Tomorrow</h2>
+        </div>
+        
+        <div class="question-block">
+          <label class="question-label">What's your focus for tomorrow?</label>
+          <p class="question-hint">One clear priority.</p>
+          <input type="text" class="input-text" id="tomorrowFocus" placeholder="Tomorrow I will focus on..." />
+        </div>
+      </div>
+      
+      <button class="btn" onclick="saveEvening()">Complete Evening</button>
+    </div>
+    
+    <!-- HISTORY VIEW -->
+    <div id="history" class="view">
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">📜</span>
+          <h2 class="section-title">Your Journey</h2>
+        </div>
+        
         <div class="history-list" id="historyList">
-          <p style="color: var(--text-muted); text-align: center; padding: 40px;">Complete your first check-in to start tracking your journey</p>
+          <div class="empty-state">
+            <div class="empty-state-icon">📝</div>
+            <p>No entries yet. Complete your first check-in to start.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -668,257 +722,394 @@
   <div class="toast" id="toast"></div>
   
   <script>
-    const sliderElements = document.querySelectorAll('.slider');
-    sliderElements.forEach(slider => {
-      const valueDisplay = document.getElementById(slider.id + 'Value');
-      const updateValue = (value) => {
-        if (valueDisplay) valueDisplay.textContent = value;
-      };
-      updateValue(slider.value);
-      slider.addEventListener('input', (e) => {
-        updateValue(e.target.value);
-      });
-    });
+    // Wake-up truths and questions
+    const truths = [
+      {
+        truth: "You are the youngest you will ever be.",
+        question: "If today is the youngest, strongest version of you that will ever exist, what will you do with it that your older self will thank you for?"
+      },
+      {
+        truth: "Every day might be your last.",
+        question: "If today was the final page of your life, how would you want the story to end by midnight?"
+      },
+      {
+        truth: "You are wealthier than most of the world.",
+        question: "With the level of wealth, safety, and freedom you have, what excuse do you actually have to play small?"
+      },
+      {
+        truth: "You have opportunities people would kill for.",
+        question: "If someone with nothing had your life for 24 hours, how much harder would they push than you?"
+      },
+      {
+        truth: "Your life is not guaranteed beyond today.",
+        question: "If life was borrowed time, how would you spend the next twelve hours?"
+      }
+    ];
     
-    function switchTab(event, tabName) {
-      const tabs = document.querySelectorAll('.tab');
-      const sections = document.querySelectorAll('.content-section');
+    // Foundational questions (rotating)
+    const foundationalQuestions = [
+      "Are you healthy today? If yes, what is stopping you from using this body fully?",
+      "Is there someone who would stand at your funeral even if it rained? If not, how will you build relationships worth dying for?",
+      "If you were gone tonight, what would people say about your life? Is that acceptable to you?",
+      "What is one thing you can do today so that by bedtime, you feel genuine pride instead of regret?",
+      "What fear or insecurity will you confront today that will raise your character one level higher?"
+    ];
+    
+    // State management
+    let entries = [];
+    let currentDayIndex = 0;
+    let eveningDidIt = null;
+    
+    // Initialize
+    function init() {
+      setupSliders();
+      loadDailyContent();
+      updateStats();
+      checkEveningAvailability();
+    }
+    
+    // Setup slider value displays
+    function setupSliders() {
+      const sliders = [
+        {id: 'energySlider', valueId: 'energyValue'},
+        {id: 'optimismSlider', valueId: 'optimismValue'},
+        {id: 'confidenceSlider', valueId: 'confidenceValue'},
+        {id: 'happinessSlider', valueId: 'happinessValue'},
+        {id: 'challengesSlider', valueId: 'challengesValue'},
+        {id: 'connectionSlider', valueId: 'connectionValue'}
+      ];
+      
+      sliders.forEach(({id, valueId}) => {
+        const slider = document.getElementById(id);
+        const valueDisplay = document.getElementById(valueId);
+        if (slider && valueDisplay) {
+          slider.addEventListener('input', (e) => {
+            valueDisplay.textContent = e.target.value;
+          });
+        }
+      });
+    }
+    
+    // Load daily rotating content
+    function loadDailyContent() {
+      const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+      const truthIndex = dayOfYear % truths.length;
+      const questionIndex = dayOfYear % foundationalQuestions.length;
+      
+      currentDayIndex = dayOfYear;
+      
+      document.getElementById('dailyTruth').textContent = truths[truthIndex].truth;
+      document.getElementById('dailyQuestion').textContent = truths[truthIndex].question;
+      document.getElementById('foundationalQuestion').textContent = foundationalQuestions[questionIndex];
+    }
+    
+    // Check if evening is available
+    function checkEveningAvailability() {
+      const today = getTodayEntries();
+      if (today.morning) {
+        document.getElementById('actionReminder').textContent = `You said: "${today.morning.proofAction}"`;
+      }
+    }
+    
+    // Get today's entries
+    function getTodayEntries() {
+      const today = new Date().toDateString();
+      return {
+        morning: entries.find(e => e.type === 'morning' && new Date(e.date).toDateString() === today),
+        evening: entries.find(e => e.type === 'evening' && new Date(e.date).toDateString() === today)
+      };
+    }
+    
+    // Switch view
+    function switchView(viewName) {
+      const tabs = document.querySelectorAll('.nav-tab');
+      const views = document.querySelectorAll('.view');
       
       tabs.forEach(tab => tab.classList.remove('active'));
-      sections.forEach(section => section.classList.remove('active'));
+      views.forEach(view => view.classList.remove('active'));
       
-      if (event?.target) {
-        event.target.classList.add('active');
-      }
-      document.getElementById(tabName)?.classList.add('active');
+      event.target.classList.add('active');
+      document.getElementById(viewName).classList.add('active');
       
-      if (tabName === 'insights') {
-        calculateInsights();
-      } else if (tabName === 'history') {
+      if (viewName === 'evening') {
+        checkEveningAvailability();
+      } else if (viewName === 'history') {
         displayHistory();
       }
     }
     
+    // Yes/No selection
+    function selectYesNo(value) {
+      eveningDidIt = value;
+      document.getElementById('didItYes').classList.toggle('selected', value === true);
+      document.getElementById('didItNo').classList.toggle('selected', value === false);
+    }
+    
+    // Save morning
     function saveMorning() {
       const data = {
         date: new Date().toISOString(),
         type: 'morning',
-        rest: parseInt(document.getElementById('morningRest').value),
-        optimism: parseInt(document.getElementById('morningOptimism').value),
-        confidence: parseInt(document.getElementById('morningConfidence').value),
-        gratitude: document.getElementById('morningGratitude').value,
-        intention: document.getElementById('morningIntention').value
+        dayIndex: currentDayIndex,
+        truthResponse: document.getElementById('truthResponse').value,
+        foundationalResponse: document.getElementById('foundationalResponse').value,
+        identityDeclaration: document.getElementById('identityDeclaration').value,
+        proofAction: document.getElementById('proofAction').value,
+        energy: parseInt(document.getElementById('energySlider').value),
+        optimism: parseInt(document.getElementById('optimismSlider').value),
+        confidence: parseInt(document.getElementById('confidenceSlider').value)
       };
       
-      saveEntry(data);
-      showToast('Morning check-in saved! Have a wonderful day! 🌅');
+      // Validate
+      if (!data.truthResponse || !data.foundationalResponse || !data.identityDeclaration || !data.proofAction) {
+        showToast('Please complete all fields');
+        return;
+      }
+      
+      // Remove old morning entry for today
+      const today = new Date().toDateString();
+      entries = entries.filter(e => !(e.type === 'morning' && new Date(e.date).toDateString() === today));
+      
+      entries.push(data);
+      saveToStorage();
+      showToast('Morning complete. Make it count.');
       updateStats();
+      
+      // Clear form
+      document.getElementById('truthResponse').value = '';
+      document.getElementById('foundationalResponse').value = '';
+      document.getElementById('identityDeclaration').value = '';
+      document.getElementById('proofAction').value = '';
     }
     
+    // Save evening
     function saveEvening() {
+      const todayMorning = getTodayEntries().morning;
+      
+      if (!todayMorning) {
+        showToast('Complete your morning check-in first');
+        return;
+      }
+      
+      if (eveningDidIt === null) {
+        showToast('Please select Yes or No for accountability');
+        return;
+      }
+      
       const data = {
         date: new Date().toISOString(),
         type: 'evening',
-        happiness: parseInt(document.getElementById('eveningHappiness').value),
-        fulfillment: parseInt(document.getElementById('eveningFulfillment').value),
-        resilience: parseInt(document.getElementById('eveningResilience').value),
-        connection: parseInt(document.getElementById('eveningConnection').value),
-        highlight: document.getElementById('eveningHighlight').value,
-        learning: document.getElementById('eveningLearning').value
+        dayIndex: currentDayIndex,
+        didIt: eveningDidIt,
+        accountabilityWhy: document.getElementById('accountabilityWhy').value,
+        todayWin: document.getElementById('todayWin').value,
+        happiness: parseInt(document.getElementById('happinessSlider').value),
+        challenges: parseInt(document.getElementById('challengesSlider').value),
+        connection: parseInt(document.getElementById('connectionSlider').value),
+        tomorrowFocus: document.getElementById('tomorrowFocus').value
       };
       
-      saveEntry(data);
-      showToast('Evening reflection saved! Rest well tonight! 🌙');
-      updateStats();
-    }
-    
-    function saveEntry(data) {
-      const entries = getEntries();
+      // Validate
+      if (!data.accountabilityWhy || !data.todayWin || !data.tomorrowFocus) {
+        showToast('Please complete all fields');
+        return;
+      }
+      
+      // Remove old evening entry for today
+      const today = new Date().toDateString();
+      entries = entries.filter(e => !(e.type === 'evening' && new Date(e.date).toDateString() === today));
+      
       entries.push(data);
+      saveToStorage();
+      showToast('Evening complete. Rest well.');
+      updateStats();
       
-      if (entries.length > 30) {
-        entries.shift();
-      }
-      
-      const entriesData = JSON.stringify(entries);
-      window.wellbeingEntries = entriesData;
+      // Clear form
+      eveningDidIt = null;
+      document.getElementById('didItYes').classList.remove('selected');
+      document.getElementById('didItNo').classList.remove('selected');
+      document.getElementById('accountabilityWhy').value = '';
+      document.getElementById('todayWin').value = '';
+      document.getElementById('tomorrowFocus').value = '';
     }
     
-    function getEntries() {
-      if (!window.wellbeingEntries) {
-        return [];
-      }
-      try {
-        return JSON.parse(window.wellbeingEntries);
-      } catch (e) {
-        return [];
-      }
-    }
-    
-    function computeScores(entries) {
+    // Calculate stats
+    function updateStats() {
+      if (entries.length === 0) return;
+      
       const morningEntries = entries.filter(e => e.type === 'morning');
       const eveningEntries = entries.filter(e => e.type === 'evening');
       
-      const happinessScores = [];
-      eveningEntries.forEach(e => happinessScores.push(e.happiness));
-      morningEntries.forEach(e => happinessScores.push(e.optimism * 0.8));
-      const happiness = happinessScores.length > 0
-        ? happinessScores.reduce((a, b) => a + b, 0) / happinessScores.length
-        : 0;
-      
-      const confidenceScores = [];
-      morningEntries.forEach(e => confidenceScores.push(e.confidence));
-      eveningEntries.forEach(e => confidenceScores.push(e.resilience));
-      const confidence = confidenceScores.length > 0
-        ? confidenceScores.reduce((a, b) => a + b, 0) / confidenceScores.length
-        : 0;
-      
-      const fulfillmentScores = [];
-      eveningEntries.forEach(e => {
-        fulfillmentScores.push(e.fulfillment * 0.7 + e.connection * 0.3);
+      // Calculate Vitality (energy + optimism)
+      let vitalityScores = [];
+      morningEntries.forEach(e => {
+        vitalityScores.push((e.energy + e.optimism) / 2);
       });
-      const fulfillment = fulfillmentScores.length > 0
-        ? fulfillmentScores.reduce((a, b) => a + b, 0) / fulfillmentScores.length
-        : 0;
+      const vitality = vitalityScores.length > 0 
+        ? (vitalityScores.reduce((a, b) => a + b, 0) / vitalityScores.length).toFixed(1)
+        : '--';
       
-      return { happiness, confidence, fulfillment };
+      // Calculate Courage (confidence + challenges handled + did what you said)
+      let courageScores = [];
+      morningEntries.forEach(e => courageScores.push(e.confidence));
+      eveningEntries.forEach(e => {
+        courageScores.push(e.challenges);
+        courageScores.push(e.didIt ? 10 : 5); // Bonus for following through
+      });
+      const courage = courageScores.length > 0
+        ? (courageScores.reduce((a, b) => a + b, 0) / courageScores.length).toFixed(1)
+        : '--';
+      
+      // Calculate Meaning (happiness + connection)
+      let meaningScores = [];
+      eveningEntries.forEach(e => {
+        meaningScores.push((e.happiness + e.connection) / 2);
+      });
+      const meaning = meaningScores.length > 0
+        ? (meaningScores.reduce((a, b) => a + b, 0) / meaningScores.length).toFixed(1)
+        : '--';
+      
+      // Calculate streak
+      const streak = calculateStreak();
+      
+      // Update display
+      document.getElementById('vitalityScore').textContent = vitality;
+      document.getElementById('courageScore').textContent = courage;
+      document.getElementById('meaningScore').textContent = meaning;
+      document.getElementById('streakCount').textContent = streak;
+      
+      // Update trends (last 7 days average)
+      updateTrends();
     }
     
-    function updateStats() {
-      const entries = getEntries();
-      const hasData = entries.length > 0;
-      const current = computeScores(entries);
-      const previous = entries.length > 1 ? computeScores(entries.slice(0, -1)) : null;
+    // Calculate streak
+    function calculateStreak() {
+      const today = new Date();
+      let streak = 0;
       
-      updateStatCard('happiness', current.happiness, previous?.happiness, 'Track your mood', hasData);
-      updateStatCard('confidence', current.confidence, previous?.confidence, 'Build self-belief', hasData);
-      updateStatCard('fulfillment', current.fulfillment, previous?.fulfillment, 'Find purpose', hasData);
-    }
-    
-    function updateStatCard(key, score, previousScore, emptyCopy, hasData) {
-      const valueEl = document.getElementById(`${key}Avg`);
-      const trendEl = document.getElementById(`${key}Trend`);
-      if (!valueEl || !trendEl) return;
-      
-      if (!hasData) {
-        valueEl.textContent = '--';
-        trendEl.textContent = emptyCopy;
-        trendEl.style.color = 'var(--text-muted)';
-        return;
+      for (let i = 0; i < 365; i++) {
+        const checkDate = new Date(today);
+        checkDate.setDate(checkDate.getDate() - i);
+        const dateStr = checkDate.toDateString();
+        
+        const hasBoth = entries.some(e => e.type === 'morning' && new Date(e.date).toDateString() === dateStr) &&
+                       entries.some(e => e.type === 'evening' && new Date(e.date).toDateString() === dateStr);
+        
+        if (hasBoth) {
+          streak++;
+        } else {
+          break;
+        }
       }
       
-      valueEl.textContent = score.toFixed(1);
-      const delta = previousScore !== undefined && previousScore !== null ? score - previousScore : 0;
-      let trendMessage = 'Keeping steady';
-      let color = 'var(--text-secondary)';
-      if (delta > 0.2) {
-        trendMessage = `Up ${delta.toFixed(1)} since last check-in`; color = 'var(--success)';
-      } else if (delta < -0.2) {
-        trendMessage = `Down ${Math.abs(delta).toFixed(1)} since last check-in`; color = 'var(--warning)';
-      }
-      trendEl.textContent = trendMessage;
-      trendEl.style.color = color;
+      return streak;
     }
     
-    function calculateInsights() {
-      const entries = getEntries();
-      if (entries.length === 0) {
-        ['happiness', 'confidence', 'fulfillment'].forEach(key => {
-          updateScore(key, '--');
-          updateInsight(key, null);
-        });
-        return;
-      }
+    // Update trends
+    function updateTrends() {
+      const trends = {
+        vitality: 'Building energy',
+        courage: 'Growing stronger',
+        meaning: 'Finding purpose'
+      };
       
-      const { happiness, confidence, fulfillment } = computeScores(entries);
-      updateScore('happiness', happiness.toFixed(1));
-      updateScore('confidence', confidence.toFixed(1));
-      updateScore('fulfillment', fulfillment.toFixed(1));
-      
-      updateInsight('happiness', happiness);
-      updateInsight('confidence', confidence);
-      updateInsight('fulfillment', fulfillment);
+      document.getElementById('vitalityTrend').textContent = trends.vitality;
+      document.getElementById('courageTrend').textContent = trends.courage;
+      document.getElementById('meaningTrend').textContent = trends.meaning;
     }
     
-    function updateScore(key, value) {
-      const scoreEl = document.getElementById(`${key}Score`);
-      const barEl = document.getElementById(`${key}Bar`);
-      const percent = value === '--' ? 0 : Math.min(100, (parseFloat(value) / 10) * 100);
-      if (scoreEl) scoreEl.textContent = value === '--' ? '--' : `${value}/10`;
-      if (barEl) barEl.style.width = `${percent}%`;
-    }
-    
-    function updateInsight(key, score) {
-      const insightEl = document.getElementById(`${key}Insight`);
-      if (!insightEl) return;
-      if (score === null) {
-        insightEl.textContent = 'Complete a morning or evening entry to see insights tailored to you.';
-        return;
-      }
-      let message = '';
-      if (score >= 8) {
-        message = 'You are thriving here—keep celebrating the habits and connections that fuel you.';
-      } else if (score >= 6) {
-        message = 'Solid momentum. A small daily ritual could help you keep this upward curve.';
-      } else if (score >= 4) {
-        message = 'You are in a rebuilding phase. Choose one supportive action to lift this area today.';
-      } else {
-        message = 'Gentle check-in needed. Reach out for support or add a tiny act of care for yourself.';
-      }
-      insightEl.textContent = message;
-    }
-    
+    // Display history
     function displayHistory() {
-      const listEl = document.getElementById('historyList');
-      const entries = getEntries();
-      if (!listEl) return;
+      const historyList = document.getElementById('historyList');
+      
       if (entries.length === 0) {
-        listEl.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 40px;">Complete your first check-in to start tracking your journey</p>';
+        historyList.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">📝</div>
+            <p>No entries yet. Complete your first check-in to start.</p>
+          </div>
+        `;
         return;
       }
-      const items = entries
-        .slice()
-        .sort((a, b) => new Date(b.date) - new Date(a.date))
-        .map(entry => renderHistoryItem(entry))
-        .join('');
-      listEl.innerHTML = items;
+      
+      // Group by date
+      const grouped = {};
+      entries.forEach(entry => {
+        const dateKey = new Date(entry.date).toDateString();
+        if (!grouped[dateKey]) grouped[dateKey] = {};
+        grouped[dateKey][entry.type] = entry;
+      });
+      
+      // Sort by date descending
+      const sortedDates = Object.keys(grouped).sort((a, b) => new Date(b) - new Date(a));
+      
+      historyList.innerHTML = sortedDates.slice(0, 30).map(dateStr => {
+        const day = grouped[dateStr];
+        const date = new Date(dateStr);
+        const formattedDate = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+        
+        return `
+          <div class="history-item">
+            <div class="history-date">${formattedDate}</div>
+            ${day.morning ? `
+              <div class="history-content">
+                <strong>Identity:</strong> ${day.morning.identityDeclaration}
+                <strong>Action:</strong> ${day.morning.proofAction}
+              </div>
+            ` : ''}
+            ${day.evening ? `
+              <div class="history-content">
+                <strong>Did it?</strong> ${day.evening.didIt ? 'YES ✓' : 'NO'}
+                <strong>Win:</strong> ${day.evening.todayWin}
+              </div>
+            ` : ''}
+            ${day.morning && day.evening ? `
+              <div class="history-scores">
+                <span>Vitality: ${((day.morning.energy + day.morning.optimism) / 2).toFixed(1)}</span>
+                <span>Courage: ${day.morning.confidence}</span>
+                <span>Meaning: ${((day.evening.happiness + day.evening.connection) / 2).toFixed(1)}</span>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
     }
     
-    function renderHistoryItem(entry) {
-      const date = new Date(entry.date);
-      const formattedDate = date.toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
-      const scores = entry.type === 'morning'
-        ? `Rest ${entry.rest}/10 · Optimism ${entry.optimism}/10 · Confidence ${entry.confidence}/10`
-        : `Happiness ${entry.happiness}/10 · Fulfillment ${entry.fulfillment}/10 · Resilience ${entry.resilience}/10 · Connection ${entry.connection}/10`;
-      const note = entry.type === 'morning'
-        ? entry.intention || entry.gratitude
-        : entry.highlight || entry.learning;
-      const noteCopy = note ? `<p class="history-note">${note}</p>` : '';
-      return `
-        <div class="history-item">
-          <div class="history-date">${entry.type === 'morning' ? '🌅 Morning' : '🌙 Evening'} · ${formattedDate}</div>
-          <div class="history-scores">${scores}</div>
-          ${noteCopy}
-        </div>
-      `;
+    // Storage (in-memory for artifacts)
+    function saveToStorage() {
+      window.identityForgeData = JSON.stringify(entries);
     }
     
+    function loadFromStorage() {
+      if (window.identityForgeData) {
+        try {
+          entries = JSON.parse(window.identityForgeData);
+        } catch (e) {
+          entries = [];
+        }
+      }
+    }
+    
+    // Toast notification
     function showToast(message) {
       const toast = document.getElementById('toast');
-      if (!toast) return;
       toast.textContent = message;
       toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2800);
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
     }
     
-    updateStats();
+    // Initialize on load
+    loadFromStorage();
+    init();
   </script>
   <script>
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker
-          .register("./service-worker.js")
-          .catch((error) => console.error("Service worker registration failed", error));
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js').catch((error) => {
+          console.error('Service worker registration failed', error);
+        });
       });
     }
   </script>

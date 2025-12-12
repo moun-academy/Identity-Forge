@@ -3,6 +3,7 @@ import {
   Animated,
   Easing,
   Pressable,
+  TextInput,
   StyleSheet,
   Text,
   View,
@@ -11,6 +12,12 @@ import * as Haptics from "expo-haptics";
 import { useFocusEffect } from "expo-router";
 import { getFallbackPerspective, getPerspective } from "../src/services/perspectiveLookup";
 import { Prompt, usePromptStore } from "../src/store/usePromptStore";
+import {
+  ReminderTime,
+  formatReminderTime,
+  getSavedReminderTime,
+  updateDailyExerciseReminderTime,
+} from "../src/services/notificationScheduler";
 
 const DAILY_PROMPTS: Prompt[] = [
   {
@@ -100,10 +107,24 @@ export default function QuestionScreen() {
     usePromptStore();
   const [reveal, setReveal] = useState<Reveal>({ perspective: undefined, optionId: undefined });
   const { opacity, translate, run } = useCardAnimation();
+  const [reminderTime, setReminderTime] = useState<ReminderTime>({ hour: 8, minute: 0 });
+  const [timeInput, setTimeInput] = useState("08:00");
+  const [timeStatus, setTimeStatus] = useState<string | null>(null);
+  const [savingTime, setSavingTime] = useState(false);
 
   useEffect(() => {
     setPrompts(DAILY_PROMPTS);
   }, [setPrompts]);
+
+  useEffect(() => {
+    const loadReminderTime = async () => {
+      const saved = await getSavedReminderTime();
+      setReminderTime(saved);
+      setTimeInput(`${String(saved.hour).padStart(2, "0")}:${String(saved.minute).padStart(2, "0")}`);
+    };
+
+    void loadReminderTime();
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -128,6 +149,38 @@ export default function QuestionScreen() {
     if (!prompt || completedToday) return;
     await Haptics.selectionAsync();
     usePromptStore.getState().recordResponse(prompt.id, optionId);
+  };
+
+  const parseTimeInput = (value: string): ReminderTime | null => {
+    const sanitized = value.trim();
+    const match = sanitized.match(/^(\d{1,2}):(\d{2})$/);
+    if (!match) return null;
+
+    const hour = Number(match[1]);
+    const minute = Number(match[2]);
+    if (Number.isNaN(hour) || Number.isNaN(minute)) return null;
+    if (hour < 0 || hour > 23 || minute < 0 || minute > 59) return null;
+
+    return { hour, minute };
+  };
+
+  const handleSaveReminderTime = async () => {
+    const parsed = parseTimeInput(timeInput);
+    if (!parsed) {
+      setTimeStatus("Enter a valid 24-hour time like 07:30 or 18:15.");
+      return;
+    }
+
+    setSavingTime(true);
+    try {
+      await updateDailyExerciseReminderTime(parsed);
+      setReminderTime(parsed);
+      setTimeStatus(`Reminder scheduled for ${formatReminderTime(parsed)}.`);
+    } catch (error) {
+      setTimeStatus("We couldn't update the reminder. Please try again.");
+    } finally {
+      setSavingTime(false);
+    }
   };
 
   if (!prompt) {
@@ -183,6 +236,39 @@ export default function QuestionScreen() {
           <Text style={styles.revealCopy}>{revealText}</Text>
         </Animated.View>
       )}
+
+      <View style={styles.settingsCard}>
+        <View style={styles.settingsHeader}>
+          <Text style={styles.settingsTitle}>Exercise reminder</Text>
+          <Text style={styles.settingsDescription}>
+            Choose the time you'd like to get your daily nudge.
+          </Text>
+        </View>
+        <View style={styles.timeRow}>
+          <View style={styles.timeInputWrapper}>
+            <Text style={styles.timeLabel}>Reminder time (24h)</Text>
+            <TextInput
+              value={timeInput}
+              onChangeText={setTimeInput}
+              placeholder="08:00"
+              placeholderTextColor="#64748b"
+              keyboardType="numeric"
+              style={styles.timeInput}
+            />
+          </View>
+          <Pressable
+            style={[styles.saveButton, savingTime && styles.saveButtonDisabled]}
+            onPress={handleSaveReminderTime}
+            disabled={savingTime}
+          >
+            <Text style={styles.saveButtonLabel}>{savingTime ? "Saving" : "Save"}</Text>
+          </Pressable>
+        </View>
+        <Text style={styles.timeStatus}>
+          Current reminder: {formatReminderTime(reminderTime)}
+          {timeStatus ? ` — ${timeStatus}` : ""}
+        </Text>
+      </View>
 
       <View style={styles.footer}>
         <Pressable style={[styles.navButton, styles.secondary]} onPress={back} disabled={currentIndex === 0}>
@@ -333,5 +419,67 @@ const styles = StyleSheet.create({
     color: "#94a3b8",
     textAlign: "center",
     fontSize: 14,
+  },
+  settingsCard: {
+    marginTop: 22,
+    padding: 16,
+    borderRadius: 16,
+    backgroundColor: "rgba(255,255,255,0.03)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.06)",
+    gap: 12,
+  },
+  settingsHeader: { gap: 4 },
+  settingsTitle: {
+    color: "#e2e8f0",
+    fontSize: 18,
+    fontWeight: "700",
+  },
+  settingsDescription: {
+    color: "#94a3b8",
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  timeRow: {
+    flexDirection: "row",
+    gap: 12,
+    alignItems: "center",
+  },
+  timeInputWrapper: { flex: 1 },
+  timeLabel: {
+    color: "#cbd5e1",
+    fontSize: 13,
+    marginBottom: 6,
+  },
+  timeInput: {
+    backgroundColor: "rgba(15,23,42,0.6)",
+    borderColor: "rgba(148,163,184,0.35)",
+    borderWidth: 1,
+    borderRadius: 10,
+    color: "#e2e8f0",
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    fontSize: 16,
+  },
+  saveButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    backgroundColor: "#4f46e5",
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#4338ca",
+  },
+  saveButtonDisabled: {
+    opacity: 0.65,
+  },
+  saveButtonLabel: {
+    color: "#e2e8f0",
+    fontWeight: "700",
+    fontSize: 15,
+  },
+  timeStatus: {
+    color: "#cbd5e1",
+    fontSize: 14,
+    lineHeight: 20,
   },
 });
