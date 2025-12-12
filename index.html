@@ -2,925 +2,1348 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0f172a" />
-  <link rel="manifest" href="./manifest.webmanifest" />
-  <title>Daily Well-Being Tracker</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Truth, Identity, Alignment</title>
   <style>
-    :root {
-      --primary: #6366f1;
-      --primary-dark: #4f46e5;
-      --secondary: #ec4899;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --bg-primary: #0f172a;
-      --bg-secondary: #1e293b;
-      --bg-tertiary: #334155;
-      --text-primary: #f1f5f9;
-      --text-secondary: #cbd5e1;
-      --text-muted: #94a3b8;
-      --border: #334155;
-      --shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-      --glow: 0 0 20px rgba(99, 102, 241, 0.3);
+    :root{
+      --bg1:#020617;
+      --bg2:#0b1220;
+      --card:#0f172a;
+      --card2:#0b1327;
+      --border:rgba(148,163,184,.18);
+      --text:#e5e7eb;
+      --muted:#9ca3af;
+      --accent:#f97316;
+      --accent2:#fb923c;
+      --good:#22c55e;
+      --warn:#fbbf24;
+      --bad:#ef4444;
+      --r:18px;
+      --r2:12px;
+      --shadow:0 18px 40px rgba(0,0,0,.38);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
     }
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    *{ box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    body{
+      min-height:100vh;
+      background: radial-gradient(circle at top, #182642, var(--bg1));
+      color:var(--text);
+      padding:14px;
+      display:flex;
+      justify-content:center;
     }
-    
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      color: var(--text-primary);
-      min-height: 100vh;
-      padding: 20px;
-      line-height: 1.6;
+    .app{ width:100%; max-width:980px; }
+    .topbar{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:12px;
     }
-    
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
+    .brand{
+      display:flex; flex-direction:column; gap:2px;
     }
-    
-    .header {
-      text-align: center;
-      margin-bottom: 40px;
-      padding: 40px 20px;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
+    .brand h1{ font-size:18px; letter-spacing:.03em; }
+    .brand .sub{ font-size:12px; color:var(--muted); }
+    .pill{
+      font-size:11px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(249,115,22,.35);
+      color:var(--accent2);
+      background:rgba(249,115,22,.08);
+      white-space:nowrap;
     }
-    
-    .header::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-      background-size: 20px 20px;
-      animation: moveGrid 20s linear infinite;
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
     }
-    
-    @keyframes moveGrid {
-      0% { transform: translate(0, 0); }
-      100% { transform: translate(20px, 20px); }
+    @media(min-width:900px){
+      .grid{ grid-template-columns: 1.15fr .85fr; }
     }
-    
-    .header h1 {
-      font-size: 3rem;
-      font-weight: 800;
-      margin-bottom: 10px;
-      position: relative;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    .card{
+      background:rgba(15,23,42,.9);
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      padding:14px;
+      backdrop-filter: blur(18px);
     }
-    
-    .header p {
-      font-size: 1.2rem;
-      opacity: 0.95;
-      position: relative;
+    .tabs{
+      display:flex; gap:8px; flex-wrap:wrap;
+      margin-bottom:10px;
     }
-    
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-bottom: 40px;
+    .tab{
+      cursor:pointer;
+      border:1px solid rgba(148,163,184,.22);
+      background:rgba(2,6,23,.4);
+      color:var(--text);
+      padding:8px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.02em;
     }
-    
-    .stat-card {
-      background: var(--bg-secondary);
-      padding: 30px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      position: relative;
-      overflow: hidden;
+    .tab.active{
+      border-color: rgba(249,115,22,.45);
+      background: rgba(249,115,22,.10);
+      color: var(--accent2);
     }
-    
-    .stat-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--glow), var(--shadow);
+
+    .section-title{
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.10em;
+      color:var(--muted);
+      margin:10px 2px 8px;
+      font-weight:700;
     }
-    
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
+
+    .row{ display:flex; gap:10px; flex-wrap:wrap; }
+    .col{ flex:1 1 240px; min-width:240px; }
+
+    .box{
+      border:1px solid rgba(148,163,184,.18);
+      background: rgba(2,6,23,.30);
+      border-radius:var(--r2);
+      padding:10px;
     }
-    
-    .stat-label {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 10px;
+
+    .truth{
+      border:1px solid rgba(249,115,22,.35);
+      background: radial-gradient(circle at top left, rgba(249,115,22,.18), rgba(2,6,23,.20));
     }
-    
-    .stat-value {
-      font-size: 3rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .truth .label{
+      font-size:11px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:6px;
+      font-weight:700;
     }
-    
-    .stat-trend {
-      font-size: 0.9rem;
-      color: var(--success);
-      margin-top: 10px;
+    .truth .t{ font-size:14px; line-height:1.35; margin-bottom:8px; }
+    .truth .q{ font-size:12px; color:var(--text); line-height:1.35; opacity:.95; }
+
+    .field label{
+      display:flex;
+      justify-content:space-between;
+      align-items:baseline;
+      gap:10px;
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:6px;
     }
-    
-    .tabs {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 30px;
-      background: var(--bg-secondary);
-      padding: 8px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      flex-wrap: wrap;
+    .field label strong{ color:var(--text); font-weight:700; }
+    textarea, input[type="text"]{
+      width:100%;
+      border-radius:12px;
+      border:1px solid rgba(148,163,184,.25);
+      background:rgba(2,6,23,.35);
+      color:var(--text);
+      padding:10px 10px;
+      font-size:13px;
+      outline:none;
     }
-    
-    .tab {
-      flex: 1;
-      padding: 15px 30px;
-      background: transparent;
-      border: none;
-      color: var(--text-secondary);
-      font-size: 1rem;
-      font-weight: 600;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      min-width: 160px;
+    textarea{ min-height:74px; resize:vertical; max-height:260px; }
+    textarea:focus, input[type="text"]:focus{
+      border-color: rgba(249,115,22,.65);
+      box-shadow: 0 0 0 1px rgba(249,115,22,.28);
     }
-    
-    .tab.active {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      color: white;
-      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    .muted{ color:var(--muted); font-size:12px; line-height:1.4; }
+    .btnrow{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    button{
+      cursor:pointer;
+      border:none;
+      border-radius:999px;
+      padding:10px 12px;
+      font-weight:800;
+      font-size:12px;
+      letter-spacing:.02em;
+      background: rgba(148,163,184,.12);
+      color: var(--text);
+      border:1px solid rgba(148,163,184,.22);
     }
-    
-    .content-section {
-      display: none;
+    button.primary{
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color:#1b0c02;
+      border:1px solid rgba(249,115,22,.15);
     }
-    
-    .content-section.active {
-      display: block;
-      animation: fadeIn 0.5s ease;
+    button.ghost{
+      background: rgba(2,6,23,.20);
+      border:1px solid rgba(148,163,184,.20);
+      color: var(--text);
     }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    button.danger{
+      background: rgba(239,68,68,.12);
+      border:1px solid rgba(239,68,68,.35);
+      color:#fecaca;
     }
-    
-    .questionnaire {
-      background: var(--bg-secondary);
-      padding: 40px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      margin-bottom: 30px;
+    button:active{ transform: translateY(1px); }
+
+    .toggle{
+      display:flex; align-items:center; gap:10px;
+      padding:10px;
+      border-radius:12px;
+      border:1px solid rgba(148,163,184,.18);
+      background: rgba(2,6,23,.25);
     }
-    
-    .question-group {
-      margin-bottom: 35px;
+    .toggle input{ transform: scale(1.1); }
+    .toggle .t1{ font-weight:800; font-size:12px; }
+    .toggle .t2{ font-size:11px; color:var(--muted); }
+
+    .statgrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
     }
-    
-    .question-label {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 15px;
-      color: var(--text-primary);
-      display: block;
+    @media(min-width:900px){
+      .statgrid{ grid-template-columns: repeat(3,1fr); }
     }
-    
-    .question-hint {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-bottom: 15px;
-      font-style: italic;
+    .stat{
+      border-radius:14px;
+      border:1px solid rgba(148,163,184,.18);
+      background: rgba(2,6,23,.25);
+      padding:10px;
     }
-    
-    .slider-container {
-      position: relative;
-      padding: 20px 0;
+    .stat .k{ font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.10em; font-weight:800; }
+    .stat .v{ font-size:24px; font-weight:900; margin-top:4px; }
+    .stat .s{ font-size:11px; color:var(--muted); margin-top:2px; line-height:1.35; }
+
+    .barwrap{ margin-top:8px; }
+    .bar{
+      height:8px;
+      border-radius:999px;
+      background: rgba(148,163,184,.10);
+      overflow:hidden;
+      border:1px solid rgba(148,163,184,.12);
     }
-    
-    .slider {
-      width: 100%;
-      height: 8px;
-      border-radius: 5px;
-      background: var(--bg-tertiary);
-      outline: none;
-      -webkit-appearance: none;
+    .fill{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      transition: width .2s ease-out;
     }
-    
-    .slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      cursor: pointer;
-      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.5);
-      transition: transform 0.2s ease;
+
+    .list{
+      max-height:420px;
+      overflow:auto;
+      border-radius:14px;
+      border:1px solid rgba(148,163,184,.16);
+      background: rgba(2,6,23,.22);
     }
-    
-    .slider::-webkit-slider-thumb:hover {
-      transform: scale(1.2);
+    .item{
+      padding:10px;
+      border-bottom:1px solid rgba(148,163,184,.12);
     }
-    
-    .slider::-moz-range-thumb {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      cursor: pointer;
-      border: none;
-      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.5);
+    .item:last-child{ border-bottom:none; }
+    .item .head{
+      display:flex; justify-content:space-between; align-items:baseline;
+      gap:10px;
+      margin-bottom:4px;
     }
-    
-    .slider-labels {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 10px;
-      font-size: 0.85rem;
-      color: var(--text-muted);
+    .item .date{ font-weight:900; font-size:12px; letter-spacing:.02em; }
+    .item .mini{ font-size:11px; color:var(--muted); }
+    .item .line{ font-size:12px; color:var(--text); opacity:.95; line-height:1.35; }
+
+    .hr{
+      height:1px;
+      background: rgba(148,163,184,.14);
+      margin:12px 0;
     }
-    
-    .slider-value {
-      text-align: center;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin-top: 10px;
+
+    .smallnote{ font-size:11px; color:var(--muted); line-height:1.45; }
+    .rightcol .card{ position:sticky; top:12px; }
+
+    .sliderrow{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
     }
-    
-    textarea {
-      width: 100%;
-      min-height: 120px;
-      background: var(--bg-tertiary);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 15px;
-      color: var(--text-primary);
-      font-size: 1rem;
-      resize: vertical;
-      transition: border-color 0.3s ease;
+    @media(min-width:900px){
+      .sliderrow{ grid-template-columns: repeat(3,1fr); }
     }
-    
-    textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    input[type="range"]{ width:100%; }
+    .rangevalue{
+      font-family: var(--mono);
+      font-size:12px;
+      color: var(--accent2);
+      font-weight:900;
     }
-    
-    .btn {
-      padding: 15px 40px;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 1.1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    .check{
+      display:flex; align-items:center; gap:10px;
+      padding:10px;
+      border-radius:12px;
+      border:1px solid rgba(148,163,184,.18);
+      background: rgba(2,6,23,.22);
     }
-    
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
-    }
-    
-    .btn:active {
-      transform: translateY(0);
-    }
-    
-    .btn-block {
-      width: 100%;
-      margin-top: 20px;
-    }
-    
-    .results {
-      background: var(--bg-secondary);
-      padding: 40px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-    }
-    
-    .result-item {
-      margin-bottom: 30px;
-    }
-    
-    .result-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-    
-    .result-name {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-    
-    .result-score {
-      font-size: 1.5rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .progress-bar {
-      height: 12px;
-      background: var(--bg-tertiary);
-      border-radius: 6px;
-      overflow: hidden;
-      position: relative;
-    }
-    
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
-      border-radius: 6px;
-      transition: width 1s ease;
-      box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
-    }
-    
-    .history-list {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    
-    .history-item {
-      background: var(--bg-tertiary);
-      padding: 20px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      transition: transform 0.2s ease;
-    }
-    
-    .history-item:hover {
-      transform: translateX(5px);
-    }
-    
-    .history-date {
-      font-weight: 600;
-      color: var(--primary);
-      margin-bottom: 10px;
-    }
-    
-    .history-scores {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-    }
-    
-    .history-note {
-      margin-top: 10px;
-      color: var(--text-muted);
-    }
-    
-    .toast {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
-      color: white;
-      padding: 20px 30px;
-      border-radius: 12px;
-      box-shadow: var(--shadow);
-      transform: translateX(400px);
-      transition: transform 0.3s ease;
-      z-index: 1000;
-    }
-    
-    .toast.show {
-      transform: translateX(0);
-    }
-    
-    .time-indicator {
-      display: inline-block;
-      padding: 8px 16px;
-      background: var(--bg-tertiary);
-      border-radius: 20px;
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      margin-bottom: 20px;
-    }
-    
-    @media (max-width: 768px) {
-      .header h1 {
-        font-size: 2rem;
-      }
-      
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .tabs {
-        flex-direction: column;
-      }
-      
-      .questionnaire {
-        padding: 25px;
-      }
-    }
+    .check .label{ font-size:12px; font-weight:800; }
+    .check .desc{ font-size:11px; color:var(--muted); line-height:1.35; }
   </style>
 </head>
+
 <body>
-  <div class="container">
-    <header class="header">
-      <h1>✨ Daily Well-Being Tracker</h1>
-      <p>Track your journey to happiness, confidence, and fulfillment</p>
-    </header>
-    
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-label">Happiness</div>
-        <div class="stat-value" id="happinessAvg">--</div>
-        <div class="stat-trend" id="happinessTrend">Track your mood</div>
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">
+        <h1>Truth, Identity, Alignment</h1>
+        <div class="sub" id="todayLabel">Today</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-label">Confidence</div>
-        <div class="stat-value" id="confidenceAvg">--</div>
-        <div class="stat-trend" id="confidenceTrend">Build self-belief</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Fulfillment</div>
-        <div class="stat-value" id="fulfillmentAvg">--</div>
-        <div class="stat-trend" id="fulfillmentTrend">Find purpose</div>
-      </div>
+      <div class="pill" id="modePill">Quick Mode</div>
     </div>
-    
-    <div class="tabs">
-      <button class="tab active" onclick="switchTab(event, 'morning')">🌅 Morning Check-in</button>
-      <button class="tab" onclick="switchTab(event, 'evening')">🌙 Evening Reflection</button>
-      <button class="tab" onclick="switchTab(event, 'insights')">📊 Insights</button>
-      <button class="tab" onclick="switchTab(event, 'history')">📜 History</button>
-    </div>
-    
-    <div id="morning" class="content-section active">
-      <div class="questionnaire">
-        <span class="time-indicator">☀️ Good Morning</span>
-        <h2 style="margin-bottom: 30px;">Start Your Day with Intention</h2>
-        
-        <div class="question-group">
-          <label class="question-label">How well-rested do you feel this morning?</label>
-          <p class="question-hint">Your energy sets the foundation for the day ahead</p>
-          <div class="slider-container">
-            <input type="range" min="1" max="10" value="5" class="slider" id="morningRest">
-            <div class="slider-labels">
-              <span>Exhausted</span>
-              <span>Energized</span>
+
+    <div class="grid">
+      <div class="card">
+        <div class="tabs">
+          <div class="tab active" data-tab="morning">Morning</div>
+          <div class="tab" data-tab="evening">Evening</div>
+          <div class="tab" data-tab="dashboard">Dashboard</div>
+          <div class="tab" data-tab="history">History</div>
+          <div class="tab" data-tab="settings">Settings</div>
+        </div>
+
+        <!-- MORNING -->
+        <div class="panel" id="panel-morning">
+          <div class="row">
+            <div class="col">
+              <div class="box truth">
+                <div class="label">Wake up truth</div>
+                <div class="t" id="truthText"></div>
+                <div class="q" id="truthQuestion"></div>
+              </div>
             </div>
-            <div class="slider-value" id="morningRestValue">5</div>
+            <div class="col">
+              <div class="toggle">
+                <input id="deepModeToggle" type="checkbox" />
+                <div>
+                  <div class="t1">Deep Mode</div>
+                  <div class="t2">More metrics and longer identity work</div>
+                </div>
+              </div>
+              <div style="height:10px"></div>
+              <div class="box">
+                <div class="section-title" style="margin-top:0">Today’s mission</div>
+                <div class="muted">You are not tracking feelings. You are building character through truth, action, and alignment.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-title">Your truth response</div>
+          <div class="field">
+            <label><span>Write the raw answer</span><strong id="morningSavedBadge" style="color:var(--muted); font-weight:800;">Not saved</strong></label>
+            <textarea id="mTruthAnswer" placeholder="Write honestly. No polishing."></textarea>
+          </div>
+
+          <div class="section-title">Foundational question of the day</div>
+          <div class="box">
+            <div class="t" id="foundationQ" style="font-size:13px; font-weight:900; margin-bottom:6px;"></div>
+            <div class="muted" id="foundationHint"></div>
+          </div>
+          <div class="field" style="margin-top:8px;">
+            <label><span>Your answer</span><strong class="muted">1 question is enough to stay sharp</strong></label>
+            <textarea id="mFoundationAnswer" placeholder="One honest paragraph."></textarea>
+          </div>
+
+          <div id="morningMetricsBlock">
+            <div class="section-title">Morning well being metrics</div>
+            <div class="sliderrow">
+              <div class="box">
+                <div class="field">
+                  <label><span>Rested</span><span class="rangevalue" id="mRestedVal">5</span></label>
+                  <input type="range" min="1" max="10" value="5" id="mRested" />
+                </div>
+              </div>
+              <div class="box">
+                <div class="field">
+                  <label><span>Optimism</span><span class="rangevalue" id="mOptimismVal">5</span></label>
+                  <input type="range" min="1" max="10" value="5" id="mOptimism" />
+                </div>
+              </div>
+              <div class="box">
+                <div class="field">
+                  <label><span>Confidence for challenges</span><span class="rangevalue" id="mConfidenceVal">5</span></label>
+                  <input type="range" min="1" max="10" value="5" id="mConfidence" />
+                </div>
+              </div>
+            </div>
+            <div class="smallnote" style="margin-top:8px;">Deep Mode is for building data and patterns. Quick Mode can skip this.</div>
+          </div>
+
+          <div class="section-title">Identity declaration</div>
+          <div class="field">
+            <label><span>Who are you becoming?</span><strong class="muted">1 sentence is enough</strong></label>
+            <input type="text" id="mIdentity" placeholder="Example: I am the man who moves first, even when I blush." />
+          </div>
+
+          <div class="section-title">Today’s aligned action</div>
+          <div class="field">
+            <label><span>What will you do today?</span><strong class="muted">Make it specific</strong></label>
+            <input type="text" id="mAction" placeholder="Example: Start 3 conversations in the hostel before noon." />
+          </div>
+
+          <div class="btnrow">
+            <button class="primary" id="saveMorningBtn">Save Morning</button>
+            <button class="ghost" id="loadMorningBtn">Load Saved</button>
+          </div>
+
+          <div class="hr"></div>
+          <div class="smallnote">
+            Reminder: You are training the response, not the feeling. If you blush, you lift your head, stay playful, and keep moving.
           </div>
         </div>
-        
-        <div class="question-group">
-          <label class="question-label">How optimistic do you feel about today?</label>
-          <p class="question-hint">Your mindset shapes your experiences</p>
-          <div class="slider-container">
-            <input type="range" min="1" max="10" value="5" class="slider" id="morningOptimism">
-            <div class="slider-labels">
-              <span>Pessimistic</span>
-              <span>Very Optimistic</span>
+
+        <!-- EVENING -->
+        <div class="panel" id="panel-evening" style="display:none;">
+          <div class="section-title">Evening well being assessment</div>
+          <div class="sliderrow">
+            <div class="box">
+              <div class="field">
+                <label><span>Happiness</span><span class="rangevalue" id="eHappyVal">5</span></label>
+                <input type="range" min="1" max="10" value="5" id="eHappy" />
+              </div>
             </div>
-            <div class="slider-value" id="morningOptimismValue">5</div>
+            <div class="box">
+              <div class="field">
+                <label><span>Fulfillment</span><span class="rangevalue" id="eFulfillVal">5</span></label>
+                <input type="range" min="1" max="10" value="5" id="eFulfill" />
+              </div>
+            </div>
+            <div class="box">
+              <div class="field">
+                <label><span>Handled challenges</span><span class="rangevalue" id="eChallengesVal">5</span></label>
+                <input type="range" min="1" max="10" value="5" id="eChallenges" />
+              </div>
+            </div>
+          </div>
+
+          <div class="sliderrow" style="margin-top:10px;">
+            <div class="box" style="grid-column:1/-1;">
+              <div class="field">
+                <label><span>Connection with others</span><span class="rangevalue" id="eConnectionVal">5</span></label>
+                <input type="range" min="1" max="10" value="5" id="eConnection" />
+              </div>
+            </div>
+          </div>
+
+          <div class="section-title">Gratitude and learning</div>
+          <div class="row">
+            <div class="col">
+              <div class="field">
+                <label><span>What moment made you smile?</span><strong class="muted">Keep it real</strong></label>
+                <textarea id="eSmile" placeholder="One clear moment."></textarea>
+              </div>
+            </div>
+            <div class="col">
+              <div class="field">
+                <label><span>What did you learn about yourself?</span><strong class="muted">One sentence</strong></label>
+                <textarea id="eLearn" placeholder="Example: I can handle discomfort when I stay playful."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-title">Identity alignment check</div>
+          <div class="box">
+            <div class="muted">Your declared identity from this morning:</div>
+            <div id="identityEcho" style="margin-top:6px; font-weight:900;"></div>
+            <div class="muted" style="margin-top:6px;">Your declared action:</div>
+            <div id="actionEcho" style="margin-top:6px; font-weight:900;"></div>
+          </div>
+
+          <div class="box" style="margin-top:10px;">
+            <div class="field">
+              <label><span>Alignment score</span><span class="rangevalue" id="eAlignVal">5</span></label>
+              <input type="range" min="1" max="10" value="5" id="eAlign" />
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:10px;">
+            <div class="col">
+              <div class="field">
+                <label><span>Where did you fall short and why?</span><strong class="muted">Honesty required</strong></label>
+                <textarea id="eShort" placeholder="Name the moment you played small."></textarea>
+              </div>
+            </div>
+            <div class="col">
+              <div class="field">
+                <label><span>Where did you rise and feel proud?</span><strong class="muted">Celebrate it</strong></label>
+                <textarea id="eProud" placeholder="Name the rep you respect."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="check" style="margin-top:10px;">
+            <input type="checkbox" id="eFear" />
+            <div>
+              <div class="label">I confronted a fear today</div>
+              <div class="desc">This boosts Meaning and Courage, because that is the point.</div>
+            </div>
+          </div>
+
+          <div class="section-title">Tomorrow’s commitment</div>
+          <div class="field">
+            <label><span>One specific action for tomorrow</span><strong class="muted">One thing</strong></label>
+            <input type="text" id="eTomorrow" placeholder="Example: Ask 1 stranger for a recommendation and hold eye contact." />
+          </div>
+
+          <div class="btnrow">
+            <button class="primary" id="saveEveningBtn">Save Evening</button>
+            <button class="ghost" id="loadEveningBtn">Load Saved</button>
+          </div>
+
+          <div class="hr"></div>
+          <div class="smallnote" id="eveningSavedBadge">Not saved</div>
+        </div>
+
+        <!-- DASHBOARD -->
+        <div class="panel" id="panel-dashboard" style="display:none;">
+          <div class="statgrid">
+            <div class="stat">
+              <div class="k">Vitality</div>
+              <div class="v" id="vitalityNow">0</div>
+              <div class="s">Rest and optimism, the fuel.</div>
+              <div class="barwrap">
+                <div class="bar"><div class="fill" id="vitalityBar"></div></div>
+              </div>
+            </div>
+            <div class="stat">
+              <div class="k">Courage</div>
+              <div class="v" id="courageNow">0</div>
+              <div class="s">Challenges handled and alignment.</div>
+              <div class="barwrap">
+                <div class="bar"><div class="fill" id="courageBar"></div></div>
+              </div>
+            </div>
+            <div class="stat">
+              <div class="k">Meaning</div>
+              <div class="v" id="meaningNow">0</div>
+              <div class="s">Fulfillment, connection, fear faced.</div>
+              <div class="barwrap">
+                <div class="bar"><div class="fill" id="meaningBar"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="row">
+            <div class="col">
+              <div class="box">
+                <div class="section-title" style="margin-top:0">Streak</div>
+                <div style="font-size:26px; font-weight:900;" id="streakVal">0</div>
+                <div class="muted">Days completed, morning and evening.</div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="box">
+                <div class="section-title" style="margin-top:0">Averages</div>
+                <div class="muted" id="avgText">No data yet.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-title">Insights</div>
+          <div class="box">
+            <div class="muted" id="insightText">Log a few days and this will start speaking truth back to you.</div>
           </div>
         </div>
-        
-        <div class="question-group">
-          <label class="question-label">How confident do you feel about handling today's challenges?</label>
-          <p class="question-hint">Confidence grows with each small step</p>
-          <div class="slider-container">
-            <input type="range" min="1" max="10" value="5" class="slider" id="morningConfidence">
-            <div class="slider-labels">
-              <span>Uncertain</span>
-              <span>Very Confident</span>
+
+        <!-- HISTORY -->
+        <div class="panel" id="panel-history" style="display:none;">
+          <div class="section-title">Past days</div>
+          <div class="list" id="historyList"></div>
+          <div class="smallnote" style="margin-top:10px;">Tap a day to load it into Morning and Evening.</div>
+        </div>
+
+        <!-- SETTINGS -->
+        <div class="panel" id="panel-settings" style="display:none;">
+          <div class="section-title">Daily truths</div>
+          <div class="box">
+            <div class="muted">Truth and question rotate by day. You can edit them in code inside the TRUTHS array.</div>
+          </div>
+
+          <div class="section-title">Storage</div>
+          <div class="box">
+            <div class="muted">Everything is stored on this device using localStorage. If you clear site data, you lose it.</div>
+            <div class="btnrow">
+              <button class="danger" id="resetAllBtn">Reset all data</button>
+              <button class="ghost" id="exportBtn">Export JSON</button>
+              <button class="ghost" id="importBtn">Import JSON</button>
             </div>
-            <div class="slider-value" id="morningConfidenceValue">5</div>
+            <textarea id="transferBox" style="margin-top:10px;" placeholder="Export will appear here. To import, paste JSON here, then press Import JSON."></textarea>
           </div>
         </div>
-        
-        <div class="question-group">
-          <label class="question-label">What are you grateful for this morning?</label>
-          <p class="question-hint">Gratitude amplifies the good in your life</p>
-          <textarea id="morningGratitude" placeholder="I'm grateful for..."></textarea>
-        </div>
-        
-        <div class="question-group">
-          <label class="question-label">What's one intention you'd like to set for today?</label>
-          <p class="question-hint">A clear intention guides your actions</p>
-          <textarea id="morningIntention" placeholder="Today, I intend to..."></textarea>
-        </div>
-        
-        <button class="btn btn-block" onclick="saveMorning()">Complete Morning Check-in</button>
+
       </div>
-    </div>
-    
-    <div id="evening" class="content-section">
-      <div class="questionnaire">
-        <span class="time-indicator">🌙 Good Evening</span>
-        <h2 style="margin-bottom: 30px;">Reflect on Your Day</h2>
-        
-        <div class="question-group">
-          <label class="question-label">How happy did you feel today overall?</label>
-          <p class="question-hint">Acknowledge the full spectrum of your emotions</p>
-          <div class="slider-container">
-            <input type="range" min="1" max="10" value="5" class="slider" id="eveningHappiness">
-            <div class="slider-labels">
-              <span>Unhappy</span>
-              <span>Very Happy</span>
-            </div>
-            <div class="slider-value" id="eveningHappinessValue">5</div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="rightcol">
+        <div class="card">
+          <div class="section-title" style="margin-top:0">Today’s truth anchor</div>
+          <div class="box truth">
+            <div class="t" id="rightTruth"></div>
+            <div class="q" id="rightQuestion" style="margin-top:6px;"></div>
           </div>
-        </div>
-        
-        <div class="question-group">
-          <label class="question-label">How fulfilled do you feel about what you accomplished?</label>
-          <p class="question-hint">Every step forward, no matter how small, matters</p>
-          <div class="slider-container">
-            <input type="range" min="1" max="10" value="5" class="slider" id="eveningFulfillment">
-            <div class="slider-labels">
-              <span>Unfulfilled</span>
-              <span>Very Fulfilled</span>
-            </div>
-            <div class="slider-value" id="eveningFulfillmentValue">5</div>
+
+          <div class="section-title">Today’s foundational focus</div>
+          <div class="box">
+            <div id="rightFoundation" style="font-weight:900; line-height:1.3;"></div>
+            <div class="smallnote" style="margin-top:8px;">One question per day keeps you sharp without burnout.</div>
           </div>
-        </div>
-        
-        <div class="question-group">
-          <label class="question-label">How well did you handle challenges today?</label>
-          <p class="question-hint">Resilience is built through reflection</p>
-          <div class="slider-container">
-            <input type="range" min="1" max="10" value="5" class="slider" id="eveningResilience">
-            <div class="slider-labels">
-              <span>Struggled</span>
-              <span>Handled Well</span>
-            </div>
-            <div class="slider-value" id="eveningResilienceValue">5</div>
+
+          <div class="section-title">Your declared identity</div>
+          <div class="box">
+            <div class="muted">Identity</div>
+            <div style="margin-top:6px; font-weight:900;" id="rightIdentity">Not set</div>
+            <div class="muted" style="margin-top:10px;">Action</div>
+            <div style="margin-top:6px; font-weight:900;" id="rightAction">Not set</div>
           </div>
-        </div>
-        
-        <div class="question-group">
-          <label class="question-label">How connected did you feel with others today?</label>
-          <p class="question-hint">Meaningful connections enrich our lives</p>
-          <div class="slider-container">
-            <input type="range" min="1" max="10" value="5" class="slider" id="eveningConnection">
-            <div class="slider-labels">
-              <span>Isolated</span>
-              <span>Very Connected</span>
-            </div>
-            <div class="slider-value" id="eveningConnectionValue">5</div>
+
+          <div class="hr"></div>
+          <div class="smallnote">
+            Core rule: the feeling is not the enemy. The avoidance is the enemy. Your response writes the story.
           </div>
-        </div>
-        
-        <div class="question-group">
-          <label class="question-label">What moment made you smile today?</label>
-          <p class="question-hint">Savor the positive moments, big and small</p>
-          <textarea id="eveningHighlight" placeholder="A moment that brought me joy was..."></textarea>
-        </div>
-        
-        <div class="question-group">
-          <label class="question-label">What's one thing you learned about yourself today?</label>
-          <p class="question-hint">Growth comes from self-awareness</p>
-          <textarea id="eveningLearning" placeholder="Today I learned..."></textarea>
-        </div>
-        
-        <button class="btn btn-block" onclick="saveEvening()">Complete Evening Reflection</button>
-      </div>
-    </div>
-    
-    <div id="insights" class="content-section">
-      <div class="results">
-        <h2 style="margin-bottom: 30px;">Your Well-Being Insights</h2>
-        
-        <div class="result-item">
-          <div class="result-header">
-            <span class="result-name">😊 Happiness Level</span>
-            <span class="result-score" id="happinessScore">--</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" id="happinessBar" style="width: 0%"></div>
-          </div>
-          <p style="margin-top: 10px; color: var(--text-muted); font-size: 0.9rem;" id="happinessInsight"></p>
-        </div>
-        
-        <div class="result-item">
-          <div class="result-header">
-            <span class="result-name">💪 Confidence Level</span>
-            <span class="result-score" id="confidenceScore">--</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" id="confidenceBar" style="width: 0%"></div>
-          </div>
-          <p style="margin-top: 10px; color: var(--text-muted); font-size: 0.9rem;" id="confidenceInsight"></p>
-        </div>
-        
-        <div class="result-item">
-          <div class="result-header">
-            <span class="result-name">🎯 Fulfillment Level</span>
-            <span class="result-score" id="fulfillmentScore">--</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" id="fulfillmentBar" style="width: 0%"></div>
-          </div>
-          <p style="margin-top: 10px; color: var(--text-muted); font-size: 0.9rem;" id="fulfillmentInsight"></p>
-        </div>
-      </div>
-    </div>
-    
-    <div id="history" class="content-section">
-      <div class="results">
-        <h2 style="margin-bottom: 30px;">Your Journey</h2>
-        <div class="history-list" id="historyList">
-          <p style="color: var(--text-muted); text-align: center; padding: 40px;">Complete your first check-in to start tracking your journey</p>
         </div>
       </div>
     </div>
   </div>
-  
-  <div class="toast" id="toast"></div>
-  
-  <script>
-    const sliderElements = document.querySelectorAll('.slider');
-    sliderElements.forEach(slider => {
-      const valueDisplay = document.getElementById(slider.id + 'Value');
-      const updateValue = (value) => {
-        if (valueDisplay) valueDisplay.textContent = value;
-      };
-      updateValue(slider.value);
-      slider.addEventListener('input', (e) => {
-        updateValue(e.target.value);
-      });
+
+<script>
+  // =========================
+  // DATA MODEL
+  // =========================
+  // Storage keys
+  const KEY_STATE = "tia_state_v1";
+  const KEY_DAYS  = "tia_days_v1";
+
+  // Truths rotate daily
+  const TRUTHS = [
+    {
+      truth: "You are the youngest you will ever be.",
+      question: "If today is the youngest, strongest version of you that will ever exist, what will you do with it that your older self will thank you for?"
+    },
+    {
+      truth: "Every day might be your last.",
+      question: "If today was the final page of your life, how would you want the story to end by midnight?"
+    },
+    {
+      truth: "You are wealthier than most of the world.",
+      question: "With the level of wealth, safety, and freedom you have, what excuse do you actually have to play small?"
+    },
+    {
+      truth: "You have opportunities people would kill for.",
+      question: "If someone with nothing had your life for 24 hours, how much harder would they push than you?"
+    },
+    {
+      truth: "Your life is not guaranteed beyond today.",
+      question: "If life was borrowed time, how would you spend the next twelve hours?"
+    }
+  ];
+
+  // Foundational questions rotate daily
+  const FOUNDATIONS = [
+    {
+      q: "Are you healthy today?",
+      hint: "If the answer is yes, what is stopping you from using this body fully?"
+    },
+    {
+      q: "Do you have someone or a group of people who would come to your funeral even if it rained?",
+      hint: "If not, how will you build relationships worth dying for?"
+    },
+    {
+      q: "If you were to die tonight, what would people say about you?",
+      hint: "Is that acceptable to you?"
+    },
+    {
+      q: "What can you do today so that by bedtime you feel genuine pride instead of regret?",
+      hint: "One action. One rep. Something you respect."
+    },
+    {
+      q: "What fear or insecurity will you confront today to raise your character one level higher?",
+      hint: "Name it. Do it early. Do not negotiate with it."
+    }
+  ];
+
+  function isoToday(){
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,"0");
+    const day = String(d.getDate()).padStart(2,"0");
+    return `${y}-${m}-${day}`;
+  }
+
+  function dayIndex(iso){
+    // stable index based on days since epoch (local midnight)
+    const [y,m,d] = iso.split("-").map(Number);
+    const dt = new Date(y, m-1, d);
+    const ms = dt.getTime();
+    const days = Math.floor(ms / 86400000);
+    return days;
+  }
+
+  function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
+
+  function loadJSON(key, fallback){
+    try{
+      const raw = localStorage.getItem(key);
+      if(!raw) return fallback;
+      return JSON.parse(raw);
+    }catch(e){
+      return fallback;
+    }
+  }
+
+  function saveJSON(key, obj){
+    localStorage.setItem(key, JSON.stringify(obj));
+  }
+
+  function getDays(){
+    return loadJSON(KEY_DAYS, {});
+  }
+
+  function setDays(days){
+    saveJSON(KEY_DAYS, days);
+  }
+
+  function getState(){
+    return loadJSON(KEY_STATE, {
+      deepMode:false,
+      lastTab:"morning"
     });
-    
-    function switchTab(event, tabName) {
-      const tabs = document.querySelectorAll('.tab');
-      const sections = document.querySelectorAll('.content-section');
-      
-      tabs.forEach(tab => tab.classList.remove('active'));
-      sections.forEach(section => section.classList.remove('active'));
-      
-      if (event?.target) {
-        event.target.classList.add('active');
-      }
-      document.getElementById(tabName)?.classList.add('active');
-      
-      if (tabName === 'insights') {
-        calculateInsights();
-      } else if (tabName === 'history') {
-        displayHistory();
-      }
-    }
-    
-    function saveMorning() {
-      const data = {
-        date: new Date().toISOString(),
-        type: 'morning',
-        rest: parseInt(document.getElementById('morningRest').value),
-        optimism: parseInt(document.getElementById('morningOptimism').value),
-        confidence: parseInt(document.getElementById('morningConfidence').value),
-        gratitude: document.getElementById('morningGratitude').value,
-        intention: document.getElementById('morningIntention').value
+  }
+
+  function setState(state){
+    saveJSON(KEY_STATE, state);
+  }
+
+  function ensureDay(iso){
+    const days = getDays();
+    if(!days[iso]){
+      days[iso] = {
+        iso,
+        truthIndex: dayIndex(iso) % TRUTHS.length,
+        foundationIndex: dayIndex(iso) % FOUNDATIONS.length,
+        morning: {
+          truthAnswer:"",
+          foundationAnswer:"",
+          rested:5,
+          optimism:5,
+          confidence:5,
+          identity:"",
+          action:"",
+          savedAt:""
+        },
+        evening: {
+          happy:5,
+          fulfill:5,
+          challenges:5,
+          connection:5,
+          smile:"",
+          learn:"",
+          align:5,
+          short:"",
+          proud:"",
+          fearFaced:false,
+          tomorrow:"",
+          savedAt:""
+        }
       };
-      
-      saveEntry(data);
-      showToast('Morning check-in saved! Have a wonderful day! 🌅');
-      updateStats();
+      setDays(days);
     }
-    
-    function saveEvening() {
-      const data = {
-        date: new Date().toISOString(),
-        type: 'evening',
-        happiness: parseInt(document.getElementById('eveningHappiness').value),
-        fulfillment: parseInt(document.getElementById('eveningFulfillment').value),
-        resilience: parseInt(document.getElementById('eveningResilience').value),
-        connection: parseInt(document.getElementById('eveningConnection').value),
-        highlight: document.getElementById('eveningHighlight').value,
-        learning: document.getElementById('eveningLearning').value
-      };
-      
-      saveEntry(data);
-      showToast('Evening reflection saved! Rest well tonight! 🌙');
-      updateStats();
+    return days[iso];
+  }
+
+  // =========================
+  // UI REFERENCES
+  // =========================
+  const els = {
+    todayLabel: document.getElementById("todayLabel"),
+    modePill: document.getElementById("modePill"),
+    tabs: Array.from(document.querySelectorAll(".tab")),
+    panels: {
+      morning: document.getElementById("panel-morning"),
+      evening: document.getElementById("panel-evening"),
+      dashboard: document.getElementById("panel-dashboard"),
+      history: document.getElementById("panel-history"),
+      settings: document.getElementById("panel-settings")
+    },
+
+    truthText: document.getElementById("truthText"),
+    truthQuestion: document.getElementById("truthQuestion"),
+    rightTruth: document.getElementById("rightTruth"),
+    rightQuestion: document.getElementById("rightQuestion"),
+
+    foundationQ: document.getElementById("foundationQ"),
+    foundationHint: document.getElementById("foundationHint"),
+    rightFoundation: document.getElementById("rightFoundation"),
+
+    deepToggle: document.getElementById("deepModeToggle"),
+    morningMetricsBlock: document.getElementById("morningMetricsBlock"),
+
+    mTruthAnswer: document.getElementById("mTruthAnswer"),
+    mFoundationAnswer: document.getElementById("mFoundationAnswer"),
+    mRested: document.getElementById("mRested"),
+    mOptimism: document.getElementById("mOptimism"),
+    mConfidence: document.getElementById("mConfidence"),
+    mRestedVal: document.getElementById("mRestedVal"),
+    mOptimismVal: document.getElementById("mOptimismVal"),
+    mConfidenceVal: document.getElementById("mConfidenceVal"),
+    mIdentity: document.getElementById("mIdentity"),
+    mAction: document.getElementById("mAction"),
+    saveMorningBtn: document.getElementById("saveMorningBtn"),
+    loadMorningBtn: document.getElementById("loadMorningBtn"),
+    morningSavedBadge: document.getElementById("morningSavedBadge"),
+
+    eHappy: document.getElementById("eHappy"),
+    eFulfill: document.getElementById("eFulfill"),
+    eChallenges: document.getElementById("eChallenges"),
+    eConnection: document.getElementById("eConnection"),
+    eHappyVal: document.getElementById("eHappyVal"),
+    eFulfillVal: document.getElementById("eFulfillVal"),
+    eChallengesVal: document.getElementById("eChallengesVal"),
+    eConnectionVal: document.getElementById("eConnectionVal"),
+    eSmile: document.getElementById("eSmile"),
+    eLearn: document.getElementById("eLearn"),
+    eAlign: document.getElementById("eAlign"),
+    eAlignVal: document.getElementById("eAlignVal"),
+    eShort: document.getElementById("eShort"),
+    eProud: document.getElementById("eProud"),
+    eFear: document.getElementById("eFear"),
+    eTomorrow: document.getElementById("eTomorrow"),
+    saveEveningBtn: document.getElementById("saveEveningBtn"),
+    loadEveningBtn: document.getElementById("loadEveningBtn"),
+    eveningSavedBadge: document.getElementById("eveningSavedBadge"),
+
+    identityEcho: document.getElementById("identityEcho"),
+    actionEcho: document.getElementById("actionEcho"),
+    rightIdentity: document.getElementById("rightIdentity"),
+    rightAction: document.getElementById("rightAction"),
+
+    vitalityNow: document.getElementById("vitalityNow"),
+    courageNow: document.getElementById("courageNow"),
+    meaningNow: document.getElementById("meaningNow"),
+    vitalityBar: document.getElementById("vitalityBar"),
+    courageBar: document.getElementById("courageBar"),
+    meaningBar: document.getElementById("meaningBar"),
+    streakVal: document.getElementById("streakVal"),
+    avgText: document.getElementById("avgText"),
+    insightText: document.getElementById("insightText"),
+
+    historyList: document.getElementById("historyList"),
+
+    resetAllBtn: document.getElementById("resetAllBtn"),
+    exportBtn: document.getElementById("exportBtn"),
+    importBtn: document.getElementById("importBtn"),
+    transferBox: document.getElementById("transferBox"),
+  };
+
+  // =========================
+  // CALCULATIONS
+  // =========================
+  function calcVitality(day){
+    // Rest and optimism, scaled to 0 to 100
+    const m = day.morning;
+    const rested = Number(m.rested ?? 5);
+    const optimism = Number(m.optimism ?? 5);
+    const v = (rested*0.5 + optimism*0.5) * 10;
+    return clamp(Math.round(v), 0, 100);
+  }
+
+  function calcCourage(day){
+    // Confidence, handled challenges, alignment
+    const m = day.morning;
+    const e = day.evening;
+    const confidence = Number(m.confidence ?? 5);
+    const challenges = Number(e.challenges ?? 5);
+    const align = Number(e.align ?? 5);
+    const c = (confidence*0.4 + challenges*0.4 + align*0.2) * 10;
+    return clamp(Math.round(c), 0, 100);
+  }
+
+  function calcMeaning(day){
+    // Fulfillment, connection, fear faced boost
+    const e = day.evening;
+    const fulfill = Number(e.fulfill ?? 5);
+    const connection = Number(e.connection ?? 5);
+    let base = (fulfill*0.6 + connection*0.4) * 10;
+    if(e.fearFaced) base += 8; // small boost
+    return clamp(Math.round(base), 0, 100);
+  }
+
+  function isMorningSaved(day){
+    return Boolean(day.morning.savedAt);
+  }
+  function isEveningSaved(day){
+    return Boolean(day.evening.savedAt);
+  }
+  function isDayComplete(day){
+    return isMorningSaved(day) && isEveningSaved(day);
+  }
+
+  function dateLabel(iso){
+    const [y,m,d] = iso.split("-").map(Number);
+    const dt = new Date(y, m-1, d);
+    return dt.toLocaleDateString(undefined, { weekday:"short", month:"short", day:"numeric" });
+  }
+
+  function getRecentIsos(n){
+    const out = [];
+    const now = new Date();
+    for(let i=0;i<n;i++){
+      const d = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      d.setDate(d.getDate() - i);
+      const iso = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+      out.push(iso);
     }
-    
-    function saveEntry(data) {
-      const entries = getEntries();
-      entries.push(data);
-      
-      if (entries.length > 30) {
-        entries.shift();
-      }
-      
-      const entriesData = JSON.stringify(entries);
-      window.wellbeingEntries = entriesData;
+    return out;
+  }
+
+  function computeStreak(days){
+    const recent = getRecentIsos(400);
+    let streak = 0;
+    for(const iso of recent){
+      if(days[iso] && isDayComplete(days[iso])) streak++;
+      else break;
     }
-    
-    function getEntries() {
-      if (!window.wellbeingEntries) {
-        return [];
-      }
-      try {
-        return JSON.parse(window.wellbeingEntries);
-      } catch (e) {
-        return [];
-      }
+    return streak;
+  }
+
+  function averageScore(days, isos, fn){
+    const vals = [];
+    for(const iso of isos){
+      const d = days[iso];
+      if(!d) continue;
+      if(!isDayComplete(d)) continue;
+      vals.push(fn(d));
     }
-    
-    function computeScores(entries) {
-      const morningEntries = entries.filter(e => e.type === 'morning');
-      const eveningEntries = entries.filter(e => e.type === 'evening');
-      
-      const happinessScores = [];
-      eveningEntries.forEach(e => happinessScores.push(e.happiness));
-      morningEntries.forEach(e => happinessScores.push(e.optimism * 0.8));
-      const happiness = happinessScores.length > 0
-        ? happinessScores.reduce((a, b) => a + b, 0) / happinessScores.length
-        : 0;
-      
-      const confidenceScores = [];
-      morningEntries.forEach(e => confidenceScores.push(e.confidence));
-      eveningEntries.forEach(e => confidenceScores.push(e.resilience));
-      const confidence = confidenceScores.length > 0
-        ? confidenceScores.reduce((a, b) => a + b, 0) / confidenceScores.length
-        : 0;
-      
-      const fulfillmentScores = [];
-      eveningEntries.forEach(e => {
-        fulfillmentScores.push(e.fulfillment * 0.7 + e.connection * 0.3);
+    if(vals.length === 0) return null;
+    const sum = vals.reduce((a,b)=>a+b,0);
+    return Math.round(sum / vals.length);
+  }
+
+  function buildInsights(days){
+    // simple pattern checks
+    const isos30 = getRecentIsos(30);
+    const rows = [];
+    for(const iso of isos30){
+      const d = days[iso];
+      if(!d || !isDayComplete(d)) continue;
+      rows.push({
+        iso,
+        vitality: calcVitality(d),
+        courage: calcCourage(d),
+        meaning: calcMeaning(d),
+        fear: !!d.evening.fearFaced,
+        rested: Number(d.morning.rested ?? 5),
+        align: Number(d.evening.align ?? 5),
       });
-      const fulfillment = fulfillmentScores.length > 0
-        ? fulfillmentScores.reduce((a, b) => a + b, 0) / fulfillmentScores.length
-        : 0;
-      
-      return { happiness, confidence, fulfillment };
     }
-    
-    function updateStats() {
-      const entries = getEntries();
-      const hasData = entries.length > 0;
-      const current = computeScores(entries);
-      const previous = entries.length > 1 ? computeScores(entries.slice(0, -1)) : null;
-      
-      updateStatCard('happiness', current.happiness, previous?.happiness, 'Track your mood', hasData);
-      updateStatCard('confidence', current.confidence, previous?.confidence, 'Build self-belief', hasData);
-      updateStatCard('fulfillment', current.fulfillment, previous?.fulfillment, 'Find purpose', hasData);
+    if(rows.length < 6){
+      return "Log at least 6 complete days and this will start revealing your patterns.";
     }
-    
-    function updateStatCard(key, score, previousScore, emptyCopy, hasData) {
-      const valueEl = document.getElementById(`${key}Avg`);
-      const trendEl = document.getElementById(`${key}Trend`);
-      if (!valueEl || !trendEl) return;
-      
-      if (!hasData) {
-        valueEl.textContent = '--';
-        trendEl.textContent = emptyCopy;
-        trendEl.style.color = 'var(--text-muted)';
-        return;
-      }
-      
-      valueEl.textContent = score.toFixed(1);
-      const delta = previousScore !== undefined && previousScore !== null ? score - previousScore : 0;
-      let trendMessage = 'Keeping steady';
-      let color = 'var(--text-secondary)';
-      if (delta > 0.2) {
-        trendMessage = `Up ${delta.toFixed(1)} since last check-in`; color = 'var(--success)';
-      } else if (delta < -0.2) {
-        trendMessage = `Down ${Math.abs(delta).toFixed(1)} since last check-in`; color = 'var(--warning)';
-      }
-      trendEl.textContent = trendMessage;
-      trendEl.style.color = color;
-    }
-    
-    function calculateInsights() {
-      const entries = getEntries();
-      if (entries.length === 0) {
-        ['happiness', 'confidence', 'fulfillment'].forEach(key => {
-          updateScore(key, '--');
-          updateInsight(key, null);
-        });
-        return;
-      }
-      
-      const { happiness, confidence, fulfillment } = computeScores(entries);
-      updateScore('happiness', happiness.toFixed(1));
-      updateScore('confidence', confidence.toFixed(1));
-      updateScore('fulfillment', fulfillment.toFixed(1));
-      
-      updateInsight('happiness', happiness);
-      updateInsight('confidence', confidence);
-      updateInsight('fulfillment', fulfillment);
-    }
-    
-    function updateScore(key, value) {
-      const scoreEl = document.getElementById(`${key}Score`);
-      const barEl = document.getElementById(`${key}Bar`);
-      const percent = value === '--' ? 0 : Math.min(100, (parseFloat(value) / 10) * 100);
-      if (scoreEl) scoreEl.textContent = value === '--' ? '--' : `${value}/10`;
-      if (barEl) barEl.style.width = `${percent}%`;
-    }
-    
-    function updateInsight(key, score) {
-      const insightEl = document.getElementById(`${key}Insight`);
-      if (!insightEl) return;
-      if (score === null) {
-        insightEl.textContent = 'Complete a morning or evening entry to see insights tailored to you.';
-        return;
-      }
-      let message = '';
-      if (score >= 8) {
-        message = 'You are thriving here—keep celebrating the habits and connections that fuel you.';
-      } else if (score >= 6) {
-        message = 'Solid momentum. A small daily ritual could help you keep this upward curve.';
-      } else if (score >= 4) {
-        message = 'You are in a rebuilding phase. Choose one supportive action to lift this area today.';
+
+    const fearDays = rows.filter(r=>r.fear);
+    const noFearDays = rows.filter(r=>!r.fear);
+
+    const avg = (arr, key) => {
+      if(arr.length === 0) return null;
+      return Math.round(arr.reduce((s,x)=>s+x[key],0)/arr.length);
+    };
+
+    const fearMeaning = avg(fearDays,"meaning");
+    const noFearMeaning = avg(noFearDays,"meaning");
+
+    const highRest = rows.filter(r=>r.rested >= 8);
+    const lowRest = rows.filter(r=>r.rested <= 4);
+    const highRestVital = avg(highRest,"vitality");
+    const lowRestVital = avg(lowRest,"vitality");
+
+    const highAlign = rows.filter(r=>r.align >= 8);
+    const lowAlign = rows.filter(r=>r.align <= 4);
+    const highAlignCourage = avg(highAlign,"courage");
+    const lowAlignCourage = avg(lowAlign,"courage");
+
+    const lines = [];
+    if(fearMeaning !== null && noFearMeaning !== null && fearDays.length >= 2 && noFearDays.length >= 2){
+      const diff = fearMeaning - noFearMeaning;
+      if(Math.abs(diff) >= 6){
+        lines.push(`Meaning shifts hard when you face fear. Difference: ${diff} points.`);
       } else {
-        message = 'Gentle check-in needed. Reach out for support or add a tiny act of care for yourself.';
+        lines.push("Fear faced days are trending higher for Meaning, keep pushing that rep.");
       }
-      insightEl.textContent = message;
     }
-    
-    function displayHistory() {
-      const listEl = document.getElementById('historyList');
-      const entries = getEntries();
-      if (!listEl) return;
-      if (entries.length === 0) {
-        listEl.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 40px;">Complete your first check-in to start tracking your journey</p>';
-        return;
-      }
-      const items = entries
-        .slice()
-        .sort((a, b) => new Date(b.date) - new Date(a.date))
-        .map(entry => renderHistoryItem(entry))
-        .join('');
-      listEl.innerHTML = items;
+
+    if(highRestVital !== null && lowRestVital !== null && highRest.length >= 2 && lowRest.length >= 2){
+      const diff = highRestVital - lowRestVital;
+      lines.push(`Rest changes Vitality. High rest vs low rest: ${diff} points.`);
     }
-    
-    function renderHistoryItem(entry) {
-      const date = new Date(entry.date);
-      const formattedDate = date.toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
-      const scores = entry.type === 'morning'
-        ? `Rest ${entry.rest}/10 · Optimism ${entry.optimism}/10 · Confidence ${entry.confidence}/10`
-        : `Happiness ${entry.happiness}/10 · Fulfillment ${entry.fulfillment}/10 · Resilience ${entry.resilience}/10 · Connection ${entry.connection}/10`;
-      const note = entry.type === 'morning'
-        ? entry.intention || entry.gratitude
-        : entry.highlight || entry.learning;
-      const noteCopy = note ? `<p class="history-note">${note}</p>` : '';
+
+    if(highAlignCourage !== null && lowAlignCourage !== null && highAlign.length >= 2 && lowAlign.length >= 2){
+      const diff = highAlignCourage - lowAlignCourage;
+      lines.push(`Alignment drives Courage. High alignment vs low alignment: ${diff} points.`);
+    }
+
+    if(lines.length === 0){
+      return "Your patterns are still forming. Keep logging, keep confronting fear early.";
+    }
+    return lines.join(" ");
+  }
+
+  // =========================
+  // RENDER
+  // =========================
+  let currentISO = isoToday();
+
+  function renderHeader(){
+    els.todayLabel.textContent = `Today: ${dateLabel(currentISO)} (${currentISO})`;
+  }
+
+  function renderTruthAndFoundation(day){
+    const t = TRUTHS[day.truthIndex];
+    els.truthText.textContent = t.truth;
+    els.truthQuestion.textContent = t.question;
+    els.rightTruth.textContent = t.truth;
+    els.rightQuestion.textContent = t.question;
+
+    const f = FOUNDATIONS[day.foundationIndex];
+    els.foundationQ.textContent = f.q;
+    els.foundationHint.textContent = f.hint;
+    els.rightFoundation.textContent = f.q;
+  }
+
+  function renderMode(state){
+    els.deepToggle.checked = !!state.deepMode;
+    els.modePill.textContent = state.deepMode ? "Deep Mode" : "Quick Mode";
+    els.morningMetricsBlock.style.display = state.deepMode ? "block" : "none";
+  }
+
+  function setRangeValueDisplays(){
+    els.mRestedVal.textContent = els.mRested.value;
+    els.mOptimismVal.textContent = els.mOptimism.value;
+    els.mConfidenceVal.textContent = els.mConfidence.value;
+    els.eHappyVal.textContent = els.eHappy.value;
+    els.eFulfillVal.textContent = els.eFulfill.value;
+    els.eChallengesVal.textContent = els.eChallenges.value;
+    els.eConnectionVal.textContent = els.eConnection.value;
+    els.eAlignVal.textContent = els.eAlign.value;
+  }
+
+  function renderMorning(day){
+    const m = day.morning;
+    els.mTruthAnswer.value = m.truthAnswer || "";
+    els.mFoundationAnswer.value = m.foundationAnswer || "";
+    els.mRested.value = m.rested ?? 5;
+    els.mOptimism.value = m.optimism ?? 5;
+    els.mConfidence.value = m.confidence ?? 5;
+    els.mIdentity.value = m.identity || "";
+    els.mAction.value = m.action || "";
+    setRangeValueDisplays();
+
+    els.morningSavedBadge.textContent = m.savedAt ? `Saved ${m.savedAt}` : "Not saved";
+    els.rightIdentity.textContent = (m.identity && m.identity.trim()) ? m.identity.trim() : "Not set";
+    els.rightAction.textContent = (m.action && m.action.trim()) ? m.action.trim() : "Not set";
+  }
+
+  function renderEvening(day){
+    const e = day.evening;
+    els.eHappy.value = e.happy ?? 5;
+    els.eFulfill.value = e.fulfill ?? 5;
+    els.eChallenges.value = e.challenges ?? 5;
+    els.eConnection.value = e.connection ?? 5;
+    els.eSmile.value = e.smile || "";
+    els.eLearn.value = e.learn || "";
+    els.eAlign.value = e.align ?? 5;
+    els.eShort.value = e.short || "";
+    els.eProud.value = e.proud || "";
+    els.eFear.checked = !!e.fearFaced;
+    els.eTomorrow.value = e.tomorrow || "";
+    setRangeValueDisplays();
+
+    const m = day.morning;
+    els.identityEcho.textContent = (m.identity && m.identity.trim()) ? m.identity.trim() : "Not set";
+    els.actionEcho.textContent = (m.action && m.action.trim()) ? m.action.trim() : "Not set";
+    els.eveningSavedBadge.textContent = e.savedAt ? `Saved ${e.savedAt}` : "Not saved";
+  }
+
+  function renderDashboard(){
+    const days = getDays();
+    const day = days[currentISO] ? days[currentISO] : ensureDay(currentISO);
+
+    const v = isDayComplete(day) ? calcVitality(day) : 0;
+    const c = isDayComplete(day) ? calcCourage(day) : 0;
+    const m = isDayComplete(day) ? calcMeaning(day) : 0;
+
+    els.vitalityNow.textContent = v;
+    els.courageNow.textContent = c;
+    els.meaningNow.textContent = m;
+
+    els.vitalityBar.style.width = `${v}%`;
+    els.courageBar.style.width = `${c}%`;
+    els.meaningBar.style.width = `${m}%`;
+
+    const streak = computeStreak(days);
+    els.streakVal.textContent = String(streak);
+
+    const isos7 = getRecentIsos(7);
+    const isos30 = getRecentIsos(30);
+
+    const v7 = averageScore(days, isos7, calcVitality);
+    const c7 = averageScore(days, isos7, calcCourage);
+    const m7 = averageScore(days, isos7, calcMeaning);
+
+    const v30 = averageScore(days, isos30, calcVitality);
+    const c30 = averageScore(days, isos30, calcCourage);
+    const m30 = averageScore(days, isos30, calcMeaning);
+
+    if(v7 === null){
+      els.avgText.textContent = "No complete days yet. Save Morning and Evening for at least one day.";
+    } else {
+      els.avgText.textContent =
+        `7 day averages: Vitality ${v7}, Courage ${c7}, Meaning ${m7}. ` +
+        `30 day averages: Vitality ${v30 ?? "NA"}, Courage ${c30 ?? "NA"}, Meaning ${m30 ?? "NA"}.`;
+    }
+
+    els.insightText.textContent = buildInsights(days);
+  }
+
+  function renderHistory(){
+    const days = getDays();
+    const keys = Object.keys(days).sort((a,b)=> b.localeCompare(a));
+    if(keys.length === 0){
+      els.historyList.innerHTML = `<div class="item"><div class="line muted">No history yet.</div></div>`;
+      return;
+    }
+
+    const items = keys.map(iso=>{
+      const d = days[iso];
+      const done = isDayComplete(d);
+      const v = done ? calcVitality(d) : 0;
+      const c = done ? calcCourage(d) : 0;
+      const m = done ? calcMeaning(d) : 0;
+
+      const truth = TRUTHS[d.truthIndex]?.truth || "Truth";
+      const ident = d.morning.identity || "";
+      const mini = done ? `Vitality ${v}, Courage ${c}, Meaning ${m}` : "Incomplete";
+
       return `
-        <div class="history-item">
-          <div class="history-date">${entry.type === 'morning' ? '🌅 Morning' : '🌙 Evening'} · ${formattedDate}</div>
-          <div class="history-scores">${scores}</div>
-          ${noteCopy}
+        <div class="item" data-iso="${iso}" style="cursor:pointer;">
+          <div class="head">
+            <div class="date">${dateLabel(iso)} <span class="mini">(${iso})</span></div>
+            <div class="mini" style="color:${done ? "var(--good)" : "var(--muted)"}; font-weight:900;">${mini}</div>
+          </div>
+          <div class="line"><span class="mini">Truth:</span> ${escapeHTML(truth)}</div>
+          <div class="line"><span class="mini">Identity:</span> ${escapeHTML(ident || "Not set")}</div>
         </div>
       `;
-    }
-    
-    function showToast(message) {
-      const toast = document.getElementById('toast');
-      if (!toast) return;
-      toast.textContent = message;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2800);
-    }
-    
-    updateStats();
-  </script>
-  <script>
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker
-          .register("./service-worker.js")
-          .catch((error) => console.error("Service worker registration failed", error));
+    }).join("");
+
+    els.historyList.innerHTML = items;
+
+    Array.from(els.historyList.querySelectorAll(".item")).forEach(el=>{
+      el.addEventListener("click", ()=>{
+        const iso = el.getAttribute("data-iso");
+        if(!iso) return;
+        currentISO = iso;
+        boot();
+        switchTab("morning");
       });
+    });
+  }
+
+  function escapeHTML(str){
+    return String(str ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  function switchTab(name){
+    els.tabs.forEach(t=> t.classList.toggle("active", t.dataset.tab === name));
+    Object.keys(els.panels).forEach(k=>{
+      els.panels[k].style.display = (k === name) ? "block" : "none";
+    });
+    const state = getState();
+    state.lastTab = name;
+    setState(state);
+
+    if(name === "dashboard") renderDashboard();
+    if(name === "history") renderHistory();
+    if(name === "evening"){
+      // refresh echo from morning
+      const day = ensureDay(currentISO);
+      renderEvening(day);
     }
-  </script>
+  }
+
+  // =========================
+  // SAVE AND LOAD
+  // =========================
+  function nowStamp(){
+    const d = new Date();
+    const hh = String(d.getHours()).padStart(2,"0");
+    const mm = String(d.getMinutes()).padStart(2,"0");
+    return `${hh}:${mm}`;
+  }
+
+  function saveMorning(){
+    const days = getDays();
+    const day = ensureDay(currentISO);
+
+    day.morning.truthAnswer = els.mTruthAnswer.value.trim();
+    day.morning.foundationAnswer = els.mFoundationAnswer.value.trim();
+    day.morning.rested = Number(els.mRested.value);
+    day.morning.optimism = Number(els.mOptimism.value);
+    day.morning.confidence = Number(els.mConfidence.value);
+    day.morning.identity = els.mIdentity.value.trim();
+    day.morning.action = els.mAction.value.trim();
+    day.morning.savedAt = nowStamp();
+
+    days[currentISO] = day;
+    setDays(days);
+
+    renderMorning(day);
+    renderEvening(day);
+    renderDashboard();
+  }
+
+  function loadMorning(){
+    const day = ensureDay(currentISO);
+    renderMorning(day);
+  }
+
+  function saveEvening(){
+    const days = getDays();
+    const day = ensureDay(currentISO);
+
+    day.evening.happy = Number(els.eHappy.value);
+    day.evening.fulfill = Number(els.eFulfill.value);
+    day.evening.challenges = Number(els.eChallenges.value);
+    day.evening.connection = Number(els.eConnection.value);
+    day.evening.smile = els.eSmile.value.trim();
+    day.evening.learn = els.eLearn.value.trim();
+    day.evening.align = Number(els.eAlign.value);
+    day.evening.short = els.eShort.value.trim();
+    day.evening.proud = els.eProud.value.trim();
+    day.evening.fearFaced = !!els.eFear.checked;
+    day.evening.tomorrow = els.eTomorrow.value.trim();
+    day.evening.savedAt = nowStamp();
+
+    days[currentISO] = day;
+    setDays(days);
+
+    renderEvening(day);
+    renderDashboard();
+    renderHistory();
+  }
+
+  function loadEvening(){
+    const day = ensureDay(currentISO);
+    renderEvening(day);
+  }
+
+  // =========================
+  // EVENTS
+  // =========================
+  function hookSliders(){
+    const pairs = [
+      [els.mRested, els.mRestedVal],
+      [els.mOptimism, els.mOptimismVal],
+      [els.mConfidence, els.mConfidenceVal],
+      [els.eHappy, els.eHappyVal],
+      [els.eFulfill, els.eFulfillVal],
+      [els.eChallenges, els.eChallengesVal],
+      [els.eConnection, els.eConnectionVal],
+      [els.eAlign, els.eAlignVal],
+    ];
+    pairs.forEach(([r, v])=>{
+      r.addEventListener("input", ()=> v.textContent = r.value);
+    });
+  }
+
+  function hookTabs(){
+    els.tabs.forEach(t=>{
+      t.addEventListener("click", ()=> switchTab(t.dataset.tab));
+    });
+  }
+
+  function hookMode(){
+    els.deepToggle.addEventListener("change", ()=>{
+      const state = getState();
+      state.deepMode = !!els.deepToggle.checked;
+      setState(state);
+      renderMode(state);
+    });
+  }
+
+  function hookButtons(){
+    els.saveMorningBtn.addEventListener("click", saveMorning);
+    els.loadMorningBtn.addEventListener("click", loadMorning);
+    els.saveEveningBtn.addEventListener("click", saveEvening);
+    els.loadEveningBtn.addEventListener("click", loadEvening);
+
+    els.resetAllBtn.addEventListener("click", ()=>{
+      const ok = window.confirm("This will delete all your saved days on this device. Continue?");
+      if(!ok) return;
+      localStorage.removeItem(KEY_DAYS);
+      boot(true);
+      switchTab("morning");
+    });
+
+    els.exportBtn.addEventListener("click", ()=>{
+      const days = getDays();
+      const payload = { version:"tia_days_v1", exportedAt:new Date().toISOString(), days };
+      els.transferBox.value = JSON.stringify(payload, null, 2);
+    });
+
+    els.importBtn.addEventListener("click", ()=>{
+      try{
+        const raw = els.transferBox.value.trim();
+        if(!raw) return;
+        const parsed = JSON.parse(raw);
+        if(!parsed.days) throw new Error("Invalid JSON: missing days");
+        setDays(parsed.days);
+        boot();
+        switchTab("history");
+      }catch(e){
+        alert("Import failed. Check JSON.");
+      }
+    });
+  }
+
+  // =========================
+  // BOOT
+  // =========================
+  function boot(afterReset=false){
+    const state = getState();
+    renderMode(state);
+
+    if(afterReset){
+      currentISO = isoToday();
+    }
+
+    const day = ensureDay(currentISO);
+
+    renderHeader();
+    renderTruthAndFoundation(day);
+    renderMorning(day);
+    renderEvening(day);
+    renderDashboard();
+    renderHistory();
+
+    // Right column identity already set in renderMorning
+  }
+
+  // Init
+  hookTabs();
+  hookMode();
+  hookSliders();
+  hookButtons();
+
+  // Load last tab
+  const state = getState();
+  boot();
+  switchTab(state.lastTab || "morning");
+</script>
 </body>
 </html>
