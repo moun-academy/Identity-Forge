@@ -11,7 +11,7 @@ const DEFAULT_TIME: ReminderTime = { hour: 8, minute: 0 };
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
-    shouldPlaySound: false,
+    shouldPlaySound: true,
     shouldSetBadge: false,
   }),
 });
@@ -21,7 +21,13 @@ const ensureAndroidChannel = async () => {
 
   await Notifications.setNotificationChannelAsync("daily-reminders", {
     name: "Daily reminders",
-    importance: Notifications.AndroidImportance.DEFAULT,
+    description: "Daily reminders to log your exercise.",
+    importance: Notifications.AndroidImportance.HIGH,
+    enableVibrate: true,
+    vibrationPattern: [0, 250, 250, 250],
+    lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
+    lightColor: "#4f46e5",
+    sound: "default",
   });
 };
 
@@ -76,7 +82,9 @@ export const scheduleDailyExerciseReminder = async (timeOverride?: ReminderTime)
     content: {
       title: "Did you move your body today?",
       body: `It's ${formatReminderTime(reminderTime)} — take a second to log your exercise and celebrate it.`,
-      sound: Platform.OS === "ios" ? "default" : undefined,
+      sound: "default",
+      priority: Notifications.AndroidNotificationPriority.MAX,
+      channelId: Platform.OS === "android" ? "daily-reminders" : undefined,
     },
     trigger: {
       hour: reminderTime.hour,
