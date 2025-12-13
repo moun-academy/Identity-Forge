@@ -1,5 +1,5 @@
 // Identity Forge Service Worker
-const CACHE_NAME = 'identity-forge-v4';
+const CACHE_NAME = 'identity-forge-v5';
 const scheduledNotifications = new Map();
 
 // Install
@@ -67,8 +67,8 @@ function scheduleNotification(title, body, notifyAt) {
     // If time has passed, show immediately
     self.registration.showNotification(title, {
       body: body,
-      icon: '/icons/icon-192x192.png',
-      badge: '/icons/icon-192x192.png',
+      icon: '/icons/icon-192.png',
+      badge: '/icons/icon-192.png',
       vibrate: [200, 100, 200],
       tag: 'identity-forge-reminder',
       requireInteraction: true,
