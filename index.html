@@ -767,11 +767,21 @@
           </div>
           
           <div class="question-block">
-            <label class="question-label">Test Notification</label>
-            <p class="question-hint">Send a test notification right now to make sure it's working</p>
-            <button class="btn" onclick="testNotification()" style="background: var(--bg-elevated); color: var(--text-primary); border: 1px solid var(--border);">Send Test Notification</button>
+            <label class="question-label">Test Notifications</label>
+            <p class="question-hint">Test instant or scheduled notifications</p>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button class="btn" onclick="testNotification()" style="background: var(--bg-elevated); color: var(--text-primary); border: 1px solid var(--border); flex: 1; min-width: 140px;">Test Now</button>
+              <button class="btn" onclick="testScheduledNotification()" style="background: var(--bg-elevated); color: var(--text-primary); border: 1px solid var(--border); flex: 1; min-width: 140px;">Test in 1 Min</button>
+            </div>
+            <p class="question-hint" id="nextNotifStatus" style="margin-top: 12px; color: var(--accent);"></p>
           </div>
-          
+
+          <div class="question-block" style="background: var(--bg-elevated); padding: 16px; border-radius: 8px; border-left: 3px solid var(--warning);">
+            <p class="question-hint" style="margin: 0; color: var(--text-secondary);">
+              <strong style="color: var(--warning);">Note:</strong> Scheduled notifications only work when the app is open or recently used. Samsung closes background apps to save battery.
+            </p>
+          </div>
+
           <button class="btn" onclick="saveNotificationSettings()">Save Reminder Times</button>
         </div>
       </div>
@@ -1324,7 +1334,7 @@
       const status = document.getElementById('notifStatus');
       const settings = document.getElementById('notifSettings');
       const hint = document.getElementById('notifPermissionHint');
-      
+
       if (notificationsEnabled) {
         toggle.classList.add('selected');
         status.textContent = 'ON';
@@ -1336,6 +1346,8 @@
         settings.style.display = 'none';
         hint.textContent = 'Click to enable browser notifications';
       }
+
+      updateNextNotifStatus();
     }
     
     function saveNotificationSettings() {
@@ -1346,6 +1358,60 @@
       showToast('Reminder times saved. Notifications rescheduled for ' + morningReminderTime + ' and ' + eveningReminderTime);
     }
     
+    // Test scheduled notification - sets reminder to 1 minute from now
+    async function testScheduledNotification() {
+      if (!notificationsEnabled) {
+        showToast('Enable notifications first');
+        return;
+      }
+
+      const now = new Date();
+      now.setMinutes(now.getMinutes() + 1);
+      const testTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      // Temporarily set morning time to 1 minute from now
+      morningReminderTime = testTime;
+      document.getElementById('morningTime').value = testTime;
+
+      // Clear any previous test notification flag
+      localStorage.removeItem(`lastNotif_morning_${getTodayDateString()}`);
+
+      showToast(`Notification scheduled for ${testTime}. Keep app open!`);
+      updateNextNotifStatus();
+
+      console.log('Test scheduled for:', testTime);
+    }
+
+    // Update the next notification status display
+    function updateNextNotifStatus() {
+      const statusEl = document.getElementById('nextNotifStatus');
+      if (!statusEl) return;
+
+      if (!notificationsEnabled) {
+        statusEl.textContent = '';
+        return;
+      }
+
+      const now = new Date();
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      const morningMinutes = timeToMinutes(morningReminderTime);
+      const eveningMinutes = timeToMinutes(eveningReminderTime);
+      const today = getTodayEntries();
+
+      let nextTime = '';
+      if (!today.morning && currentMinutes < morningMinutes) {
+        nextTime = `Next: Morning at ${morningReminderTime}`;
+      } else if (today.morning && !today.evening && currentMinutes < eveningMinutes) {
+        nextTime = `Next: Evening at ${eveningReminderTime}`;
+      } else if (!today.morning) {
+        nextTime = `Next: Morning at ${morningReminderTime} (within window)`;
+      } else {
+        nextTime = 'All reminders done for today';
+      }
+
+      statusEl.textContent = nextTime;
+    }
+
     async function testNotification() {
       if (!notificationsEnabled) {
         showToast('Enable notifications first');
@@ -1454,10 +1520,22 @@
       const lastEveningNotif = getLastNotificationTime('evening');
       const tenMinutesAgo = Date.now() - (10 * 60 * 1000);
 
+      // Debug logging
+      console.log('Notification check:', {
+        currentTime: `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`,
+        morningSet: morningReminderTime,
+        eveningSet: eveningReminderTime,
+        currentMinutes,
+        morningMinutes,
+        eveningMinutes,
+        morningDone: !!today.morning,
+        eveningDone: !!today.evening
+      });
+
       // Morning reminder - trigger if within window and not already sent today
       const morningDiff = currentMinutes - morningMinutes;
       if (morningDiff >= 0 && morningDiff <= WINDOW_MINUTES && !today.morning && lastMorningNotif < tenMinutesAgo) {
-        console.log('Sending morning notification...');
+        console.log('TRIGGERING morning notification!');
         sendNotification(
           'Morning Check-In',
           'Your life matters. Your time is limited. Start your day with intention.',
@@ -1469,7 +1547,7 @@
       // Evening reminder - trigger if within window and morning is done
       const eveningDiff = currentMinutes - eveningMinutes;
       if (eveningDiff >= 0 && eveningDiff <= WINDOW_MINUTES && today.morning && !today.evening && lastEveningNotif < tenMinutesAgo) {
-        console.log('Sending evening notification...');
+        console.log('TRIGGERING evening notification!');
         sendNotification(
           'Evening Reflection',
           'Did you do what you said you\'d do? Complete your evening check-in.',
