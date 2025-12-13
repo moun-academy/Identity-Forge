@@ -3,10 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#ff6b35" />
-  <link rel="manifest" href="/manifest.webmanifest" />
-  <link rel="icon" href="/icons/icon-192.png" />
-  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
   <title>Identity Forge</title>
   <style>
     * {
@@ -540,6 +536,7 @@
       <button class="nav-tab active" onclick="switchView('morning')">Morning</button>
       <button class="nav-tab" onclick="switchView('evening')">Evening</button>
       <button class="nav-tab" onclick="switchView('history')">History</button>
+      <button class="nav-tab" onclick="switchView('settings')">Settings</button>
     </nav>
     
     <!-- MORNING VIEW -->
@@ -721,6 +718,61 @@
         </div>
       </div>
     </div>
+    
+    <!-- SETTINGS VIEW -->
+    <div id="settings" class="view">
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">⚙️</span>
+          <h2 class="section-title">Notification Settings</h2>
+        </div>
+        
+        <div class="question-block">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <label class="question-label" style="margin: 0;">Enable Notifications</label>
+            <button class="yes-no-btn" id="notifToggle" onclick="toggleNotifications()" style="width: 120px; padding: 10px;">
+              <span id="notifStatus">OFF</span>
+            </button>
+          </div>
+          <p class="question-hint" id="notifPermissionHint">Click to enable browser notifications</p>
+        </div>
+        
+        <div id="notifSettings" style="display: none;">
+          <div class="question-block">
+            <label class="question-label">Morning Reminder</label>
+            <p class="question-hint">When should we remind you to do your morning check-in?</p>
+            <input type="time" class="input-text" id="morningTime" value="07:00" style="font-size: 1.1rem; padding: 16px;" />
+          </div>
+          
+          <div class="question-block">
+            <label class="question-label">Evening Reminder</label>
+            <p class="question-hint">When should we remind you to do your evening reflection?</p>
+            <input type="time" class="input-text" id="eveningTime" value="21:00" style="font-size: 1.1rem; padding: 16px;" />
+          </div>
+          
+          <button class="btn" onclick="saveNotificationSettings()">Save Reminder Times</button>
+        </div>
+      </div>
+      
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">💾</span>
+          <h2 class="section-title">Data Management</h2>
+        </div>
+        
+        <div class="question-block">
+          <label class="question-label">Export Your Data</label>
+          <p class="question-hint">Download all your entries as a JSON file for backup</p>
+          <button class="btn" onclick="exportData()" style="background: var(--bg-elevated); color: var(--text-primary); border: 1px solid var(--border);">Download Data</button>
+        </div>
+        
+        <div class="question-block">
+          <label class="question-label" style="color: var(--warning);">Reset Everything</label>
+          <p class="question-hint">This will delete all your entries. This cannot be undone.</p>
+          <button class="btn" onclick="confirmReset()" style="background: transparent; color: var(--warning); border: 1px solid var(--warning);">Clear All Data</button>
+        </div>
+      </div>
+    </div>
   </div>
   
   <div class="toast" id="toast"></div>
@@ -763,6 +815,10 @@
     let entries = [];
     let currentDayIndex = 0;
     let eveningDidIt = null;
+    let notificationsEnabled = false;
+    let morningReminderTime = '07:00';
+    let eveningReminderTime = '21:00';
+    let notificationCheckInterval = null;
     
     // Initialize
     function init() {
@@ -770,6 +826,8 @@
       loadDailyContent();
       updateStats();
       checkEveningAvailability();
+      loadNotificationSettings();
+      startNotificationChecker();
     }
     
     // Setup slider value displays
@@ -839,6 +897,8 @@
         checkEveningAvailability();
       } else if (viewName === 'history') {
         displayHistory();
+      } else if (viewName === 'settings') {
+        updateSettingsUI();
       }
     }
     
@@ -1082,6 +1142,11 @@
     // Storage (in-memory for artifacts)
     function saveToStorage() {
       window.identityForgeData = JSON.stringify(entries);
+      window.identityForgeSettings = JSON.stringify({
+        notificationsEnabled,
+        morningReminderTime,
+        eveningReminderTime
+      });
     }
     
     function loadFromStorage() {
@@ -1090,6 +1155,166 @@
           entries = JSON.parse(window.identityForgeData);
         } catch (e) {
           entries = [];
+        }
+      }
+      if (window.identityForgeSettings) {
+        try {
+          const settings = JSON.parse(window.identityForgeSettings);
+          notificationsEnabled = settings.notificationsEnabled || false;
+          morningReminderTime = settings.morningReminderTime || '07:00';
+          eveningReminderTime = settings.eveningReminderTime || '21:00';
+        } catch (e) {
+          // Use defaults
+        }
+      }
+    }
+    
+    // Notification functions
+    async function toggleNotifications() {
+      if (!notificationsEnabled) {
+        // Request permission
+        if (!("Notification" in window)) {
+          showToast("This browser doesn't support notifications");
+          return;
+        }
+        
+        const permission = await Notification.requestPermission();
+        
+        if (permission === "granted") {
+          notificationsEnabled = true;
+          showToast("Notifications enabled!");
+          saveToStorage();
+          updateSettingsUI();
+        } else {
+          showToast("Notification permission denied");
+        }
+      } else {
+        // Disable notifications
+        notificationsEnabled = false;
+        showToast("Notifications disabled");
+        saveToStorage();
+        updateSettingsUI();
+      }
+    }
+    
+    function loadNotificationSettings() {
+      if (document.getElementById('morningTime')) {
+        document.getElementById('morningTime').value = morningReminderTime;
+      }
+      if (document.getElementById('eveningTime')) {
+        document.getElementById('eveningTime').value = eveningReminderTime;
+      }
+      updateSettingsUI();
+    }
+    
+    function updateSettingsUI() {
+      const toggle = document.getElementById('notifToggle');
+      const status = document.getElementById('notifStatus');
+      const settings = document.getElementById('notifSettings');
+      const hint = document.getElementById('notifPermissionHint');
+      
+      if (notificationsEnabled) {
+        toggle.classList.add('selected');
+        status.textContent = 'ON';
+        settings.style.display = 'block';
+        hint.textContent = 'Notifications are active';
+      } else {
+        toggle.classList.remove('selected');
+        status.textContent = 'OFF';
+        settings.style.display = 'none';
+        hint.textContent = 'Click to enable browser notifications';
+      }
+    }
+    
+    function saveNotificationSettings() {
+      morningReminderTime = document.getElementById('morningTime').value;
+      eveningReminderTime = document.getElementById('eveningTime').value;
+      saveToStorage();
+      showToast('Reminder times saved');
+    }
+    
+    function startNotificationChecker() {
+      // Check every minute if it's time to send a notification
+      notificationCheckInterval = setInterval(checkAndSendNotifications, 60000);
+      // Also check immediately
+      checkAndSendNotifications();
+    }
+    
+    function checkAndSendNotifications() {
+      if (!notificationsEnabled) return;
+      
+      const now = new Date();
+      const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      const today = getTodayEntries();
+      
+      // Morning reminder
+      if (currentTime === morningReminderTime && !today.morning) {
+        sendNotification(
+          '🔥 Morning Check-In',
+          'Your life matters. Your time is limited. Start your day with intention.',
+          'morning'
+        );
+      }
+      
+      // Evening reminder
+      if (currentTime === eveningReminderTime && today.morning && !today.evening) {
+        sendNotification(
+          '🌙 Evening Reflection',
+          'Did you do what you said you\'d do? Complete your evening check-in.',
+          'evening'
+        );
+      }
+    }
+    
+    function sendNotification(title, body, type) {
+      if (!("Notification" in window) || Notification.permission !== "granted") {
+        return;
+      }
+      
+      const notification = new Notification(title, {
+        body: body,
+        icon: '🎯',
+        badge: '🎯',
+        requireInteraction: false,
+        silent: false
+      });
+      
+      notification.onclick = function() {
+        window.focus();
+        switchView(type);
+        notification.close();
+      };
+    }
+    
+    // Data management
+    function exportData() {
+      const dataStr = JSON.stringify({
+        entries: entries,
+        exportDate: new Date().toISOString(),
+        version: '1.0'
+      }, null, 2);
+      
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `identity-forge-backup-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      showToast('Data exported successfully');
+    }
+    
+    function confirmReset() {
+      if (confirm('Are you absolutely sure? This will delete ALL your entries and cannot be undone.')) {
+        if (confirm('Last chance. Delete everything?')) {
+          entries = [];
+          saveToStorage();
+          updateStats();
+          displayHistory();
+          showToast('All data cleared');
         }
       }
     }
@@ -1107,15 +1332,6 @@
     // Initialize on load
     loadFromStorage();
     init();
-  </script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js').catch((error) => {
-          console.error('Service worker registration failed', error);
-        });
-      });
-    }
   </script>
 </body>
 </html>
