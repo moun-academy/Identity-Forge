@@ -1,55 +1,96 @@
-const CACHE_NAME = "gratitude-pwa-v2";
-const ASSETS = [
-  "/",
-  "/index.html",
-  "/manifest.webmanifest",
-  "/icons/icon-192.png",
-  "/icons/icon-512.png",
-  "/icons/icon-512-maskable.png",
-];
+// Identity Forge Service Worker
+const CACHE_NAME = 'identity-forge-v1';
+const scheduledNotifications = new Map();
 
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches
-      .open(CACHE_NAME)
-      .then((cache) => cache.addAll(ASSETS))
-      .then(() => self.skipWaiting())
-  );
+// Install
+self.addEventListener('install', (event) => {
+  console.log('Identity Forge SW: Installing...');
+  self.skipWaiting();
 });
 
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches
-      .keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))))
-      .then(() => self.clients.claim())
-  );
+// Activate
+self.addEventListener('activate', (event) => {
+  console.log('Identity Forge SW: Activating...');
+  event.waitUntil(self.clients.claim());
 });
 
-self.addEventListener("fetch", (event) => {
-  if (event.request.method !== "GET") return;
-
-  if (event.request.mode === "navigate") {
-    event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
-          return response;
-        })
-        .catch(() => caches.match("./index.html"))
-    );
-    return;
+// Listen for notification scheduling from main app
+self.addEventListener('message', (event) => {
+  if (event.data.type === 'SCHEDULE_NOTIFICATION') {
+    const { title, body, notifyAt } = event.data;
+    scheduleNotification(title, body, notifyAt);
   }
+});
 
-  event.respondWith(
-    caches.match(event.request).then((cached) => {
-      if (cached) return cached;
-      return fetch(event.request).then((response) => {
-        const copy = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
-        return response;
+// Schedule a notification
+function scheduleNotification(title, body, notifyAt) {
+  const delay = notifyAt - Date.now();
+  const notificationId = `${title}-${notifyAt}`;
+  
+  // Clear any existing timeout for this notification
+  if (scheduledNotifications.has(notificationId)) {
+    clearTimeout(scheduledNotifications.get(notificationId));
+  }
+  
+  if (delay > 0) {
+    const timeoutId = setTimeout(() => {
+      self.registration.showNotification(title, {
+        body: body,
+        icon: '/icons/icon-192x192.png',
+        badge: '/icons/icon-192x192.png',
+        vibrate: [200, 100, 200],
+        tag: 'identity-forge-reminder',
+        requireInteraction: true, // Makes it stay until dismissed
+        actions: [
+          { action: 'open', title: 'Open App' },
+          { action: 'dismiss', title: 'Dismiss' }
+        ],
+        data: { url: '/' }
       });
-    })
-  );
+      scheduledNotifications.delete(notificationId);
+    }, delay);
+    
+    scheduledNotifications.set(notificationId, timeoutId);
+    console.log(`Notification scheduled for ${new Date(notifyAt).toLocaleString()}`);
+  } else {
+    // If time has passed, show immediately
+    self.registration.showNotification(title, {
+      body: body,
+      icon: '/icons/icon-192x192.png',
+      badge: '/icons/icon-192x192.png',
+      vibrate: [200, 100, 200],
+      tag: 'identity-forge-reminder',
+      requireInteraction: true,
+      data: { url: '/' }
+    });
+  }
+}
+
+// Handle notification clicks
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  
+  if (event.action === 'open' || !event.action) {
+    event.waitUntil(
+      clients.matchAll({ type: 'window', includeUncontrolled: true })
+        .then(clientList => {
+          // If app is already open, focus it
+          for (let client of clientList) {
+            if (client.url === '/' && 'focus' in client) {
+              return client.focus();
+            }
+          }
+          // Otherwise open new window
+          if (clients.openWindow) {
+            return clients.openWindow('/');
+          }
+        })
+    );
+  }
+});
+
+// Keep service worker alive
+self.addEventListener('fetch', (event) => {
+  // Pass through, don't cache for now
+  event.respondWith(fetch(event.request));
 });
