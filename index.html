@@ -1208,28 +1208,36 @@
           showToast("This browser doesn't support notifications");
           return;
         }
-        
+
+        // Check if service worker is available (required for Samsung)
+        if (!('serviceWorker' in navigator)) {
+          showToast("Service workers not supported. Try Chrome or Samsung Internet.");
+          return;
+        }
+
+        showToast("Requesting permission...");
+
         const permission = await Notification.requestPermission();
-        
+
         if (permission === "granted") {
-          notificationsEnabled = true;
-          
-          // Register for push notifications if service worker is available
-          if ('serviceWorker' in navigator && 'PushManager' in window) {
-            try {
-              const registration = await navigator.serviceWorker.ready;
-              console.log('Service worker ready for notifications');
-            } catch (err) {
-              console.log('Service worker issue:', err);
-            }
+          // Wait for service worker to be ready
+          try {
+            const registration = await navigator.serviceWorker.ready;
+            console.log('Service worker ready for notifications');
+
+            notificationsEnabled = true;
+            showToast("Notifications enabled! Tap 'Test' to verify.");
+            saveToStorage();
+            updateSettingsUI();
+            scheduleNextNotifications();
+          } catch (err) {
+            console.error('Service worker issue:', err);
+            showToast("Service worker error. Try refreshing the page.");
           }
-          
-          showToast("Notifications enabled!");
-          saveToStorage();
-          updateSettingsUI();
-          scheduleNextNotifications();
+        } else if (permission === "denied") {
+          showToast("Permission denied. Enable in browser settings > Site settings > Notifications");
         } else {
-          showToast("Notification permission denied");
+          showToast("Permission dismissed. Try again.");
         }
       } else {
         // Disable notifications
@@ -1333,28 +1341,48 @@
       showToast('Reminder times saved. Notifications rescheduled for ' + morningReminderTime + ' and ' + eveningReminderTime);
     }
     
-    function testNotification() {
+    async function testNotification() {
       if (!notificationsEnabled) {
         showToast('Enable notifications first');
         return;
       }
-      
+
       if (!("Notification" in window)) {
         showToast("This browser doesn't support notifications");
         return;
       }
-      
+
       if (Notification.permission !== "granted") {
-        showToast("Notification permission not granted");
+        showToast("Notification permission not granted. Please enable in browser settings.");
         return;
       }
-      
-      sendNotification(
-        '🎯 Test Notification',
+
+      // Check if service worker is ready (required for Samsung)
+      if ('serviceWorker' in navigator) {
+        try {
+          const registration = await navigator.serviceWorker.ready;
+          if (!registration.active) {
+            showToast("Service worker not active. Try refreshing the page.");
+            return;
+          }
+        } catch (err) {
+          showToast("Service worker error: " + err.message);
+          return;
+        }
+      }
+
+      showToast('Sending notification...');
+
+      await sendNotification(
+        'Test Notification',
         'Your notifications are working! You will receive reminders at your set times.',
         'settings'
       );
-      showToast('Test notification sent!');
+
+      // Delay the success message so user sees the notification first
+      setTimeout(() => {
+        showToast('Notification sent! Check your notification panel.');
+      }, 500);
     }
     
     function startNotificationChecker() {
@@ -1398,24 +1426,54 @@
       }
     }
     
-    function sendNotification(title, body, type) {
+    async function sendNotification(title, body, type) {
       if (!("Notification" in window) || Notification.permission !== "granted") {
+        console.log('Notification permission not granted');
         return;
       }
-      
-      const notification = new Notification(title, {
-        body: body,
-        icon: '🎯',
-        badge: '🎯',
-        requireInteraction: false,
-        silent: false
-      });
-      
-      notification.onclick = function() {
-        window.focus();
-        switchView(type);
-        notification.close();
-      };
+
+      // Use Service Worker for notifications (required for Samsung/Android)
+      if ('serviceWorker' in navigator) {
+        try {
+          const registration = await navigator.serviceWorker.ready;
+          await registration.showNotification(title, {
+            body: body,
+            icon: '/icons/icon-192x192.png',
+            badge: '/icons/icon-192x192.png',
+            vibrate: [200, 100, 200, 100, 200],
+            tag: 'identity-forge-' + type,
+            requireInteraction: true,
+            actions: [
+              { action: 'open', title: 'Open App' },
+              { action: 'dismiss', title: 'Dismiss' }
+            ],
+            data: { type: type }
+          });
+          console.log('Notification sent via Service Worker');
+          return;
+        } catch (err) {
+          console.error('Service Worker notification failed:', err);
+        }
+      }
+
+      // Fallback to direct notification (desktop browsers)
+      try {
+        const notification = new Notification(title, {
+          body: body,
+          icon: '/icons/icon-192x192.png',
+          badge: '/icons/icon-192x192.png',
+          requireInteraction: false,
+          silent: false
+        });
+
+        notification.onclick = function() {
+          window.focus();
+          switchView(type);
+          notification.close();
+        };
+      } catch (err) {
+        console.error('Direct notification failed:', err);
+      }
     }
     
     // Data management

@@ -69,24 +69,32 @@ function scheduleNotification(title, body, notifyAt) {
 // Handle notification clicks
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  
-  if (event.action === 'open' || !event.action) {
-    event.waitUntil(
-      clients.matchAll({ type: 'window', includeUncontrolled: true })
-        .then(clientList => {
-          // If app is already open, focus it
-          for (let client of clientList) {
-            if (client.url === '/' && 'focus' in client) {
-              return client.focus();
-            }
-          }
-          // Otherwise open new window
-          if (clients.openWindow) {
-            return clients.openWindow('/');
-          }
-        })
-    );
+
+  if (event.action === 'dismiss') {
+    return; // Just close the notification
   }
+
+  // Open or focus the app
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true })
+      .then(clientList => {
+        // Try to find and focus an existing window
+        for (let client of clientList) {
+          if ('focus' in client) {
+            return client.focus();
+          }
+        }
+        // Otherwise open new window
+        if (clients.openWindow) {
+          return clients.openWindow('/');
+        }
+      })
+  );
+});
+
+// Handle notification close (for analytics/tracking if needed)
+self.addEventListener('notificationclose', (event) => {
+  console.log('Notification closed:', event.notification.tag);
 });
 
 // Keep service worker alive
