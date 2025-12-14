@@ -1407,33 +1407,41 @@
       }).join('');
     }
     
-    // Storage (in-memory for artifacts)
+    // Storage using localStorage
     function saveToStorage() {
-      window.identityForgeData = JSON.stringify(entries);
-      window.identityForgeSettings = JSON.stringify({
-        notificationsEnabled,
-        morningReminderTime,
-        eveningReminderTime
-      });
-    }
-    
-    function loadFromStorage() {
-      if (window.identityForgeData) {
-        try {
-          entries = JSON.parse(window.identityForgeData);
-        } catch (e) {
-          entries = [];
-        }
+      try {
+        localStorage.setItem('identityForgeData', JSON.stringify(entries));
+        localStorage.setItem('identityForgeSettings', JSON.stringify({
+          notificationsEnabled,
+          morningReminderTime,
+          eveningReminderTime
+        }));
+      } catch (e) {
+        console.error('Failed to save to localStorage:', e);
       }
-      if (window.identityForgeSettings) {
-        try {
-          const settings = JSON.parse(window.identityForgeSettings);
-          notificationsEnabled = settings.notificationsEnabled || false;
-          morningReminderTime = settings.morningReminderTime || '07:00';
-          eveningReminderTime = settings.eveningReminderTime || '21:00';
-        } catch (e) {
-          // Use defaults
+    }
+
+    function loadFromStorage() {
+      try {
+        const data = localStorage.getItem('identityForgeData');
+        if (data) {
+          entries = JSON.parse(data);
         }
+      } catch (e) {
+        console.error('Failed to load data:', e);
+        entries = [];
+      }
+
+      try {
+        const settings = localStorage.getItem('identityForgeSettings');
+        if (settings) {
+          const parsed = JSON.parse(settings);
+          notificationsEnabled = parsed.notificationsEnabled || false;
+          morningReminderTime = parsed.morningReminderTime || '07:00';
+          eveningReminderTime = parsed.eveningReminderTime || '21:00';
+        }
+      } catch (e) {
+        console.error('Failed to load settings:', e);
       }
     }
     
