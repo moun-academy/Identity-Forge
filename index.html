@@ -1026,12 +1026,30 @@
           <button class="btn" onclick="confirmReset()" style="background: transparent; color: var(--warning); border: 1px solid var(--warning);">Clear All Data</button>
         </div>
       </div>
+
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">ℹ️</span>
+          <h2 class="section-title">App Info</h2>
+        </div>
+
+        <div class="question-block">
+          <label class="question-label">Current Version</label>
+          <p class="question-hint">Use this to verify you have the latest update</p>
+          <div style="padding: 16px; background: var(--bg-elevated); border-radius: 8px; border: 1px solid var(--border); text-align: center;">
+            <span style="font-size: 1.2rem; font-weight: 700; color: var(--accent);" id="appVersion">Loading...</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  
+
   <div class="toast" id="toast"></div>
   
   <script>
+    // App Version - Update this timestamp when making changes
+    const APP_VERSION = 'v2025-12-14 00:15';
+
     // Register Service Worker for PWA notifications
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/service-worker.js')
@@ -1042,7 +1060,7 @@
           console.log('Service Worker registration failed:', err);
         });
     }
-    
+
     // Wake-up truths and questions
     const truths = [
       {
@@ -1087,6 +1105,7 @@
     
     // Initialize
     function init() {
+      console.log(`🔥 Identity Forge ${APP_VERSION} - App loaded successfully`);
       setupSliders();
       loadDailyContent();
       updateStats();
@@ -1564,7 +1583,7 @@
       const status = document.getElementById('notifStatus');
       const settings = document.getElementById('notifSettings');
       const hint = document.getElementById('notifPermissionHint');
-      
+
       if (notificationsEnabled) {
         toggle.classList.add('selected');
         status.textContent = 'ON';
@@ -1575,6 +1594,12 @@
         status.textContent = 'OFF';
         settings.style.display = 'none';
         hint.textContent = 'Click to enable browser notifications';
+      }
+
+      // Update app version display
+      const versionElement = document.getElementById('appVersion');
+      if (versionElement) {
+        versionElement.textContent = APP_VERSION;
       }
     }
     

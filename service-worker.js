@@ -1,5 +1,5 @@
 // Identity Forge Service Worker
-const CACHE_NAME = 'identity-forge-v4';
+const CACHE_NAME = 'identity-forge-v5';
 const scheduledNotifications = new Map();
 
 // Install
