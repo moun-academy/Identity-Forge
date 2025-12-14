@@ -1048,7 +1048,7 @@
   
   <script>
     // App Version - Update this timestamp when making changes
-    const APP_VERSION = 'v2025-12-14 00:15';
+    const APP_VERSION = 'v2025-12-14 00:45';
 
     // Register Service Worker for PWA notifications
     if ('serviceWorker' in navigator) {
@@ -1426,7 +1426,7 @@
       }).join('');
     }
     
-    // Storage using localStorage
+    // Storage using localStorage with migration from old window-based storage
     function saveToStorage() {
       try {
         localStorage.setItem('identityForgeData', JSON.stringify(entries));
@@ -1435,16 +1435,42 @@
           morningReminderTime,
           eveningReminderTime
         }));
+        console.log(`Saved ${entries.length} entries to localStorage`);
       } catch (e) {
         console.error('Failed to save to localStorage:', e);
       }
     }
 
     function loadFromStorage() {
+      // Migration: Check for old window-based storage first
+      if (window.identityForgeData && !localStorage.getItem('identityForgeData')) {
+        console.log('Migrating data from window storage to localStorage...');
+        try {
+          localStorage.setItem('identityForgeData', window.identityForgeData);
+          const migratedData = JSON.parse(window.identityForgeData);
+          console.log(`Migrated ${migratedData.length} entries to localStorage`);
+        } catch (e) {
+          console.error('Migration failed:', e);
+        }
+      }
+
+      if (window.identityForgeSettings && !localStorage.getItem('identityForgeSettings')) {
+        try {
+          localStorage.setItem('identityForgeSettings', window.identityForgeSettings);
+          console.log('Migrated settings to localStorage');
+        } catch (e) {
+          console.error('Settings migration failed:', e);
+        }
+      }
+
+      // Load from localStorage
       try {
         const data = localStorage.getItem('identityForgeData');
         if (data) {
           entries = JSON.parse(data);
+          console.log(`Loaded ${entries.length} entries from localStorage`);
+        } else {
+          console.log('No saved data found');
         }
       } catch (e) {
         console.error('Failed to load data:', e);
@@ -1458,6 +1484,7 @@
           notificationsEnabled = parsed.notificationsEnabled || false;
           morningReminderTime = parsed.morningReminderTime || '07:00';
           eveningReminderTime = parsed.eveningReminderTime || '21:00';
+          console.log('Settings loaded successfully');
         }
       } catch (e) {
         console.error('Failed to load settings:', e);
