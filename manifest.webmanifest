@@ -1,10 +1,11 @@
 {
   "name": "Identity Forge",
-  "short_name": "IdentityForge",
-  "description": "A sleek interface for crafting and tracking your digital identity goals.",
+  "short_name": "Identity Forge",
+  "description": "Your life matters. Your time is limited. Your future self is watching.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0a0a0a",
   "theme_color": "#ff6b35",
   "icons": [
