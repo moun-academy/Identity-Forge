@@ -183,7 +183,7 @@
     
     .nav-tabs {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(6, 1fr);
       gap: 8px;
       margin-bottom: 32px;
       background: linear-gradient(135deg, var(--bg-card) 0%, rgba(21, 21, 21, 0.95) 100%);
@@ -997,6 +997,336 @@
       font-size: 1rem;
       color: var(--text-primary);
     }
+
+    /* Principles Section Styles */
+    .principles-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .principles-header h2 {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--accent);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .principles-header .tagline {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+
+    .today-principle-card {
+      background: linear-gradient(135deg, rgba(255, 149, 0, 0.15) 0%, rgba(255, 149, 0, 0.05) 100%);
+      border: 2px solid var(--accent);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .today-principle-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(255, 149, 0, 0.2), transparent 70%);
+      pointer-events: none;
+    }
+
+    .today-principle-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .today-principle-number {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .today-principle-text {
+      font-size: 1.2rem;
+      font-weight: 600;
+      line-height: 1.6;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+    }
+
+    .today-principle-status {
+      display: inline-block;
+      padding: 8px 16px;
+      background: var(--bg-dark);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+
+    .today-principle-status.honored {
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.15) 0%, rgba(0, 255, 136, 0.1) 100%);
+      color: var(--success);
+      border-color: rgba(0, 255, 136, 0.3);
+    }
+
+    .principles-list {
+      margin-bottom: 32px;
+    }
+
+    .principle-item {
+      display: flex;
+      gap: 16px;
+      padding: 20px;
+      background: var(--bg-elevated);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    .principle-item:hover {
+      border-color: rgba(255, 149, 0, 0.3);
+      transform: translateX(4px);
+    }
+
+    .principle-item.today-highlight {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, rgba(255, 149, 0, 0.1) 0%, rgba(255, 149, 0, 0.02) 100%);
+    }
+
+    .principle-number {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--accent);
+      min-width: 32px;
+    }
+
+    .principle-text {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--text-primary);
+    }
+
+    .weekly-tracking {
+      margin-bottom: 32px;
+    }
+
+    .weekly-tracking-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .week-day-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 12px 16px;
+      background: var(--bg-elevated);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .week-day-row.today {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, rgba(255, 149, 0, 0.1) 0%, rgba(255, 149, 0, 0.02) 100%);
+    }
+
+    .week-day-name {
+      font-weight: 700;
+      color: var(--text-primary);
+      min-width: 50px;
+    }
+
+    .week-day-principles {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      flex: 1;
+      text-align: right;
+    }
+
+    .week-day-principles .honored {
+      color: var(--success);
+    }
+
+    .week-score {
+      text-align: center;
+      padding: 16px;
+      background: var(--bg-dark);
+      border-radius: 12px;
+      margin-top: 16px;
+      border: 1px solid var(--border);
+    }
+
+    .week-score-value {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--accent);
+    }
+
+    .week-score-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .monthly-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .monthly-stat-card {
+      padding: 20px;
+      background: var(--bg-elevated);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .monthly-stat-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+
+    .monthly-stat-value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.4;
+    }
+
+    .monthly-stat-value .highlight {
+      color: var(--accent);
+    }
+
+    /* Principles checkboxes in evening */
+    .principles-checkbox-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .principle-checkbox-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--bg-elevated);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .principle-checkbox-item:hover {
+      border-color: rgba(255, 149, 0, 0.4);
+      background: var(--bg-dark);
+    }
+
+    .principle-checkbox-item.checked {
+      border-color: var(--success);
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 255, 136, 0.02) 100%);
+    }
+
+    .principle-checkbox {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      color: transparent;
+      font-size: 14px;
+    }
+
+    .principle-checkbox-item.checked .principle-checkbox {
+      background: var(--success);
+      border-color: var(--success);
+      color: var(--bg-dark);
+    }
+
+    .principle-checkbox-text {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .principle-checkbox-item.checked .principle-checkbox-text {
+      color: var(--text-primary);
+    }
+
+    /* Morning principle reminder */
+    .morning-principle-reminder {
+      background: linear-gradient(135deg, rgba(255, 149, 0, 0.1) 0%, rgba(255, 149, 0, 0.03) 100%);
+      border-left: 4px solid var(--accent);
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 8px;
+    }
+
+    .morning-principle-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .morning-principle-text {
+      font-size: 1rem;
+      color: var(--text-primary);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .morning-principle-prompt {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+
+    @media (max-width: 640px) {
+      .monthly-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-tabs {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .today-principle-card {
+        padding: 20px;
+      }
+
+      .today-principle-text {
+        font-size: 1.1rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1034,6 +1364,7 @@
       <button class="nav-tab" onclick="switchView('evening')">Evening</button>
       <button class="nav-tab" onclick="switchView('history')">History</button>
       <button class="nav-tab" onclick="switchView('ground')"><span class="nav-icon">⚖️</span> Ground</button>
+      <button class="nav-tab" onclick="switchView('principles')"><span class="nav-icon">📜</span> Principles</button>
       <button class="nav-tab" onclick="switchView('settings')">Settings</button>
     </nav>
     
@@ -1054,8 +1385,15 @@
           <label class="question-label">Your honest response:</label>
           <textarea class="input-textarea" id="truthResponse" placeholder="Write your answer..."></textarea>
         </div>
+
+        <!-- Today's Principle Reminder -->
+        <div class="morning-principle-reminder">
+          <div class="morning-principle-label">🎯 Today's Principle</div>
+          <div class="morning-principle-text" id="morningPrincipleText">Loading...</div>
+          <div class="morning-principle-prompt" id="morningPrinciplePrompt">What leap will you take today?</div>
+        </div>
       </div>
-      
+
       <div class="section">
         <div class="section-header">
           <span class="section-icon">⚡</span>
@@ -1145,14 +1483,37 @@
           <span class="section-icon">🏆</span>
           <h2 class="section-title">Today's Win</h2>
         </div>
-        
+
         <div class="question-block">
           <label class="question-label">What's one thing you did well today?</label>
           <p class="question-hint">No matter how small. Acknowledge it.</p>
           <textarea class="input-textarea" id="todayWin" placeholder="Today I..."></textarea>
         </div>
       </div>
-      
+
+      <!-- Principles Check -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">📜</span>
+          <h2 class="section-title">Principles Check</h2>
+        </div>
+
+        <div class="question-block">
+          <label class="question-label">Which principles did you live by today?</label>
+          <p class="question-hint">Select all that apply</p>
+
+          <div class="principles-checkbox-list" id="principlesCheckboxList">
+            <!-- Populated by JavaScript -->
+          </div>
+        </div>
+
+        <div class="question-block">
+          <label class="question-label">Reflection (Optional)</label>
+          <p class="question-hint">Which principle did you break? How will you honor it tomorrow?</p>
+          <textarea class="input-textarea" id="principlesReflection" placeholder="Today I struggled with..."></textarea>
+        </div>
+      </div>
+
       <div class="section">
         <div class="section-header">
           <span class="section-icon">📊</span>
@@ -1301,6 +1662,17 @@
             Take Reality Check
           </button>
         </div>
+
+        <div class="question-block">
+          <label class="question-label">Principles Practice</label>
+          <p class="question-hint">Track how you live by your 7 core principles</p>
+          <div style="padding: 16px; background: var(--bg-elevated); border-radius: 8px; border: 1px solid var(--border);">
+            <span id="principlesMonthlyAvg">Not tracked yet</span>
+          </div>
+          <button class="btn" onclick="switchView('principles')" style="background: var(--bg-elevated); color: var(--text-primary); border: 1px solid var(--border); margin-top: 12px;">
+            View Principles
+          </button>
+        </div>
       </div>
     </div>
 
@@ -1402,13 +1774,80 @@
         </div>
       </div>
     </div>
+
+    <!-- PRINCIPLES VIEW -->
+    <div id="principles" class="view">
+      <div class="section">
+        <div class="principles-header">
+          <h2>How to Live Well</h2>
+          <p class="tagline">The rules you forget when life gets hard</p>
+        </div>
+
+        <!-- Today's Principle Card -->
+        <div class="today-principle-card">
+          <div class="today-principle-label">🎯 Today's Focus</div>
+          <div class="today-principle-number" id="todayPrincipleNumber">Principle #1</div>
+          <div class="today-principle-text" id="todayPrincipleText">Loading...</div>
+          <div class="today-principle-status" id="todayPrincipleStatus">Check in evening</div>
+        </div>
+
+        <!-- All Principles List -->
+        <div class="principles-list" id="principlesList">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Weekly Tracking Section -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">📊</span>
+          <h2 class="section-title">This Week's Practice</h2>
+        </div>
+
+        <div class="weekly-tracking" id="weeklyTracking">
+          <!-- Populated by JavaScript -->
+        </div>
+
+        <div class="week-score">
+          <div class="week-score-value" id="weekScoreValue">0</div>
+          <div class="week-score-label">principles honored this week</div>
+        </div>
+      </div>
+
+      <!-- Monthly Stats Section -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">📈</span>
+          <h2 class="section-title">This Month</h2>
+        </div>
+
+        <div class="monthly-stats" id="monthlyStats">
+          <div class="monthly-stat-card">
+            <div class="monthly-stat-label">Most Honored</div>
+            <div class="monthly-stat-value" id="mostHonoredPrinciple">Not enough data</div>
+          </div>
+          <div class="monthly-stat-card">
+            <div class="monthly-stat-label">Least Honored</div>
+            <div class="monthly-stat-value" id="leastHonoredPrinciple">Not enough data</div>
+          </div>
+          <div class="monthly-stat-card">
+            <div class="monthly-stat-label">Best Day</div>
+            <div class="monthly-stat-value" id="bestDayPrinciple">Not enough data</div>
+          </div>
+          <div class="monthly-stat-card">
+            <div class="monthly-stat-label">Daily Average</div>
+            <div class="monthly-stat-value" id="avgPrinciplesDay">Not enough data</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="toast" id="toast"></div>
   
   <script>
     // App Version - Update this timestamp when making changes
-    const APP_VERSION = 'v2025-12-14 01:30';
+    const APP_VERSION = 'v2025-12-15 01:00';
 
     // Register Service Worker for PWA notifications
     if ('serviceWorker' in navigator) {
@@ -1453,7 +1892,59 @@
       "What is one thing you can do today so that by bedtime, you feel genuine pride instead of regret?",
       "What fear or insecurity will you confront today that will raise your character one level higher?"
     ];
-    
+
+    // Principles for living well
+    const principles = [
+      {
+        number: 1,
+        short: "Be your own best friend",
+        full: "Be your own best friend. Never attack yourself.",
+        prompt: "How will you practice self-compassion today?"
+      },
+      {
+        number: 2,
+        short: "Nothing is yours (no loss, only gain)",
+        full: "Believe that nothing is yours so there is no loss, only gain.",
+        prompt: "What can you appreciate without clinging to today?"
+      },
+      {
+        number: 3,
+        short: "Invest in good friends",
+        full: "Invest in good friends. They tend to add colors to life.",
+        prompt: "Who will you connect with today?"
+      },
+      {
+        number: 4,
+        short: "Take relentless action",
+        full: "Take relentless action by reducing overthinking and taking the leaps. That tends to add more excitement and opportunity into your life.",
+        prompt: "What leap will you take today?"
+      },
+      {
+        number: 5,
+        short: "Give more than you take",
+        full: "Give more than you take. Giving provides sense of meaning into your life.",
+        prompt: "What will you give freely today?"
+      },
+      {
+        number: 6,
+        short: "Enjoy little moments",
+        full: "Enjoy little moments. Beautiful breakfast, sunsets, laughs. Life is just a series of moments.",
+        prompt: "What small moment will you fully embrace today?"
+      },
+      {
+        number: 7,
+        short: "Play a musical instrument",
+        full: "Learn to play a musical instrument. It adds another form of expression.",
+        prompt: "How will you express yourself creatively today?"
+      }
+    ];
+
+    // Principles tracking data
+    let principlesData = {
+      tracking: []
+    };
+    let selectedPrinciples = [];
+
     // State management
     let entries = [];
     let currentDayIndex = 0;
@@ -1468,6 +1959,8 @@
       console.log(`🔥 Identity Forge ${APP_VERSION} - App loaded successfully`);
       setupSliders();
       loadDailyContent();
+      loadPrinciplesData();
+      initPrinciplesUI();
       updateStats();
       checkEveningAvailability();
       loadNotificationSettings();
@@ -1538,7 +2031,8 @@
       // Find and activate the correct tab
       tabs.forEach(tab => {
         if (tab.textContent.toLowerCase().includes(viewName.toLowerCase()) ||
-            (viewName === 'ground' && tab.textContent.includes('Ground'))) {
+            (viewName === 'ground' && tab.textContent.includes('Ground')) ||
+            (viewName === 'principles' && tab.textContent.includes('Principles'))) {
           tab.classList.add('active');
         }
       });
@@ -1547,12 +2041,15 @@
 
       if (viewName === 'evening') {
         checkEveningAvailability();
+        initPrinciplesCheckboxes();
       } else if (viewName === 'history') {
         displayHistory();
       } else if (viewName === 'settings') {
         updateSettingsUI();
       } else if (viewName === 'ground') {
         initGroundView();
+      } else if (viewName === 'principles') {
+        updatePrinciplesView();
       }
     }
     
@@ -1604,17 +2101,17 @@
     // Save evening
     function saveEvening() {
       const todayMorning = getTodayEntries().morning;
-      
+
       if (!todayMorning) {
         showToast('Complete your morning check-in first');
         return;
       }
-      
+
       if (eveningDidIt === null) {
         showToast('Please select Yes or No for accountability');
         return;
       }
-      
+
       const data = {
         date: new Date().toISOString(),
         type: 'evening',
@@ -1627,23 +2124,27 @@
         connection: parseInt(document.getElementById('connectionSlider').value),
         tomorrowFocus: document.getElementById('tomorrowFocus').value
       };
-      
+
       // Validate
       if (!data.accountabilityWhy || !data.todayWin || !data.tomorrowFocus) {
         showToast('Please complete all fields');
         return;
       }
-      
+
       // Remove old evening entry for today
       const today = new Date().toDateString();
       entries = entries.filter(e => !(e.type === 'evening' && new Date(e.date).toDateString() === today));
-      
+
       entries.push(data);
       saveToStorage();
+
+      // Save principles tracking
+      savePrinciplesTracking();
+
       showToast('Evening complete. Rest well.');
       updateStats();
       scheduleNextNotifications(); // Reschedule for tomorrow
-      
+
       // Clear form
       eveningDidIt = null;
       document.getElementById('didItYes').classList.remove('selected');
@@ -1651,6 +2152,9 @@
       document.getElementById('accountabilityWhy').value = '';
       document.getElementById('todayWin').value = '';
       document.getElementById('tomorrowFocus').value = '';
+      document.getElementById('principlesReflection').value = '';
+      selectedPrinciples = [];
+      initPrinciplesCheckboxes();
     }
     
     // Calculate stats
@@ -2000,6 +2504,22 @@
 
       // Update last ground check display
       updateGroundLastCheck();
+
+      // Update principles monthly average
+      updatePrinciplesSettingsDisplay();
+    }
+
+    // Update principles display in settings
+    function updatePrinciplesSettingsDisplay() {
+      const principlesAvgEl = document.getElementById('principlesMonthlyAvg');
+      if (!principlesAvgEl) return;
+
+      const stats = getPrinciplesStats();
+      if (stats.count === 0) {
+        principlesAvgEl.textContent = 'Not tracked yet';
+      } else {
+        principlesAvgEl.innerHTML = `This month: <strong style="color: var(--accent);">${stats.avg}</strong> principles per day (avg)`;
+      }
     }
     
     function saveNotificationSettings() {
@@ -2235,7 +2755,331 @@
         toast.classList.remove('show');
       }, 3000);
     }
-    
+
+    // ===== PRINCIPLES SECTION =====
+
+    // Get today's principle (based on day of week)
+    function getTodayPrinciple() {
+      const dayOfWeek = new Date().getDay(); // 0 (Sun) to 6 (Sat)
+      // Map: Sun=7, Mon=1, Tue=2, Wed=3, Thu=4, Fri=5, Sat=6
+      const principleIndex = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+      return principles[principleIndex];
+    }
+
+    // Load principles data from localStorage
+    function loadPrinciplesData() {
+      try {
+        const data = localStorage.getItem('principlesData');
+        if (data) {
+          principlesData = JSON.parse(data);
+          // Clean up entries older than 90 days
+          const ninetyDaysAgo = new Date();
+          ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+          principlesData.tracking = principlesData.tracking.filter(entry => {
+            return new Date(entry.date) > ninetyDaysAgo;
+          });
+          savePrinciplesData();
+          console.log(`Loaded ${principlesData.tracking.length} principles tracking entries`);
+        }
+      } catch (e) {
+        console.error('Failed to load principles data:', e);
+        principlesData = { tracking: [] };
+      }
+    }
+
+    // Save principles data to localStorage
+    function savePrinciplesData() {
+      try {
+        localStorage.setItem('principlesData', JSON.stringify(principlesData));
+      } catch (e) {
+        console.error('Failed to save principles data:', e);
+      }
+    }
+
+    // Save today's principles tracking (called from saveEvening)
+    function savePrinciplesTracking() {
+      const today = new Date().toISOString().split('T')[0];
+      const reflection = document.getElementById('principlesReflection')?.value || '';
+
+      // Remove existing entry for today
+      principlesData.tracking = principlesData.tracking.filter(entry => entry.date !== today);
+
+      // Add new entry
+      principlesData.tracking.push({
+        date: today,
+        principlesHonored: [...selectedPrinciples],
+        reflection: reflection
+      });
+
+      savePrinciplesData();
+    }
+
+    // Initialize principles UI (called on app load)
+    function initPrinciplesUI() {
+      // Set up morning principle reminder
+      updateMorningPrincipleReminder();
+      // Set up evening checkboxes
+      initPrinciplesCheckboxes();
+    }
+
+    // Update morning principle reminder
+    function updateMorningPrincipleReminder() {
+      const todayPrinciple = getTodayPrinciple();
+      const morningTextEl = document.getElementById('morningPrincipleText');
+      const morningPromptEl = document.getElementById('morningPrinciplePrompt');
+
+      if (morningTextEl) {
+        morningTextEl.textContent = `Principle #${todayPrinciple.number}: ${todayPrinciple.full}`;
+      }
+      if (morningPromptEl) {
+        morningPromptEl.textContent = todayPrinciple.prompt;
+      }
+    }
+
+    // Initialize principles checkboxes in evening view
+    function initPrinciplesCheckboxes() {
+      const container = document.getElementById('principlesCheckboxList');
+      if (!container) return;
+
+      // Check if already tracked today
+      const today = new Date().toISOString().split('T')[0];
+      const todayEntry = principlesData.tracking.find(e => e.date === today);
+
+      if (todayEntry) {
+        selectedPrinciples = [...todayEntry.principlesHonored];
+      }
+
+      container.innerHTML = principles.map(p => {
+        const isChecked = selectedPrinciples.includes(p.number);
+        return `
+          <div class="principle-checkbox-item ${isChecked ? 'checked' : ''}" onclick="togglePrincipleCheckbox(${p.number})">
+            <div class="principle-checkbox">${isChecked ? '✓' : ''}</div>
+            <div class="principle-checkbox-text">${p.number}. ${p.short}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Toggle principle checkbox
+    function togglePrincipleCheckbox(principleNumber) {
+      const index = selectedPrinciples.indexOf(principleNumber);
+      if (index > -1) {
+        selectedPrinciples.splice(index, 1);
+      } else {
+        selectedPrinciples.push(principleNumber);
+      }
+      initPrinciplesCheckboxes();
+    }
+
+    // Update the main Principles view
+    function updatePrinciplesView() {
+      updateTodayPrincipleCard();
+      updatePrinciplesList();
+      updateWeeklyTracking();
+      updateMonthlyStats();
+    }
+
+    // Update Today's Principle card in Principles view
+    function updateTodayPrincipleCard() {
+      const todayPrinciple = getTodayPrinciple();
+      const numberEl = document.getElementById('todayPrincipleNumber');
+      const textEl = document.getElementById('todayPrincipleText');
+      const statusEl = document.getElementById('todayPrincipleStatus');
+
+      if (numberEl) numberEl.textContent = `Principle #${todayPrinciple.number}`;
+      if (textEl) textEl.textContent = todayPrinciple.full;
+
+      // Check if today was tracked
+      const today = new Date().toISOString().split('T')[0];
+      const todayEntry = principlesData.tracking.find(e => e.date === today);
+
+      if (statusEl) {
+        if (todayEntry) {
+          const honored = todayEntry.principlesHonored.includes(todayPrinciple.number);
+          if (honored) {
+            statusEl.textContent = '✓ Honored today';
+            statusEl.classList.add('honored');
+          } else {
+            statusEl.textContent = 'Not honored today';
+            statusEl.classList.remove('honored');
+          }
+        } else {
+          statusEl.textContent = 'Check in evening';
+          statusEl.classList.remove('honored');
+        }
+      }
+    }
+
+    // Update Principles list in Principles view
+    function updatePrinciplesList() {
+      const container = document.getElementById('principlesList');
+      if (!container) return;
+
+      const todayPrinciple = getTodayPrinciple();
+
+      container.innerHTML = principles.map(p => `
+        <div class="principle-item ${p.number === todayPrinciple.number ? 'today-highlight' : ''}">
+          <div class="principle-number">${p.number}</div>
+          <div class="principle-text">${p.full}</div>
+        </div>
+      `).join('');
+    }
+
+    // Update weekly tracking display
+    function updateWeeklyTracking() {
+      const container = document.getElementById('weeklyTracking');
+      const weekScoreEl = document.getElementById('weekScoreValue');
+      if (!container) return;
+
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const today = new Date();
+      const todayDayIndex = today.getDay();
+
+      // Get last 7 days
+      const weekDays = [];
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date(today);
+        date.setDate(today.getDate() - i);
+        weekDays.push({
+          date: date,
+          dayName: days[date.getDay()],
+          dateStr: date.toISOString().split('T')[0],
+          isToday: i === 0
+        });
+      }
+
+      let totalPrinciples = 0;
+
+      container.innerHTML = weekDays.map(day => {
+        const entry = principlesData.tracking.find(e => e.date === day.dateStr);
+        let content = '—';
+
+        if (entry && entry.principlesHonored.length > 0) {
+          const principleNums = entry.principlesHonored.sort((a, b) => a - b);
+          content = `<span class="honored">✓ #${principleNums.join(', #')} (${principleNums.length})</span>`;
+          totalPrinciples += principleNums.length;
+        } else if (day.isToday) {
+          content = 'Track in evening';
+        }
+
+        return `
+          <div class="week-day-row ${day.isToday ? 'today' : ''}">
+            <div class="week-day-name">${day.dayName}</div>
+            <div class="week-day-principles">${content}</div>
+          </div>
+        `;
+      }).join('');
+
+      if (weekScoreEl) {
+        weekScoreEl.textContent = totalPrinciples;
+      }
+    }
+
+    // Update monthly stats display
+    function updateMonthlyStats() {
+      const now = new Date();
+      const currentMonth = now.getMonth();
+      const currentYear = now.getFullYear();
+
+      // Filter entries for current month
+      const monthEntries = principlesData.tracking.filter(entry => {
+        const entryDate = new Date(entry.date);
+        return entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear;
+      });
+
+      if (monthEntries.length === 0) {
+        document.getElementById('mostHonoredPrinciple').textContent = 'Not enough data';
+        document.getElementById('leastHonoredPrinciple').textContent = 'Not enough data';
+        document.getElementById('bestDayPrinciple').textContent = 'Not enough data';
+        document.getElementById('avgPrinciplesDay').textContent = 'Not enough data';
+        return;
+      }
+
+      // Count occurrences of each principle
+      const counts = {};
+      principles.forEach(p => counts[p.number] = 0);
+
+      let bestDay = null;
+      let bestDayCount = 0;
+      let totalPrinciples = 0;
+
+      monthEntries.forEach(entry => {
+        const count = entry.principlesHonored.length;
+        totalPrinciples += count;
+
+        if (count > bestDayCount) {
+          bestDayCount = count;
+          bestDay = entry.date;
+        }
+
+        entry.principlesHonored.forEach(num => {
+          counts[num]++;
+        });
+      });
+
+      // Find most and least honored
+      let mostHonored = { num: 1, count: 0 };
+      let leastHonored = { num: 1, count: Infinity };
+
+      Object.entries(counts).forEach(([num, count]) => {
+        if (count > mostHonored.count) {
+          mostHonored = { num: parseInt(num), count };
+        }
+        if (count < leastHonored.count) {
+          leastHonored = { num: parseInt(num), count };
+        }
+      });
+
+      // Update display
+      const mostPrinciple = principles.find(p => p.number === mostHonored.num);
+      const leastPrinciple = principles.find(p => p.number === leastHonored.num);
+
+      document.getElementById('mostHonoredPrinciple').innerHTML =
+        `<span class="highlight">#${mostHonored.num}</span> - ${mostPrinciple.short} (${mostHonored.count} times)`;
+
+      document.getElementById('leastHonoredPrinciple').innerHTML =
+        `<span class="highlight">#${leastHonored.num}</span> - ${leastPrinciple.short} (${leastHonored.count} times)`;
+
+      if (bestDay) {
+        const bestDate = new Date(bestDay);
+        const formatted = bestDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        document.getElementById('bestDayPrinciple').innerHTML =
+          `${formatted} (<span class="highlight">${bestDayCount}/7</span> principles)`;
+      }
+
+      const avg = (totalPrinciples / monthEntries.length).toFixed(1);
+      document.getElementById('avgPrinciplesDay').innerHTML =
+        `<span class="highlight">${avg}</span> principles per day`;
+    }
+
+    // Get principles stats for settings
+    function getPrinciplesStats() {
+      const now = new Date();
+      const currentMonth = now.getMonth();
+      const currentYear = now.getFullYear();
+
+      const monthEntries = principlesData.tracking.filter(entry => {
+        const entryDate = new Date(entry.date);
+        return entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear;
+      });
+
+      if (monthEntries.length === 0) {
+        return { avg: 0, count: 0 };
+      }
+
+      let total = 0;
+      monthEntries.forEach(entry => {
+        total += entry.principlesHonored.length;
+      });
+
+      return {
+        avg: (total / monthEntries.length).toFixed(1),
+        count: monthEntries.length
+      };
+    }
+
+    // ===== END PRINCIPLES SECTION =====
+
     // Initialize on load
     // ===== GROUND CHECK (Reality Check) =====
 
