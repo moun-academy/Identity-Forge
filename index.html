@@ -1316,7 +1316,7 @@
       }
 
       .nav-tabs {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
       }
 
       .today-principle-card {
@@ -1327,6 +1327,787 @@
         font-size: 1.1rem;
       }
     }
+
+    /* ===== EXECUTION & PRESENCE TRACKING STYLES ===== */
+
+    /* Live Scores Widget */
+    .live-scores-widget {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+      padding: 16px;
+      background: linear-gradient(135deg, rgba(21, 21, 21, 0.95) 0%, rgba(26, 26, 26, 0.9) 100%);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .score-widget {
+      text-align: center;
+      padding: 12px 8px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+    }
+
+    .score-widget:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+      box-shadow: var(--shadow-md);
+    }
+
+    .score-widget-value {
+      font-size: 1.8rem;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .score-widget-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .score-widget-indicator {
+      font-size: 0.75rem;
+    }
+
+    /* Score color classes */
+    .score-red { color: #ff4444; }
+    .score-orange { color: #ff9500; }
+    .score-yellow { color: #ffcc00; }
+    .score-green { color: #00ff88; }
+    .score-blue { color: #00bbff; }
+
+    /* Floating Action Button */
+    .fab-container {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 900;
+    }
+
+    .fab-btn {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+      border: none;
+      color: var(--bg-dark);
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(255, 149, 0, 0.4);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fabPulse 10s ease-in-out infinite;
+    }
+
+    .fab-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 28px rgba(255, 149, 0, 0.5);
+    }
+
+    .fab-btn:active {
+      transform: scale(0.95);
+    }
+
+    @keyframes fabPulse {
+      0%, 90%, 100% { box-shadow: 0 4px 20px rgba(255, 149, 0, 0.4); }
+      95% { box-shadow: 0 4px 30px rgba(255, 149, 0, 0.7); }
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .modal-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-primary);
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close:hover {
+      color: var(--text-primary);
+      background: var(--bg-elevated);
+    }
+
+    /* Presence Check Options */
+    .presence-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .presence-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--bg-elevated);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .presence-option:hover {
+      border-color: var(--accent);
+      background: var(--bg-dark);
+    }
+
+    .presence-option.selected {
+      border-color: var(--success);
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 255, 136, 0.02) 100%);
+    }
+
+    .presence-checkbox {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      color: transparent;
+      font-size: 14px;
+    }
+
+    .presence-option.selected .presence-checkbox {
+      background: var(--success);
+      border-color: var(--success);
+      color: var(--bg-dark);
+    }
+
+    .presence-option-text {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    .presence-option.selected .presence-option-text {
+      color: var(--text-primary);
+    }
+
+    /* Time Blocks */
+    .time-blocks-container {
+      margin-top: 20px;
+    }
+
+    .time-block-item {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .time-block-item:hover {
+      border-color: rgba(255, 149, 0, 0.3);
+    }
+
+    .time-block-item.completed {
+      border-left: 4px solid var(--success);
+    }
+
+    .time-block-item.in-progress {
+      border-left: 4px solid var(--warning);
+      background: linear-gradient(135deg, rgba(255, 170, 0, 0.1) 0%, rgba(255, 170, 0, 0.02) 100%);
+    }
+
+    .time-block-item.skipped {
+      border-left: 4px solid #ff4444;
+      opacity: 0.7;
+    }
+
+    .time-block-item.upcoming {
+      border-left: 4px solid var(--text-dim);
+    }
+
+    .time-block-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .time-block-status-icon {
+      font-size: 1.2rem;
+    }
+
+    .time-block-time {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .time-block-activity {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .time-block-intention {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+
+    .time-block-status {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 8px;
+    }
+
+    .time-block-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .time-block-btn {
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-dark);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .time-block-btn:hover {
+      border-color: var(--accent);
+      color: var(--text-primary);
+    }
+
+    .time-block-btn.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--bg-dark);
+    }
+
+    .time-block-btn.primary:hover {
+      background: var(--accent-hover);
+    }
+
+    /* Add Time Block Form */
+    .add-block-form {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .add-block-form.active {
+      display: block;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .time-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .time-input-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .time-input-group input[type="time"] {
+      width: 100%;
+      padding: 12px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
+
+    .time-input-group input[type="time"]:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .add-block-btns {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .add-block-btn {
+      flex: 1;
+      padding: 12px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .add-block-btn.save {
+      background: var(--accent);
+      color: var(--bg-dark);
+    }
+
+    .add-block-btn.save:hover {
+      background: var(--accent-hover);
+    }
+
+    .add-block-btn.cancel {
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    .add-block-btn.cancel:hover {
+      border-color: var(--accent);
+      color: var(--text-primary);
+    }
+
+    /* Execution Score Bar */
+    .execution-score-bar {
+      margin-bottom: 24px;
+      padding: 20px;
+      background: var(--bg-elevated);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .execution-score-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .execution-score-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+    }
+
+    .execution-score-value {
+      font-size: 1.2rem;
+      font-weight: 900;
+    }
+
+    .execution-progress {
+      height: 10px;
+      background: var(--bg-dark);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .execution-progress-fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 0.3s ease;
+    }
+
+    /* Presence Log */
+    .presence-log {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .presence-log-item {
+      padding: 14px 16px;
+      background: var(--bg-elevated);
+      border-radius: 10px;
+      margin-bottom: 10px;
+      border-left: 3px solid var(--accent);
+    }
+
+    .presence-log-time {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+
+    .presence-log-thought {
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .presence-log-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .presence-tag {
+      font-size: 0.7rem;
+      padding: 4px 8px;
+      background: var(--bg-dark);
+      border-radius: 12px;
+      color: var(--text-secondary);
+    }
+
+    .presence-tag.positive {
+      background: rgba(0, 255, 136, 0.15);
+      color: var(--success);
+    }
+
+    /* Streaks Display */
+    .streaks-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .streak-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background: var(--bg-elevated);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .streak-icon {
+      font-size: 1.5rem;
+    }
+
+    .streak-info {
+      flex: 1;
+    }
+
+    .streak-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .streak-best {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    .streak-value {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--accent);
+    }
+
+    .streak-value span {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    /* Patterns View */
+    .pattern-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .pattern-card-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .pattern-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pattern-row:last-child {
+      border-bottom: none;
+    }
+
+    .pattern-label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .pattern-value {
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .pattern-insight {
+      margin-top: 16px;
+      padding: 16px;
+      background: linear-gradient(135deg, rgba(255, 149, 0, 0.1) 0%, rgba(255, 149, 0, 0.03) 100%);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    /* Level Badge */
+    .level-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--bg-dark);
+    }
+
+    /* Achievement Badges */
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .achievement-item {
+      padding: 16px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .achievement-item.earned {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, rgba(255, 149, 0, 0.1) 0%, rgba(255, 149, 0, 0.02) 100%);
+    }
+
+    .achievement-item.locked {
+      opacity: 0.5;
+    }
+
+    .achievement-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .achievement-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .achievement-desc {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    /* Evening Review Sections */
+    .review-summary {
+      background: var(--bg-elevated);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .review-summary-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .review-summary-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+    }
+
+    .review-summary-score {
+      font-size: 1.1rem;
+      font-weight: 900;
+    }
+
+    .review-block-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .review-block-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background: var(--bg-dark);
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+
+    .review-block-status {
+      font-size: 1rem;
+    }
+
+    .review-block-time {
+      color: var(--text-dim);
+      min-width: 50px;
+    }
+
+    .review-block-activity {
+      color: var(--text-primary);
+      flex: 1;
+    }
+
+    /* Urge List */
+    .urge-list {
+      margin: 16px 0;
+    }
+
+    .urge-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 12px;
+      background: var(--bg-dark);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 0.85rem;
+    }
+
+    .urge-time {
+      color: var(--text-dim);
+      min-width: 45px;
+    }
+
+    .urge-text {
+      color: var(--text-primary);
+      flex: 1;
+    }
+
+    /* Mobile responsive for tracking */
+    @media (max-width: 640px) {
+      .live-scores-widget {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        padding: 12px;
+      }
+
+      .score-widget {
+        padding: 10px 6px;
+      }
+
+      .score-widget-value {
+        font-size: 1.4rem;
+      }
+
+      .score-widget-label {
+        font-size: 0.6rem;
+      }
+
+      .fab-container {
+        bottom: 20px;
+        right: 20px;
+      }
+
+      .fab-btn {
+        width: 56px;
+        height: 56px;
+        font-size: 1.3rem;
+      }
+
+      .achievements-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .time-inputs {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ===== END EXECUTION & PRESENCE TRACKING STYLES ===== */
   </style>
 </head>
 <body>
@@ -1358,14 +2139,35 @@
         <div class="stat-trend">Days</div>
       </div>
     </div>
-    
-    <nav class="nav-tabs">
-      <button class="nav-tab active" onclick="switchView('morning')">Morning</button>
-      <button class="nav-tab" onclick="switchView('evening')">Evening</button>
-      <button class="nav-tab" onclick="switchView('history')">History</button>
+
+    <!-- Live Scores Widget (Execution & Presence Tracking) -->
+    <div class="live-scores-widget" id="liveScoresWidget">
+      <div class="score-widget" onclick="openExecutionDetails()">
+        <div class="score-widget-value" id="executeScoreValue">--</div>
+        <div class="score-widget-label">Execute</div>
+        <div class="score-widget-indicator" id="executeIndicator">🔴</div>
+      </div>
+      <div class="score-widget" onclick="openPresenceLog()">
+        <div class="score-widget-value" id="presentScoreValue">--</div>
+        <div class="score-widget-label">Present</div>
+        <div class="score-widget-indicator" id="presentIndicator">🔴</div>
+      </div>
+      <div class="score-widget" onclick="switchView('track')">
+        <div class="score-widget-value" id="planScoreValue">--</div>
+        <div class="score-widget-label">Plan</div>
+        <div class="score-widget-indicator" id="planIndicator"></div>
+      </div>
+    </div>
+
+    <nav class="nav-tabs" style="grid-template-columns: repeat(4, 1fr);">
+      <button class="nav-tab active" onclick="switchView('morning')"><span class="nav-icon">☀️</span> Morning</button>
+      <button class="nav-tab" onclick="switchView('track')"><span class="nav-icon">🎯</span> Track</button>
+      <button class="nav-tab" onclick="switchView('evening')"><span class="nav-icon">🌙</span> Evening</button>
+      <button class="nav-tab" onclick="switchView('patterns')"><span class="nav-icon">📊</span> Patterns</button>
       <button class="nav-tab" onclick="switchView('ground')"><span class="nav-icon">⚖️</span> Ground</button>
       <button class="nav-tab" onclick="switchView('principles')"><span class="nav-icon">📜</span> Principles</button>
-      <button class="nav-tab" onclick="switchView('settings')">Settings</button>
+      <button class="nav-tab" onclick="switchView('history')"><span class="nav-icon">📚</span> History</button>
+      <button class="nav-tab" onclick="switchView('settings')"><span class="nav-icon">⚙️</span> Settings</button>
     </nav>
     
     <!-- MORNING VIEW -->
@@ -1424,7 +2226,59 @@
           <input type="text" class="input-text" id="proofAction" placeholder="I will..." />
         </div>
       </div>
-      
+
+      <!-- Today's Plan (Time Blocks) -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">📅</span>
+          <h2 class="section-title">Today's Plan</h2>
+        </div>
+
+        <div class="question-block">
+          <label class="question-label">What's your schedule today?</label>
+          <p class="question-hint">Create time blocks with intentions. Be specific about what you'll do and the mindset you need.</p>
+
+          <!-- Add Block Form -->
+          <div class="add-block-form" id="addBlockForm">
+            <div class="time-inputs">
+              <div class="time-input-group">
+                <label>Start Time</label>
+                <input type="time" id="blockStartTime" value="09:00" />
+              </div>
+              <div class="time-input-group">
+                <label>End Time</label>
+                <input type="time" id="blockEndTime" value="10:00" />
+              </div>
+            </div>
+            <div class="question-block" style="margin-bottom: 12px;">
+              <label class="question-label" style="font-size: 0.85rem;">Activity</label>
+              <input type="text" class="input-text" id="blockActivity" placeholder="What will you do?" style="padding: 12px;" />
+            </div>
+            <div class="question-block" style="margin-bottom: 0;">
+              <label class="question-label" style="font-size: 0.85rem;">Intention (mindset)</label>
+              <input type="text" class="input-text" id="blockIntention" placeholder="What mindset do you need?" style="padding: 12px;" />
+            </div>
+            <div class="add-block-btns">
+              <button class="add-block-btn save" onclick="saveTimeBlock()">Save Block</button>
+              <button class="add-block-btn cancel" onclick="cancelAddBlock()">Cancel</button>
+            </div>
+          </div>
+
+          <!-- Time Blocks List -->
+          <div class="time-blocks-container" id="morningTimeBlocks">
+            <div class="empty-state" id="noBlocksMessage">
+              <p style="color: var(--text-dim); font-size: 0.9rem;">No time blocks yet. Add your first block to start planning your day.</p>
+            </div>
+          </div>
+
+          <button class="btn" onclick="showAddBlockForm()" id="addBlockBtn" style="background: var(--bg-elevated); color: var(--text-primary); border: 1px solid var(--border); margin-top: 12px;">
+            + Add Time Block
+          </button>
+
+          <div id="blockCount" style="text-align: center; margin-top: 12px; font-size: 0.85rem; color: var(--text-dim);"></div>
+        </div>
+      </div>
+
       <div class="section">
         <div class="section-header">
           <span class="section-icon">📊</span>
@@ -1458,15 +2312,204 @@
       
       <button class="btn" onclick="saveMorning()">Complete Morning</button>
     </div>
-    
+
+    <!-- TRACK VIEW (Today's Execution) -->
+    <div id="track" class="view">
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">🎯</span>
+          <h2 class="section-title">Today's Execution</h2>
+        </div>
+
+        <!-- Execution Score Bar -->
+        <div class="execution-score-bar">
+          <div class="execution-score-header">
+            <span class="execution-score-label">Execution Score</span>
+            <span class="execution-score-value" id="trackExecutionScore">--/100</span>
+          </div>
+          <div class="execution-progress">
+            <div class="execution-progress-fill" id="trackExecutionFill" style="width: 0%; background: linear-gradient(90deg, #ff4444, #ff9500);"></div>
+          </div>
+        </div>
+
+        <!-- Time Blocks List -->
+        <div id="trackTimeBlocks">
+          <div class="empty-state" id="noTrackBlocksMessage">
+            <div class="empty-state-icon">📅</div>
+            <p>No plan created yet.</p>
+            <p style="font-size: 0.85rem; color: var(--text-dim); margin-top: 8px;">Create your plan in the morning check-in to start tracking.</p>
+            <button class="btn" onclick="switchView('morning')" style="margin-top: 16px; padding: 12px 24px; width: auto;">Go to Morning</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Streaks Section -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">🔥</span>
+          <h2 class="section-title">Your Streaks</h2>
+        </div>
+
+        <div class="streaks-container">
+          <div class="streak-item">
+            <div class="streak-icon">📅</div>
+            <div class="streak-info">
+              <div class="streak-name">Daily Plan</div>
+              <div class="streak-best" id="planStreakBest">Best: 0 days</div>
+            </div>
+            <div class="streak-value"><span id="planStreakCurrent">0</span> <span>days</span></div>
+          </div>
+          <div class="streak-item">
+            <div class="streak-icon">🧘</div>
+            <div class="streak-info">
+              <div class="streak-name">Awareness</div>
+              <div class="streak-best" id="awarenessStreakBest">Best: 0 days</div>
+            </div>
+            <div class="streak-value"><span id="awarenessStreakCurrent">0</span> <span>days</span></div>
+          </div>
+          <div class="streak-item">
+            <div class="streak-icon">✅</div>
+            <div class="streak-info">
+              <div class="streak-name">Complete</div>
+              <div class="streak-best" id="completeStreakBest">Best: 0 days</div>
+            </div>
+            <div class="streak-value"><span id="completeStreakCurrent">0</span> <span>days</span></div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+          <div class="level-badge" id="levelBadge">
+            🌱 BEGINNER
+          </div>
+          <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 8px;" id="levelProgress">Day 0 of 7</p>
+        </div>
+      </div>
+
+      <!-- Achievements -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">🏆</span>
+          <h2 class="section-title">Achievements</h2>
+        </div>
+
+        <div class="achievements-grid" id="achievementsGrid">
+          <div class="achievement-item locked" id="badge-execution-week">
+            <div class="achievement-icon">🔥</div>
+            <div class="achievement-name">Week of Execution</div>
+            <div class="achievement-desc">7 days with 70+ execution score</div>
+          </div>
+          <div class="achievement-item locked" id="badge-presence-week">
+            <div class="achievement-icon">🧘</div>
+            <div class="achievement-name">Week of Presence</div>
+            <div class="achievement-desc">7 days with 50+ presence score</div>
+          </div>
+          <div class="achievement-item locked" id="badge-perfect-day">
+            <div class="achievement-icon">💎</div>
+            <div class="achievement-name">Perfect Day</div>
+            <div class="achievement-desc">Both scores at 90+ in one day</div>
+          </div>
+          <div class="achievement-item locked" id="badge-30-day">
+            <div class="achievement-icon">🏆</div>
+            <div class="achievement-name">30-Day Master</div>
+            <div class="achievement-desc">30-day complete streak</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- EVENING VIEW -->
     <div id="evening" class="view">
+      <!-- Execution Review -->
+      <div class="section" id="eveningExecutionSection">
+        <div class="section-header">
+          <span class="section-icon">🎯</span>
+          <h2 class="section-title">Execution Review</h2>
+        </div>
+
+        <div class="review-summary">
+          <div class="review-summary-header">
+            <span class="review-summary-title">Time Blocks</span>
+            <span class="review-summary-score" id="eveningBlocksCompleted">0/0 completed</span>
+          </div>
+          <div class="review-summary-header">
+            <span class="review-summary-title">Execution Score</span>
+            <span class="review-summary-score" id="eveningExecutionScore">--/100</span>
+          </div>
+          <div class="review-block-list" id="eveningBlocksList">
+            <p style="color: var(--text-dim); font-size: 0.85rem;">No blocks to review yet.</p>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <label class="question-label">What pattern do you see?</label>
+          <p class="question-hint">Where do you consistently fail? What's the common thread?</p>
+          <textarea class="input-textarea" id="executionPattern" placeholder="I notice that..."></textarea>
+        </div>
+
+        <div class="question-block">
+          <label class="question-label">Tomorrow, what changes?</label>
+          <p class="question-hint">One specific adjustment based on today's pattern.</p>
+          <textarea class="input-textarea" id="executionTomorrow" placeholder="Tomorrow I will..."></textarea>
+        </div>
+      </div>
+
+      <!-- Presence Review -->
+      <div class="section" id="eveningPresenceSection">
+        <div class="section-header">
+          <span class="section-icon">🧘</span>
+          <h2 class="section-title">Presence Review</h2>
+        </div>
+
+        <div class="review-summary">
+          <div class="review-summary-header">
+            <span class="review-summary-title">Presence Checks</span>
+            <span class="review-summary-score" id="eveningPresenceChecks">0 times</span>
+          </div>
+          <div class="review-summary-header">
+            <span class="review-summary-title">Presence Score</span>
+            <span class="review-summary-score" id="eveningPresenceScore">--/100</span>
+          </div>
+        </div>
+
+        <div id="eveningUrgesList" style="margin-bottom: 20px;">
+          <label class="question-label" style="font-size: 0.9rem; margin-bottom: 12px; display: block;">Urges Caught Today:</label>
+          <div class="urge-list" id="urgeListContainer">
+            <p style="color: var(--text-dim); font-size: 0.85rem;">No urges logged today. Use the ⚡ button to log presence checks.</p>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 16px; margin-bottom: 20px;">
+          <div style="flex: 1; padding: 16px; background: var(--bg-elevated); border-radius: 12px; text-align: center;">
+            <div style="font-size: 1.5rem; font-weight: 900; color: var(--accent);" id="evening5SecondCount">0</div>
+            <div style="font-size: 0.75rem; color: var(--text-dim);">5-Second Rule Used</div>
+          </div>
+          <div style="flex: 1; padding: 16px; background: var(--bg-elevated); border-radius: 12px; text-align: center;">
+            <div style="font-size: 1.5rem; font-weight: 900; color: var(--success);" id="eveningStayedPresentCount">0</div>
+            <div style="font-size: 0.75rem; color: var(--text-dim);">Stayed Present</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <label class="question-label">Most common urge today:</label>
+          <p class="question-hint" id="commonUrgeHint">Analyze what triggered you most.</p>
+          <div id="commonUrgeDisplay" style="padding: 12px; background: var(--bg-elevated); border-radius: 8px; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 16px;">
+            Not enough data yet.
+          </div>
+        </div>
+
+        <div class="question-block">
+          <label class="question-label">Tomorrow's awareness focus:</label>
+          <p class="question-hint">What will you watch for tomorrow?</p>
+          <textarea class="input-textarea" id="awarenessFocus" placeholder="I will be aware of..."></textarea>
+        </div>
+      </div>
+
       <div class="section">
         <div class="section-header">
           <span class="section-icon">✓</span>
           <h2 class="section-title">Accountability</h2>
         </div>
-        
+
         <div class="question-block">
           <label class="question-label">Did you do what you said you'd do?</label>
           <p class="question-hint" id="actionReminder">Loading your commitment...</p>
@@ -1477,7 +2520,7 @@
           <textarea class="input-textarea" id="accountabilityWhy" placeholder="Why or why not? Be honest."></textarea>
         </div>
       </div>
-      
+
       <div class="section">
         <div class="section-header">
           <span class="section-icon">🏆</span>
@@ -1568,7 +2611,7 @@
           <span class="section-icon">📜</span>
           <h2 class="section-title">Your Journey</h2>
         </div>
-        
+
         <div class="history-list" id="historyList">
           <div class="empty-state">
             <div class="empty-state-icon">📝</div>
@@ -1577,7 +2620,110 @@
         </div>
       </div>
     </div>
-    
+
+    <!-- PATTERNS VIEW (Analytics) -->
+    <div id="patterns" class="view">
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">📊</span>
+          <h2 class="section-title">Your Execution Patterns</h2>
+        </div>
+
+        <div class="pattern-card">
+          <div class="pattern-card-title">This Week</div>
+          <div class="pattern-row">
+            <span class="pattern-label">Morning blocks (6-11 AM)</span>
+            <span class="pattern-value score-green" id="patternMorning">--%</span>
+          </div>
+          <div class="pattern-row">
+            <span class="pattern-label">Afternoon blocks (12-5 PM)</span>
+            <span class="pattern-value score-orange" id="patternAfternoon">--%</span>
+          </div>
+          <div class="pattern-row">
+            <span class="pattern-label">Evening blocks (6-10 PM)</span>
+            <span class="pattern-value score-yellow" id="patternEvening">--%</span>
+          </div>
+        </div>
+
+        <div class="pattern-card">
+          <div class="pattern-card-title">Activity Analysis</div>
+          <div class="pattern-row">
+            <span class="pattern-label">Most skipped activity</span>
+            <span class="pattern-value" id="patternMostSkipped">No data</span>
+          </div>
+          <div class="pattern-row">
+            <span class="pattern-label">Best day this week</span>
+            <span class="pattern-value" id="patternBestDay">No data</span>
+          </div>
+          <div class="pattern-row">
+            <span class="pattern-label">Worst day this week</span>
+            <span class="pattern-value" id="patternWorstDay">No data</span>
+          </div>
+          <div class="pattern-row">
+            <span class="pattern-label">Average execution score</span>
+            <span class="pattern-value" id="patternAvgExecution">--/100</span>
+          </div>
+        </div>
+
+        <div class="pattern-insight" id="executionInsight">
+          <strong>💡 Insight:</strong> Complete more days to see patterns in your execution.
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">🧘</span>
+          <h2 class="section-title">Your Awareness Patterns</h2>
+        </div>
+
+        <div class="pattern-card">
+          <div class="pattern-card-title">This Month</div>
+          <div class="pattern-row">
+            <span class="pattern-label">Total presence checks</span>
+            <span class="pattern-value" id="patternTotalChecks">0</span>
+          </div>
+          <div class="pattern-row">
+            <span class="pattern-label">Average per day</span>
+            <span class="pattern-value" id="patternAvgChecks">0</span>
+          </div>
+          <div class="pattern-row">
+            <span class="pattern-label">5-second rule success rate</span>
+            <span class="pattern-value" id="pattern5SecondRate">--%</span>
+          </div>
+        </div>
+
+        <div class="pattern-card">
+          <div class="pattern-card-title">Most Common Urges</div>
+          <div id="commonUrgesContainer">
+            <p style="color: var(--text-dim); font-size: 0.9rem;">Not enough data yet. Log presence checks to see patterns.</p>
+          </div>
+        </div>
+
+        <div class="pattern-card">
+          <div class="pattern-card-title">Your Trigger Times</div>
+          <div id="triggerTimesContainer">
+            <p style="color: var(--text-dim); font-size: 0.9rem;">Track more days to identify your trigger times.</p>
+          </div>
+        </div>
+
+        <div class="pattern-insight" id="presenceInsight">
+          <strong>📈 Growth:</strong> Start tracking to see your awareness growth over time.
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">📅</span>
+          <h2 class="section-title">Weekly Overview</h2>
+        </div>
+
+        <div id="weeklyOverview" style="display: flex; flex-direction: column; gap: 8px;">
+          <!-- Populated by JavaScript -->
+          <p style="color: var(--text-dim); font-size: 0.9rem;">Complete more days to see your weekly overview.</p>
+        </div>
+      </div>
+    </div>
+
     <!-- SETTINGS VIEW -->
     <div id="settings" class="view">
       <div class="section">
@@ -1843,11 +2989,164 @@
     </div>
   </div>
 
+  <!-- Floating Action Button (FAB) for Presence Check -->
+  <div class="fab-container" id="fabContainer">
+    <button class="fab-btn" onclick="openPresenceModal()" title="Log presence check">
+      ⚡
+    </button>
+  </div>
+
+  <!-- Presence Check Modal -->
+  <div class="modal-overlay" id="presenceModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">What are you thinking right now?</span>
+        <button class="modal-close" onclick="closePresenceModal()">×</button>
+      </div>
+
+      <div class="question-block" style="margin-bottom: 20px;">
+        <label class="question-label">Name the thought/urge/feeling:</label>
+        <textarea class="input-textarea" id="presenceThought" placeholder="I want to... / I feel... / I'm thinking about..." style="min-height: 80px;"></textarea>
+      </div>
+
+      <div class="presence-options" id="presenceOptions">
+        <div class="presence-option" onclick="togglePresenceOption('caughtUrge')">
+          <div class="presence-checkbox" id="check-caughtUrge">✓</div>
+          <div class="presence-option-text">Caught an urge</div>
+        </div>
+        <div class="presence-option" onclick="togglePresenceOption('used5Second')">
+          <div class="presence-checkbox" id="check-used5Second">✓</div>
+          <div class="presence-option-text">Used the 5-second rule (5-4-3-2-1 then act)</div>
+        </div>
+        <div class="presence-option" onclick="togglePresenceOption('stayedPresent')">
+          <div class="presence-checkbox" id="check-stayedPresent">✓</div>
+          <div class="presence-option-text">Stayed present with my plan</div>
+        </div>
+        <div class="presence-option" onclick="togglePresenceOption('brokePlan')">
+          <div class="presence-checkbox" id="check-brokePlan">✓</div>
+          <div class="presence-option-text">Broke my plan / gave in to urge</div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-top: 20px;">
+        <button class="btn" onclick="logPresenceCheck()" style="flex: 1;">Log It</button>
+        <button class="btn" onclick="closePresenceModal()" style="flex: 1; background: var(--bg-elevated); color: var(--text-primary); border: 1px solid var(--border);">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Block Completion Modal -->
+  <div class="modal-overlay" id="blockCompleteModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">Complete Time Block</span>
+        <button class="modal-close" onclick="closeBlockModal()">×</button>
+      </div>
+
+      <div style="padding: 16px; background: var(--bg-elevated); border-radius: 12px; margin-bottom: 20px;">
+        <div style="font-size: 0.9rem; color: var(--accent); font-weight: 700;" id="modalBlockTime">--:-- - --:--</div>
+        <div style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-top: 8px;" id="modalBlockActivity">Activity</div>
+      </div>
+
+      <div class="question-block">
+        <label class="question-label">Did you follow through?</label>
+        <div class="presence-options" id="blockStatusOptions">
+          <div class="presence-option" onclick="selectBlockStatus('completed')">
+            <div class="presence-checkbox" id="status-completed">✓</div>
+            <div class="presence-option-text">Yes, completed as planned</div>
+          </div>
+          <div class="presence-option" onclick="selectBlockStatus('partial')">
+            <div class="presence-checkbox" id="status-partial">✓</div>
+            <div class="presence-option-text">Partially completed</div>
+          </div>
+          <div class="presence-option" onclick="selectBlockStatus('skipped')">
+            <div class="presence-checkbox" id="status-skipped">✓</div>
+            <div class="presence-option-text">No, skipped/avoided</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <label class="question-label">Did you honor your intention?</label>
+        <p class="question-hint" id="modalIntentionText">"Your intention here"</p>
+        <div class="presence-option" onclick="toggleIntentionHonored()" id="intentionOption">
+          <div class="presence-checkbox" id="check-intention">✓</div>
+          <div class="presence-option-text">Yes, I honored this</div>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <label class="question-label">Quick note (optional):</label>
+        <input type="text" class="input-text" id="blockNote" placeholder="Any notes about this block..." />
+      </div>
+
+      <input type="hidden" id="currentBlockId" />
+
+      <div style="display: flex; gap: 12px; margin-top: 20px;">
+        <button class="btn" onclick="completeBlock()" style="flex: 1;">Mark Complete</button>
+        <button class="btn" onclick="closeBlockModal()" style="flex: 1; background: var(--bg-elevated); color: var(--text-primary); border: 1px solid var(--border);">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Execution Details Modal -->
+  <div class="modal-overlay" id="executionDetailsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">Execution Details</span>
+        <button class="modal-close" onclick="closeExecutionDetailsModal()">×</button>
+      </div>
+
+      <div class="execution-score-bar">
+        <div class="execution-score-header">
+          <span class="execution-score-label">Today's Execution Score</span>
+          <span class="execution-score-value" id="modalExecutionScore">--/100</span>
+        </div>
+        <div class="execution-progress">
+          <div class="execution-progress-fill" id="modalExecutionFill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <div id="modalBlocksList" style="margin-top: 20px;">
+        <!-- Populated by JavaScript -->
+      </div>
+
+      <button class="btn" onclick="switchView('track'); closeExecutionDetailsModal();" style="margin-top: 20px;">View Full Track</button>
+    </div>
+  </div>
+
+  <!-- Presence Log Modal -->
+  <div class="modal-overlay" id="presenceLogModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">Today's Presence Log</span>
+        <button class="modal-close" onclick="closePresenceLogModal()">×</button>
+      </div>
+
+      <div style="display: flex; gap: 16px; margin-bottom: 20px;">
+        <div style="flex: 1; padding: 16px; background: var(--bg-elevated); border-radius: 12px; text-align: center;">
+          <div style="font-size: 1.8rem; font-weight: 900; color: var(--accent);" id="modalPresenceScore">--</div>
+          <div style="font-size: 0.75rem; color: var(--text-dim);">Presence Score</div>
+        </div>
+        <div style="flex: 1; padding: 16px; background: var(--bg-elevated); border-radius: 12px; text-align: center;">
+          <div style="font-size: 1.8rem; font-weight: 900; color: var(--text-primary);" id="modalCheckCount">0</div>
+          <div style="font-size: 0.75rem; color: var(--text-dim);">Checks Today</div>
+        </div>
+      </div>
+
+      <div class="presence-log" id="modalPresenceLog">
+        <p style="color: var(--text-dim); font-size: 0.9rem; text-align: center;">No presence checks logged today.</p>
+      </div>
+
+      <button class="btn" onclick="openPresenceModal(); closePresenceLogModal();" style="margin-top: 20px;">+ Log New Check</button>
+    </div>
+  </div>
+
   <div class="toast" id="toast"></div>
-  
+
   <script>
     // App Version - Update this timestamp when making changes
-    const APP_VERSION = 'v2025-12-15 01:00';
+    const APP_VERSION = 'v2025-12-16 01:00';
 
     // Register Service Worker for PWA notifications
     if ('serviceWorker' in navigator) {
@@ -3536,8 +4835,1404 @@
 
     // ===== END GROUND CHECK =====
 
+    // ===== EXECUTION & PRESENCE TRACKING SYSTEM =====
+
+    // Tracking State
+    let executionData = {};
+    let presenceData = {};
+    let streaksData = {
+      planStreak: { current: 0, best: 0 },
+      awarenessStreak: { current: 0, best: 0 },
+      completeStreak: { current: 0, best: 0 }
+    };
+    let badges = {
+      executionWeek: { earned: false, date: null },
+      presenceWeek: { earned: false, date: null },
+      perfectDay: { earned: false, date: null },
+      thirtyDay: { earned: false, date: null }
+    };
+
+    // Time block management
+    let timeBlocks = [];
+    let editingBlockId = null;
+
+    // Presence check state
+    let presenceOptions = {
+      caughtUrge: false,
+      used5Second: false,
+      stayedPresent: false,
+      brokePlan: false
+    };
+    let selectedBlockStatus = null;
+    let intentionHonored = false;
+
+    // Load tracking data
+    function loadTrackingData() {
+      try {
+        const today = getTodayDateString();
+
+        // Load execution data
+        const execData = localStorage.getItem('executionData');
+        if (execData) {
+          const parsed = JSON.parse(execData);
+          executionData = parsed;
+          // Load today's time blocks if they exist
+          if (executionData.date === today && executionData.timeBlocks) {
+            timeBlocks = executionData.timeBlocks;
+          } else if (executionData.date !== today) {
+            // New day, reset execution data but keep time blocks if morning not done
+            timeBlocks = [];
+            executionData = { date: today, timeBlocks: [], executionScore: 0 };
+          }
+        } else {
+          executionData = { date: today, timeBlocks: [], executionScore: 0 };
+        }
+
+        // Load presence data
+        const presData = localStorage.getItem('presenceData');
+        if (presData) {
+          const parsed = JSON.parse(presData);
+          if (parsed.date === today) {
+            presenceData = parsed;
+          } else {
+            presenceData = { date: today, checks: [], presenceScore: 0 };
+          }
+        } else {
+          presenceData = { date: today, checks: [], presenceScore: 0 };
+        }
+
+        // Load streaks data
+        const streaks = localStorage.getItem('streaksData');
+        if (streaks) {
+          streaksData = JSON.parse(streaks);
+        }
+
+        // Load badges
+        const badgesData = localStorage.getItem('badgesData');
+        if (badgesData) {
+          badges = JSON.parse(badgesData);
+        }
+
+        console.log('Tracking data loaded');
+      } catch (e) {
+        console.error('Failed to load tracking data:', e);
+      }
+    }
+
+    // Save tracking data
+    function saveTrackingData() {
+      try {
+        localStorage.setItem('executionData', JSON.stringify(executionData));
+        localStorage.setItem('presenceData', JSON.stringify(presenceData));
+        localStorage.setItem('streaksData', JSON.stringify(streaksData));
+        localStorage.setItem('badgesData', JSON.stringify(badges));
+      } catch (e) {
+        console.error('Failed to save tracking data:', e);
+      }
+    }
+
+    // ===== TIME BLOCK MANAGEMENT =====
+
+    function showAddBlockForm() {
+      document.getElementById('addBlockForm').classList.add('active');
+      document.getElementById('addBlockBtn').style.display = 'none';
+      editingBlockId = null;
+      // Clear form
+      document.getElementById('blockActivity').value = '';
+      document.getElementById('blockIntention').value = '';
+    }
+
+    function cancelAddBlock() {
+      document.getElementById('addBlockForm').classList.remove('active');
+      document.getElementById('addBlockBtn').style.display = 'block';
+      editingBlockId = null;
+    }
+
+    function saveTimeBlock() {
+      const startTime = document.getElementById('blockStartTime').value;
+      const endTime = document.getElementById('blockEndTime').value;
+      const activity = document.getElementById('blockActivity').value.trim();
+      const intention = document.getElementById('blockIntention').value.trim();
+
+      if (!activity) {
+        showToast('Please enter an activity');
+        return;
+      }
+
+      if (!intention) {
+        showToast('Please enter your intention');
+        return;
+      }
+
+      // Validate times
+      if (startTime >= endTime) {
+        showToast('End time must be after start time');
+        return;
+      }
+
+      // Check for overlaps
+      const newStart = timeToMinutes(startTime);
+      const newEnd = timeToMinutes(endTime);
+
+      for (const block of timeBlocks) {
+        if (editingBlockId && block.id === editingBlockId) continue;
+
+        const blockStart = timeToMinutes(block.startTime);
+        const blockEnd = timeToMinutes(block.endTime);
+
+        if ((newStart < blockEnd && newEnd > blockStart)) {
+          showToast('Time blocks cannot overlap');
+          return;
+        }
+      }
+
+      // Check max blocks
+      if (!editingBlockId && timeBlocks.length >= 10) {
+        showToast('Maximum 10 time blocks per day');
+        return;
+      }
+
+      if (editingBlockId) {
+        // Update existing block
+        const index = timeBlocks.findIndex(b => b.id === editingBlockId);
+        if (index !== -1) {
+          timeBlocks[index] = {
+            ...timeBlocks[index],
+            startTime,
+            endTime,
+            activity,
+            intention
+          };
+        }
+      } else {
+        // Add new block
+        const newBlock = {
+          id: 'block_' + Date.now(),
+          startTime,
+          endTime,
+          activity,
+          intention,
+          status: 'upcoming',
+          honoredIntention: false,
+          notes: ''
+        };
+        timeBlocks.push(newBlock);
+      }
+
+      // Sort blocks by start time
+      timeBlocks.sort((a, b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
+
+      // Update execution data
+      executionData.timeBlocks = timeBlocks;
+      executionData.date = getTodayDateString();
+      saveTrackingData();
+
+      // Update UI
+      cancelAddBlock();
+      renderMorningTimeBlocks();
+      updateBlockCount();
+      updateLiveScores();
+      showToast(editingBlockId ? 'Block updated' : 'Block added');
+    }
+
+    function editTimeBlock(blockId) {
+      const block = timeBlocks.find(b => b.id === blockId);
+      if (!block) return;
+
+      editingBlockId = blockId;
+      document.getElementById('blockStartTime').value = block.startTime;
+      document.getElementById('blockEndTime').value = block.endTime;
+      document.getElementById('blockActivity').value = block.activity;
+      document.getElementById('blockIntention').value = block.intention;
+
+      document.getElementById('addBlockForm').classList.add('active');
+      document.getElementById('addBlockBtn').style.display = 'none';
+    }
+
+    function deleteTimeBlock(blockId) {
+      if (!confirm('Delete this time block?')) return;
+
+      timeBlocks = timeBlocks.filter(b => b.id !== blockId);
+      executionData.timeBlocks = timeBlocks;
+      saveTrackingData();
+
+      renderMorningTimeBlocks();
+      updateBlockCount();
+      updateLiveScores();
+      showToast('Block deleted');
+    }
+
+    function renderMorningTimeBlocks() {
+      const container = document.getElementById('morningTimeBlocks');
+      const noBlocksMsg = document.getElementById('noBlocksMessage');
+
+      if (timeBlocks.length === 0) {
+        container.innerHTML = '';
+        container.appendChild(noBlocksMsg);
+        noBlocksMsg.style.display = 'block';
+        return;
+      }
+
+      noBlocksMsg.style.display = 'none';
+      container.innerHTML = timeBlocks.map(block => `
+        <div class="time-block-item ${block.status}">
+          <div class="time-block-header">
+            <span class="time-block-time">${block.startTime} - ${block.endTime}</span>
+          </div>
+          <div class="time-block-activity">${block.activity}</div>
+          <div class="time-block-intention">Intention: ${block.intention}</div>
+          <div class="time-block-actions">
+            <button class="time-block-btn" onclick="editTimeBlock('${block.id}')">Edit</button>
+            <button class="time-block-btn" onclick="deleteTimeBlock('${block.id}')">Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function updateBlockCount() {
+      const countEl = document.getElementById('blockCount');
+      if (countEl) {
+        countEl.textContent = timeBlocks.length > 0 ? `Total Blocks: ${timeBlocks.length}` : '';
+      }
+    }
+
+    // ===== TRACK VIEW FUNCTIONS =====
+
+    function renderTrackTimeBlocks() {
+      const container = document.getElementById('trackTimeBlocks');
+      const noBlocksMsg = document.getElementById('noTrackBlocksMessage');
+
+      if (timeBlocks.length === 0) {
+        container.innerHTML = '';
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'empty-state';
+        msgDiv.id = 'noTrackBlocksMessage';
+        msgDiv.innerHTML = `
+          <div class="empty-state-icon">📅</div>
+          <p>No plan created yet.</p>
+          <p style="font-size: 0.85rem; color: var(--text-dim); margin-top: 8px;">Create your plan in the morning check-in to start tracking.</p>
+          <button class="btn" onclick="switchView('morning')" style="margin-top: 16px; padding: 12px 24px; width: auto;">Go to Morning</button>
+        `;
+        container.appendChild(msgDiv);
+        return;
+      }
+
+      // Update block statuses based on current time
+      updateBlockStatuses();
+
+      container.innerHTML = timeBlocks.map(block => {
+        const statusIcon = getBlockStatusIcon(block.status);
+        const statusText = getBlockStatusText(block.status);
+        const statusClass = block.status;
+
+        let actionBtn = '';
+        if (block.status === 'in-progress' || block.status === 'upcoming') {
+          actionBtn = `<button class="time-block-btn primary" onclick="openBlockCompleteModal('${block.id}')">Complete Now</button>`;
+        } else if (block.status !== 'completed' && block.status !== 'skipped' && block.status !== 'partial') {
+          actionBtn = `<button class="time-block-btn" onclick="openBlockCompleteModal('${block.id}')">Mark Status</button>`;
+        }
+
+        return `
+          <div class="time-block-item ${statusClass}">
+            <div class="time-block-header">
+              <span class="time-block-status-icon">${statusIcon}</span>
+              <span class="time-block-time">${block.startTime} - ${block.endTime}</span>
+            </div>
+            <div class="time-block-activity">${block.activity}</div>
+            <div class="time-block-intention">Intention: ${block.intention}</div>
+            <div class="time-block-status" style="color: ${getStatusColor(block.status)};">
+              Status: ${statusText}
+              ${block.honoredIntention ? ' • ✓ Intention honored' : ''}
+            </div>
+            ${actionBtn ? `<div class="time-block-actions">${actionBtn}</div>` : ''}
+          </div>
+        `;
+      }).join('');
+
+      // Update execution score display
+      updateExecutionScoreDisplay();
+    }
+
+    function updateBlockStatuses() {
+      const now = new Date();
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+      timeBlocks.forEach(block => {
+        if (block.status === 'completed' || block.status === 'skipped' || block.status === 'partial') {
+          return; // Don't change completed statuses
+        }
+
+        const startMinutes = timeToMinutes(block.startTime);
+        const endMinutes = timeToMinutes(block.endTime);
+
+        if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
+          block.status = 'in-progress';
+        } else if (currentMinutes >= endMinutes) {
+          // Block time has passed but not marked - keep as upcoming to let user decide
+          block.status = 'upcoming';
+        } else {
+          block.status = 'upcoming';
+        }
+      });
+
+      executionData.timeBlocks = timeBlocks;
+      saveTrackingData();
+    }
+
+    function getBlockStatusIcon(status) {
+      switch (status) {
+        case 'completed': return '✅';
+        case 'partial': return '🔄';
+        case 'skipped': return '❌';
+        case 'in-progress': return '⏳';
+        case 'upcoming': return '⏰';
+        default: return '⏰';
+      }
+    }
+
+    function getBlockStatusText(status) {
+      switch (status) {
+        case 'completed': return 'COMPLETED';
+        case 'partial': return 'PARTIAL';
+        case 'skipped': return 'SKIPPED';
+        case 'in-progress': return 'IN PROGRESS';
+        case 'upcoming': return 'UPCOMING';
+        default: return 'UPCOMING';
+      }
+    }
+
+    function getStatusColor(status) {
+      switch (status) {
+        case 'completed': return 'var(--success)';
+        case 'partial': return 'var(--warning)';
+        case 'skipped': return '#ff4444';
+        case 'in-progress': return 'var(--warning)';
+        default: return 'var(--text-dim)';
+      }
+    }
+
+    // ===== BLOCK COMPLETION MODAL =====
+
+    function openBlockCompleteModal(blockId) {
+      const block = timeBlocks.find(b => b.id === blockId);
+      if (!block) return;
+
+      document.getElementById('currentBlockId').value = blockId;
+      document.getElementById('modalBlockTime').textContent = `${block.startTime} - ${block.endTime}`;
+      document.getElementById('modalBlockActivity').textContent = block.activity;
+      document.getElementById('modalIntentionText').textContent = `"${block.intention}"`;
+
+      // Reset selections
+      selectedBlockStatus = null;
+      intentionHonored = false;
+      document.querySelectorAll('#blockStatusOptions .presence-option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      document.getElementById('intentionOption').classList.remove('selected');
+      document.getElementById('blockNote').value = '';
+
+      document.getElementById('blockCompleteModal').classList.add('active');
+    }
+
+    function closeBlockModal() {
+      document.getElementById('blockCompleteModal').classList.remove('active');
+    }
+
+    function selectBlockStatus(status) {
+      selectedBlockStatus = status;
+      document.querySelectorAll('#blockStatusOptions .presence-option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      event.currentTarget.classList.add('selected');
+    }
+
+    function toggleIntentionHonored() {
+      intentionHonored = !intentionHonored;
+      document.getElementById('intentionOption').classList.toggle('selected', intentionHonored);
+    }
+
+    function completeBlock() {
+      if (!selectedBlockStatus) {
+        showToast('Please select a status');
+        return;
+      }
+
+      const blockId = document.getElementById('currentBlockId').value;
+      const note = document.getElementById('blockNote').value.trim();
+
+      const index = timeBlocks.findIndex(b => b.id === blockId);
+      if (index === -1) return;
+
+      timeBlocks[index].status = selectedBlockStatus;
+      timeBlocks[index].honoredIntention = intentionHonored;
+      timeBlocks[index].notes = note;
+
+      executionData.timeBlocks = timeBlocks;
+      calculateExecutionScore();
+      saveTrackingData();
+
+      closeBlockModal();
+      renderTrackTimeBlocks();
+      updateLiveScores();
+
+      const points = selectedBlockStatus === 'completed' ? 8 : (selectedBlockStatus === 'partial' ? 4 : -5);
+      const bonus = intentionHonored ? 2 : 0;
+      showToast(`Block ${selectedBlockStatus}! ${points + bonus >= 0 ? '+' : ''}${points + bonus} points`);
+    }
+
+    // ===== EXECUTION SCORE CALCULATION =====
+
+    function calculateExecutionScore() {
+      if (timeBlocks.length === 0) {
+        executionData.executionScore = 0;
+        return 0;
+      }
+
+      let score = 50; // Base score for having a plan
+
+      timeBlocks.forEach(block => {
+        switch (block.status) {
+          case 'completed':
+            score += 8;
+            break;
+          case 'partial':
+            score += 4;
+            break;
+          case 'skipped':
+            score -= 5;
+            break;
+        }
+
+        if (block.honoredIntention && (block.status === 'completed' || block.status === 'partial')) {
+          score += 2;
+        }
+      });
+
+      // Check if evening review is done
+      const todayEvening = getTodayEntries().evening;
+      if (todayEvening) {
+        score += 10;
+      }
+
+      // Cap at 100
+      score = Math.max(0, Math.min(100, score));
+
+      executionData.executionScore = score;
+      return score;
+    }
+
+    function updateExecutionScoreDisplay() {
+      const score = calculateExecutionScore();
+      const scoreEl = document.getElementById('trackExecutionScore');
+      const fillEl = document.getElementById('trackExecutionFill');
+
+      if (scoreEl) {
+        scoreEl.textContent = `${score}/100`;
+        scoreEl.className = 'execution-score-value ' + getScoreColorClass(score);
+      }
+
+      if (fillEl) {
+        fillEl.style.width = `${score}%`;
+        fillEl.style.background = getScoreGradient(score);
+      }
+    }
+
+    function getScoreColorClass(score) {
+      if (score >= 90) return 'score-green';
+      if (score >= 70) return 'score-yellow';
+      if (score >= 50) return 'score-orange';
+      return 'score-red';
+    }
+
+    function getScoreGradient(score) {
+      if (score >= 90) return 'linear-gradient(90deg, #00ff88, #00cc6f)';
+      if (score >= 70) return 'linear-gradient(90deg, #ffcc00, #ff9500)';
+      if (score >= 50) return 'linear-gradient(90deg, #ff9500, #ff6600)';
+      return 'linear-gradient(90deg, #ff4444, #ff0000)';
+    }
+
+    // ===== PRESENCE CHECK FUNCTIONS =====
+
+    function openPresenceModal() {
+      // Reset state
+      presenceOptions = {
+        caughtUrge: false,
+        used5Second: false,
+        stayedPresent: false,
+        brokePlan: false
+      };
+      document.querySelectorAll('#presenceOptions .presence-option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      document.getElementById('presenceThought').value = '';
+
+      document.getElementById('presenceModal').classList.add('active');
+    }
+
+    function closePresenceModal() {
+      document.getElementById('presenceModal').classList.remove('active');
+    }
+
+    function togglePresenceOption(option) {
+      presenceOptions[option] = !presenceOptions[option];
+      const el = document.getElementById('check-' + option).parentElement;
+      el.classList.toggle('selected', presenceOptions[option]);
+    }
+
+    function logPresenceCheck() {
+      const thought = document.getElementById('presenceThought').value.trim();
+
+      if (!thought) {
+        showToast('Please describe your thought/urge');
+        return;
+      }
+
+      const check = {
+        timestamp: new Date().toISOString(),
+        thought: thought,
+        caughtUrge: presenceOptions.caughtUrge,
+        used5SecondRule: presenceOptions.used5Second,
+        stayedPresent: presenceOptions.stayedPresent,
+        brokePlan: presenceOptions.brokePlan
+      };
+
+      // Calculate points
+      let points = 10; // Base points for logging
+      if (presenceOptions.caughtUrge) points += 5;
+      if (presenceOptions.used5Second) points += 10;
+      if (presenceOptions.stayedPresent) points += 5;
+      // brokePlan doesn't add/subtract - it's honest tracking
+
+      // Update presence data
+      if (!presenceData.checks) presenceData.checks = [];
+      presenceData.checks.push(check);
+      presenceData.presenceScore = (presenceData.presenceScore || 0) + points;
+      presenceData.date = getTodayDateString();
+
+      saveTrackingData();
+      closePresenceModal();
+      updateLiveScores();
+
+      showToast(`+${points} Presence! Total: ${presenceData.presenceScore}`);
+    }
+
+    // ===== LIVE SCORES WIDGET =====
+
+    function updateLiveScores() {
+      // Execute Score
+      const execScore = calculateExecutionScore();
+      const execEl = document.getElementById('executeScoreValue');
+      const execIndicator = document.getElementById('executeIndicator');
+      if (execEl) {
+        if (timeBlocks.length === 0) {
+          execEl.textContent = '--';
+          execEl.className = 'score-widget-value';
+        } else {
+          execEl.textContent = execScore;
+          execEl.className = 'score-widget-value ' + getScoreColorClass(execScore);
+        }
+      }
+      if (execIndicator) {
+        execIndicator.textContent = getScoreIndicator(execScore, 'execution');
+      }
+
+      // Presence Score
+      const presScore = presenceData.presenceScore || 0;
+      const presEl = document.getElementById('presentScoreValue');
+      const presIndicator = document.getElementById('presentIndicator');
+      if (presEl) {
+        presEl.textContent = presScore || '--';
+        presEl.className = 'score-widget-value ' + getPresenceColorClass(presScore);
+      }
+      if (presIndicator) {
+        presIndicator.textContent = getScoreIndicator(presScore, 'presence');
+      }
+
+      // Plan Score
+      const completedBlocks = timeBlocks.filter(b => b.status === 'completed' || b.status === 'partial').length;
+      const planEl = document.getElementById('planScoreValue');
+      if (planEl) {
+        if (timeBlocks.length === 0) {
+          planEl.textContent = '--';
+        } else {
+          planEl.textContent = `${completedBlocks}/${timeBlocks.length}`;
+        }
+      }
+    }
+
+    function getPresenceColorClass(score) {
+      if (score >= 81) return 'score-blue';
+      if (score >= 51) return 'score-green';
+      if (score >= 21) return 'score-yellow';
+      return 'score-red';
+    }
+
+    function getScoreIndicator(score, type) {
+      if (type === 'execution') {
+        if (score >= 90) return '🟢';
+        if (score >= 70) return '🟡';
+        if (score >= 50) return '🟠';
+        return '🔴';
+      } else {
+        if (score >= 81) return '🔵';
+        if (score >= 51) return '🟢';
+        if (score >= 21) return '🟡';
+        return '🔴';
+      }
+    }
+
+    // ===== EXECUTION DETAILS MODAL =====
+
+    function openExecutionDetails() {
+      const score = calculateExecutionScore();
+
+      document.getElementById('modalExecutionScore').textContent = `${score}/100`;
+      document.getElementById('modalExecutionScore').className = 'execution-score-value ' + getScoreColorClass(score);
+      document.getElementById('modalExecutionFill').style.width = `${score}%`;
+      document.getElementById('modalExecutionFill').style.background = getScoreGradient(score);
+
+      const listEl = document.getElementById('modalBlocksList');
+      if (timeBlocks.length === 0) {
+        listEl.innerHTML = '<p style="color: var(--text-dim); text-align: center;">No plan created yet.</p>';
+      } else {
+        listEl.innerHTML = timeBlocks.map(block => `
+          <div class="review-block-item">
+            <span class="review-block-status">${getBlockStatusIcon(block.status)}</span>
+            <span class="review-block-time">${block.startTime}</span>
+            <span class="review-block-activity">${block.activity}</span>
+          </div>
+        `).join('');
+      }
+
+      document.getElementById('executionDetailsModal').classList.add('active');
+    }
+
+    function closeExecutionDetailsModal() {
+      document.getElementById('executionDetailsModal').classList.remove('active');
+    }
+
+    // ===== PRESENCE LOG MODAL =====
+
+    function openPresenceLog() {
+      const score = presenceData.presenceScore || 0;
+      const checks = presenceData.checks || [];
+
+      document.getElementById('modalPresenceScore').textContent = score;
+      document.getElementById('modalCheckCount').textContent = checks.length;
+
+      const logEl = document.getElementById('modalPresenceLog');
+      if (checks.length === 0) {
+        logEl.innerHTML = '<p style="color: var(--text-dim); font-size: 0.9rem; text-align: center;">No presence checks logged today.</p>';
+      } else {
+        logEl.innerHTML = checks.map(check => {
+          const time = new Date(check.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          const tags = [];
+          if (check.caughtUrge) tags.push('<span class="presence-tag positive">Caught urge</span>');
+          if (check.used5SecondRule) tags.push('<span class="presence-tag positive">5-second rule</span>');
+          if (check.stayedPresent) tags.push('<span class="presence-tag positive">Stayed present</span>');
+          if (check.brokePlan) tags.push('<span class="presence-tag">Broke plan</span>');
+
+          return `
+            <div class="presence-log-item">
+              <div class="presence-log-time">${time}</div>
+              <div class="presence-log-thought">${check.thought}</div>
+              <div class="presence-log-tags">${tags.join('')}</div>
+            </div>
+          `;
+        }).reverse().join('');
+      }
+
+      document.getElementById('presenceLogModal').classList.add('active');
+    }
+
+    function closePresenceLogModal() {
+      document.getElementById('presenceLogModal').classList.remove('active');
+    }
+
+    // ===== STREAKS & GAMIFICATION =====
+
+    function updateStreaks() {
+      const today = getTodayDateString();
+
+      // Load historical data to calculate streaks
+      const allExecData = getAllExecutionHistory();
+      const allPresData = getAllPresenceHistory();
+
+      // Calculate plan streak (plan created + execution >= 70)
+      let planStreak = 0;
+      for (let i = 0; i < 365; i++) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const dateStr = date.toISOString().split('T')[0];
+
+        const dayExec = allExecData[dateStr];
+        if (dayExec && dayExec.timeBlocks && dayExec.timeBlocks.length > 0 && dayExec.executionScore >= 70) {
+          planStreak++;
+        } else if (i > 0) {
+          break;
+        }
+      }
+
+      // Calculate awareness streak (3+ presence checks)
+      let awarenessStreak = 0;
+      for (let i = 0; i < 365; i++) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const dateStr = date.toISOString().split('T')[0];
+
+        const dayPres = allPresData[dateStr];
+        if (dayPres && dayPres.checks && dayPres.checks.length >= 3) {
+          awarenessStreak++;
+        } else if (i > 0) {
+          break;
+        }
+      }
+
+      // Calculate complete streak (both conditions)
+      let completeStreak = 0;
+      for (let i = 0; i < 365; i++) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const dateStr = date.toISOString().split('T')[0];
+
+        const dayExec = allExecData[dateStr];
+        const dayPres = allPresData[dateStr];
+
+        const hasPlan = dayExec && dayExec.timeBlocks && dayExec.timeBlocks.length > 0 && dayExec.executionScore >= 70;
+        const hasAwareness = dayPres && dayPres.checks && dayPres.checks.length >= 3;
+
+        if (hasPlan && hasAwareness) {
+          completeStreak++;
+        } else if (i > 0) {
+          break;
+        }
+      }
+
+      // Update best records
+      streaksData.planStreak.current = planStreak;
+      streaksData.planStreak.best = Math.max(streaksData.planStreak.best, planStreak);
+
+      streaksData.awarenessStreak.current = awarenessStreak;
+      streaksData.awarenessStreak.best = Math.max(streaksData.awarenessStreak.best, awarenessStreak);
+
+      streaksData.completeStreak.current = completeStreak;
+      streaksData.completeStreak.best = Math.max(streaksData.completeStreak.best, completeStreak);
+
+      saveTrackingData();
+      updateStreaksDisplay();
+      checkBadges();
+    }
+
+    function getAllExecutionHistory() {
+      try {
+        const data = localStorage.getItem('executionHistory');
+        return data ? JSON.parse(data) : {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function getAllPresenceHistory() {
+      try {
+        const data = localStorage.getItem('presenceHistory');
+        return data ? JSON.parse(data) : {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveToHistory() {
+      const today = getTodayDateString();
+
+      // Save execution history
+      const execHistory = getAllExecutionHistory();
+      execHistory[today] = { ...executionData };
+      localStorage.setItem('executionHistory', JSON.stringify(execHistory));
+
+      // Save presence history
+      const presHistory = getAllPresenceHistory();
+      presHistory[today] = { ...presenceData };
+      localStorage.setItem('presenceHistory', JSON.stringify(presHistory));
+    }
+
+    function updateStreaksDisplay() {
+      document.getElementById('planStreakCurrent').textContent = streaksData.planStreak.current;
+      document.getElementById('planStreakBest').textContent = `Best: ${streaksData.planStreak.best} days`;
+
+      document.getElementById('awarenessStreakCurrent').textContent = streaksData.awarenessStreak.current;
+      document.getElementById('awarenessStreakBest').textContent = `Best: ${streaksData.awarenessStreak.best} days`;
+
+      document.getElementById('completeStreakCurrent').textContent = streaksData.completeStreak.current;
+      document.getElementById('completeStreakBest').textContent = `Best: ${streaksData.completeStreak.best} days`;
+
+      // Update level
+      updateLevel();
+    }
+
+    function updateLevel() {
+      const streak = streaksData.completeStreak.current;
+      let level, icon, nextMilestone;
+
+      if (streak >= 91) {
+        level = 'MASTER';
+        icon = '👑';
+        nextMilestone = 'You are a master!';
+      } else if (streak >= 61) {
+        level = 'TRANSFORMED';
+        icon = '🦋';
+        nextMilestone = `${91 - streak} days to Master`;
+      } else if (streak >= 31) {
+        level = 'DISCIPLINED';
+        icon = '💪';
+        nextMilestone = `${61 - streak} days to Transformed`;
+      } else if (streak >= 15) {
+        level = 'CONSISTENT';
+        icon = '🎯';
+        nextMilestone = `${31 - streak} days to Disciplined`;
+      } else if (streak >= 8) {
+        level = 'AWARE';
+        icon = '👁️';
+        nextMilestone = `${15 - streak} days to Consistent`;
+      } else {
+        level = 'BEGINNER';
+        icon = '🌱';
+        nextMilestone = `${8 - streak} days to Aware`;
+      }
+
+      document.getElementById('levelBadge').innerHTML = `${icon} ${level}`;
+      document.getElementById('levelProgress').textContent = nextMilestone;
+    }
+
+    function checkBadges() {
+      // Week of Execution
+      if (!badges.executionWeek.earned && streaksData.planStreak.current >= 7) {
+        badges.executionWeek.earned = true;
+        badges.executionWeek.date = new Date().toISOString();
+        document.getElementById('badge-execution-week').classList.remove('locked');
+        document.getElementById('badge-execution-week').classList.add('earned');
+        showToast('🔥 Badge Earned: Week of Execution!');
+      }
+
+      // Week of Presence
+      if (!badges.presenceWeek.earned && streaksData.awarenessStreak.current >= 7) {
+        badges.presenceWeek.earned = true;
+        badges.presenceWeek.date = new Date().toISOString();
+        document.getElementById('badge-presence-week').classList.remove('locked');
+        document.getElementById('badge-presence-week').classList.add('earned');
+        showToast('🧘 Badge Earned: Week of Presence!');
+      }
+
+      // Perfect Day
+      const execScore = calculateExecutionScore();
+      const presScore = presenceData.presenceScore || 0;
+      if (!badges.perfectDay.earned && execScore >= 90 && presScore >= 90) {
+        badges.perfectDay.earned = true;
+        badges.perfectDay.date = new Date().toISOString();
+        document.getElementById('badge-perfect-day').classList.remove('locked');
+        document.getElementById('badge-perfect-day').classList.add('earned');
+        showToast('💎 Badge Earned: Perfect Day!');
+      }
+
+      // 30-Day Master
+      if (!badges.thirtyDay.earned && streaksData.completeStreak.current >= 30) {
+        badges.thirtyDay.earned = true;
+        badges.thirtyDay.date = new Date().toISOString();
+        document.getElementById('badge-30-day').classList.remove('locked');
+        document.getElementById('badge-30-day').classList.add('earned');
+        showToast('🏆 Badge Earned: 30-Day Master!');
+      }
+
+      saveTrackingData();
+      updateBadgesDisplay();
+    }
+
+    function updateBadgesDisplay() {
+      if (badges.executionWeek.earned) {
+        document.getElementById('badge-execution-week').classList.remove('locked');
+        document.getElementById('badge-execution-week').classList.add('earned');
+      }
+      if (badges.presenceWeek.earned) {
+        document.getElementById('badge-presence-week').classList.remove('locked');
+        document.getElementById('badge-presence-week').classList.add('earned');
+      }
+      if (badges.perfectDay.earned) {
+        document.getElementById('badge-perfect-day').classList.remove('locked');
+        document.getElementById('badge-perfect-day').classList.add('earned');
+      }
+      if (badges.thirtyDay.earned) {
+        document.getElementById('badge-30-day').classList.remove('locked');
+        document.getElementById('badge-30-day').classList.add('earned');
+      }
+    }
+
+    // ===== EVENING REVIEW FUNCTIONS =====
+
+    function updateEveningReview() {
+      // Update execution review
+      const completedBlocks = timeBlocks.filter(b => b.status === 'completed').length;
+      const partialBlocks = timeBlocks.filter(b => b.status === 'partial').length;
+      const skippedBlocks = timeBlocks.filter(b => b.status === 'skipped').length;
+      const doneBlocks = completedBlocks + partialBlocks;
+
+      document.getElementById('eveningBlocksCompleted').textContent = `${doneBlocks}/${timeBlocks.length} completed`;
+
+      const execScore = calculateExecutionScore();
+      document.getElementById('eveningExecutionScore').textContent = `${execScore}/100`;
+      document.getElementById('eveningExecutionScore').className = 'review-summary-score ' + getScoreColorClass(execScore);
+
+      // Render blocks list
+      const blocksListEl = document.getElementById('eveningBlocksList');
+      if (timeBlocks.length === 0) {
+        blocksListEl.innerHTML = '<p style="color: var(--text-dim); font-size: 0.85rem;">No blocks to review yet.</p>';
+      } else {
+        blocksListEl.innerHTML = timeBlocks.map(block => `
+          <div class="review-block-item">
+            <span class="review-block-status">${getBlockStatusIcon(block.status)}</span>
+            <span class="review-block-time">${block.startTime}</span>
+            <span class="review-block-activity">${block.activity} - ${getBlockStatusText(block.status)}</span>
+          </div>
+        `).join('');
+      }
+
+      // Update presence review
+      const checks = presenceData.checks || [];
+      const presScore = presenceData.presenceScore || 0;
+
+      document.getElementById('eveningPresenceChecks').textContent = `${checks.length} times`;
+      document.getElementById('eveningPresenceScore').textContent = `${presScore}/100`;
+      document.getElementById('eveningPresenceScore').className = 'review-summary-score ' + getPresenceColorClass(presScore);
+
+      // Urges list
+      const urgeChecks = checks.filter(c => c.caughtUrge);
+      const urgeListEl = document.getElementById('urgeListContainer');
+      if (urgeChecks.length === 0) {
+        urgeListEl.innerHTML = '<p style="color: var(--text-dim); font-size: 0.85rem;">No urges logged today. Use the ⚡ button to log presence checks.</p>';
+      } else {
+        urgeListEl.innerHTML = urgeChecks.map(check => {
+          const time = new Date(check.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          return `
+            <div class="urge-item">
+              <span class="urge-time">${time}</span>
+              <span class="urge-text">"${check.thought}"</span>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // 5-second rule count
+      const fiveSecondCount = checks.filter(c => c.used5SecondRule).length;
+      document.getElementById('evening5SecondCount').textContent = fiveSecondCount;
+
+      // Stayed present count
+      const stayedPresentCount = checks.filter(c => c.stayedPresent).length;
+      document.getElementById('eveningStayedPresentCount').textContent = stayedPresentCount;
+
+      // Common urge analysis
+      analyzeCommonUrge();
+    }
+
+    function analyzeCommonUrge() {
+      const checks = presenceData.checks || [];
+      if (checks.length < 2) {
+        document.getElementById('commonUrgeDisplay').textContent = 'Not enough data yet.';
+        return;
+      }
+
+      // Simple keyword analysis
+      const keywords = {};
+      const commonWords = ['i', 'to', 'the', 'a', 'want', 'feel', 'like', 'am', 'my', 'and', 'or', 'is', 'it', 'that', 'this', 'be'];
+
+      checks.forEach(check => {
+        const words = check.thought.toLowerCase().split(/\s+/);
+        words.forEach(word => {
+          if (word.length > 3 && !commonWords.includes(word)) {
+            keywords[word] = (keywords[word] || 0) + 1;
+          }
+        });
+      });
+
+      const sorted = Object.entries(keywords).sort((a, b) => b[1] - a[1]);
+      if (sorted.length > 0) {
+        const topWords = sorted.slice(0, 3).map(([word, count]) => word).join(', ');
+        document.getElementById('commonUrgeDisplay').textContent = `Common themes: ${topWords}`;
+      } else {
+        document.getElementById('commonUrgeDisplay').textContent = 'Keep tracking to see patterns.';
+      }
+    }
+
+    // ===== PATTERNS VIEW =====
+
+    function updatePatternsView() {
+      const execHistory = getAllExecutionHistory();
+      const presHistory = getAllPresenceHistory();
+
+      // Time of day analysis
+      let morningTotal = 0, morningCompleted = 0;
+      let afternoonTotal = 0, afternoonCompleted = 0;
+      let eveningTotal = 0, eveningCompleted = 0;
+
+      Object.values(execHistory).forEach(day => {
+        if (day.timeBlocks) {
+          day.timeBlocks.forEach(block => {
+            const hour = parseInt(block.startTime.split(':')[0]);
+            const isCompleted = block.status === 'completed' || block.status === 'partial';
+
+            if (hour >= 6 && hour < 12) {
+              morningTotal++;
+              if (isCompleted) morningCompleted++;
+            } else if (hour >= 12 && hour < 18) {
+              afternoonTotal++;
+              if (isCompleted) afternoonCompleted++;
+            } else if (hour >= 18 && hour < 22) {
+              eveningTotal++;
+              if (isCompleted) eveningCompleted++;
+            }
+          });
+        }
+      });
+
+      document.getElementById('patternMorning').textContent = morningTotal > 0 ?
+        `${Math.round(morningCompleted / morningTotal * 100)}%` : '--%';
+      document.getElementById('patternAfternoon').textContent = afternoonTotal > 0 ?
+        `${Math.round(afternoonCompleted / afternoonTotal * 100)}%` : '--%';
+      document.getElementById('patternEvening').textContent = eveningTotal > 0 ?
+        `${Math.round(eveningCompleted / eveningTotal * 100)}%` : '--%';
+
+      // Activity analysis - find most skipped
+      const activitySkips = {};
+      Object.values(execHistory).forEach(day => {
+        if (day.timeBlocks) {
+          day.timeBlocks.forEach(block => {
+            if (block.status === 'skipped') {
+              activitySkips[block.activity] = (activitySkips[block.activity] || 0) + 1;
+            }
+          });
+        }
+      });
+
+      const mostSkipped = Object.entries(activitySkips).sort((a, b) => b[1] - a[1])[0];
+      document.getElementById('patternMostSkipped').textContent = mostSkipped ?
+        `${mostSkipped[0]} (${mostSkipped[1]}x)` : 'No data';
+
+      // Best/Worst day
+      let bestDay = null, bestScore = 0;
+      let worstDay = null, worstScore = 100;
+
+      Object.entries(execHistory).forEach(([date, day]) => {
+        if (day.executionScore !== undefined) {
+          if (day.executionScore > bestScore) {
+            bestScore = day.executionScore;
+            bestDay = date;
+          }
+          if (day.executionScore < worstScore && day.timeBlocks && day.timeBlocks.length > 0) {
+            worstScore = day.executionScore;
+            worstDay = date;
+          }
+        }
+      });
+
+      document.getElementById('patternBestDay').textContent = bestDay ?
+        `${formatDateShort(bestDay)} (${bestScore}/100)` : 'No data';
+      document.getElementById('patternWorstDay').textContent = worstDay ?
+        `${formatDateShort(worstDay)} (${worstScore}/100)` : 'No data';
+
+      // Average execution
+      const scores = Object.values(execHistory)
+        .filter(d => d.executionScore !== undefined && d.timeBlocks && d.timeBlocks.length > 0)
+        .map(d => d.executionScore);
+      const avgExec = scores.length > 0 ?
+        Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : '--';
+      document.getElementById('patternAvgExecution').textContent = `${avgExec}/100`;
+
+      // Presence patterns
+      let totalChecks = 0, totalDays = 0, fiveSecondSuccess = 0, fiveSecondTotal = 0;
+
+      Object.values(presHistory).forEach(day => {
+        if (day.checks && day.checks.length > 0) {
+          totalDays++;
+          totalChecks += day.checks.length;
+          day.checks.forEach(check => {
+            if (check.used5SecondRule) {
+              fiveSecondTotal++;
+              if (check.stayedPresent && !check.brokePlan) fiveSecondSuccess++;
+            }
+          });
+        }
+      });
+
+      document.getElementById('patternTotalChecks').textContent = totalChecks;
+      document.getElementById('patternAvgChecks').textContent = totalDays > 0 ?
+        (totalChecks / totalDays).toFixed(1) : '0';
+      document.getElementById('pattern5SecondRate').textContent = fiveSecondTotal > 0 ?
+        `${Math.round(fiveSecondSuccess / fiveSecondTotal * 100)}%` : '--%';
+
+      // Common urges across all days
+      const allUrges = {};
+      Object.values(presHistory).forEach(day => {
+        if (day.checks) {
+          day.checks.forEach(check => {
+            if (check.caughtUrge) {
+              const words = check.thought.toLowerCase().split(/\s+/);
+              words.forEach(word => {
+                if (word.length > 4) {
+                  allUrges[word] = (allUrges[word] || 0) + 1;
+                }
+              });
+            }
+          });
+        }
+      });
+
+      const sortedUrges = Object.entries(allUrges).sort((a, b) => b[1] - a[1]).slice(0, 5);
+      const urgesContainer = document.getElementById('commonUrgesContainer');
+      if (sortedUrges.length > 0) {
+        urgesContainer.innerHTML = sortedUrges.map(([word, count], i) => `
+          <div class="pattern-row">
+            <span class="pattern-label">${i + 1}. ${word}</span>
+            <span class="pattern-value">${count} times</span>
+          </div>
+        `).join('');
+      } else {
+        urgesContainer.innerHTML = '<p style="color: var(--text-dim); font-size: 0.9rem;">Not enough data yet.</p>';
+      }
+
+      // Generate insight
+      generateInsight(morningCompleted, morningTotal, afternoonCompleted, afternoonTotal, eveningCompleted, eveningTotal);
+    }
+
+    function formatDateShort(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    }
+
+    function generateInsight(mc, mt, ac, at, ec, et) {
+      const insightEl = document.getElementById('executionInsight');
+
+      if (mt + at + et < 5) {
+        insightEl.innerHTML = '<strong>💡 Insight:</strong> Complete more days to see patterns in your execution.';
+        return;
+      }
+
+      const morningRate = mt > 0 ? mc / mt : 0;
+      const afternoonRate = at > 0 ? ac / at : 0;
+      const eveningRate = et > 0 ? ec / et : 0;
+
+      let insight = '<strong>💡 Insight:</strong> ';
+
+      if (morningRate > afternoonRate && morningRate > eveningRate) {
+        insight += "You're strongest in the mornings. Schedule your hardest work before noon.";
+      } else if (afternoonRate < morningRate && afternoonRate < eveningRate) {
+        insight += "You struggle in the afternoons. Consider a power nap or schedule lighter tasks after lunch.";
+      } else if (eveningRate > morningRate && eveningRate > afternoonRate) {
+        insight += "You're a night owl! Protect your evening focus time.";
+      } else {
+        insight += "Your performance is consistent throughout the day. Look for other patterns.";
+      }
+
+      insightEl.innerHTML = insight;
+    }
+
+    // ===== SWITCH VIEW UPDATES =====
+
+    // Override the original switchView to include tracking views
+    const originalSwitchView = switchView;
+    switchView = function(viewName) {
+      const tabs = document.querySelectorAll('.nav-tab');
+      const views = document.querySelectorAll('.view');
+
+      tabs.forEach(tab => tab.classList.remove('active'));
+      views.forEach(view => view.classList.remove('active'));
+
+      // Find and activate the correct tab
+      tabs.forEach(tab => {
+        const tabText = tab.textContent.toLowerCase();
+        if (tabText.includes(viewName.toLowerCase())) {
+          tab.classList.add('active');
+        }
+      });
+
+      const viewEl = document.getElementById(viewName);
+      if (viewEl) {
+        viewEl.classList.add('active');
+      }
+
+      // Special handling for each view
+      if (viewName === 'evening') {
+        checkEveningAvailability();
+        initPrinciplesCheckboxes();
+        updateEveningReview();
+      } else if (viewName === 'history') {
+        displayHistory();
+      } else if (viewName === 'settings') {
+        updateSettingsUI();
+      } else if (viewName === 'ground') {
+        initGroundView();
+      } else if (viewName === 'principles') {
+        updatePrinciplesView();
+      } else if (viewName === 'track') {
+        renderTrackTimeBlocks();
+        updateStreaks();
+        updateBadgesDisplay();
+      } else if (viewName === 'patterns') {
+        updatePatternsView();
+      } else if (viewName === 'morning') {
+        renderMorningTimeBlocks();
+        updateBlockCount();
+      }
+    };
+
+    // ===== SAVE MORNING OVERRIDE =====
+
+    const originalSaveMorning = saveMorning;
+    saveMorning = function() {
+      const data = {
+        date: new Date().toISOString(),
+        type: 'morning',
+        dayIndex: currentDayIndex,
+        truthResponse: document.getElementById('truthResponse').value,
+        foundationalResponse: document.getElementById('foundationalResponse').value,
+        identityDeclaration: document.getElementById('identityDeclaration').value,
+        proofAction: document.getElementById('proofAction').value,
+        energy: parseInt(document.getElementById('energySlider').value),
+        optimism: parseInt(document.getElementById('optimismSlider').value),
+        confidence: parseInt(document.getElementById('confidenceSlider').value)
+      };
+
+      // Validate
+      if (!data.truthResponse || !data.foundationalResponse || !data.identityDeclaration || !data.proofAction) {
+        showToast('Please complete all fields');
+        return;
+      }
+
+      // Remove old morning entry for today
+      const today = new Date().toDateString();
+      entries = entries.filter(e => !(e.type === 'morning' && new Date(e.date).toDateString() === today));
+
+      entries.push(data);
+      saveToStorage();
+
+      // Save execution data with time blocks
+      executionData.date = getTodayDateString();
+      executionData.timeBlocks = timeBlocks;
+      executionData.executionScore = timeBlocks.length > 0 ? 50 : 0; // Base score
+      saveTrackingData();
+      saveToHistory();
+
+      showToast('Morning complete. Make it count.');
+      updateStats();
+      updateLiveScores();
+      scheduleNextNotifications();
+
+      // Clear form
+      document.getElementById('truthResponse').value = '';
+      document.getElementById('foundationalResponse').value = '';
+      document.getElementById('identityDeclaration').value = '';
+      document.getElementById('proofAction').value = '';
+    };
+
+    // ===== SAVE EVENING OVERRIDE =====
+
+    const originalSaveEvening = saveEvening;
+    saveEvening = function() {
+      const todayMorning = getTodayEntries().morning;
+
+      if (!todayMorning) {
+        showToast('Complete your morning check-in first');
+        return;
+      }
+
+      if (eveningDidIt === null) {
+        showToast('Please select Yes or No for accountability');
+        return;
+      }
+
+      const data = {
+        date: new Date().toISOString(),
+        type: 'evening',
+        dayIndex: currentDayIndex,
+        didIt: eveningDidIt,
+        accountabilityWhy: document.getElementById('accountabilityWhy').value,
+        todayWin: document.getElementById('todayWin').value,
+        happiness: parseInt(document.getElementById('happinessSlider').value),
+        challenges: parseInt(document.getElementById('challengesSlider').value),
+        connection: parseInt(document.getElementById('connectionSlider').value),
+        tomorrowFocus: document.getElementById('tomorrowFocus').value,
+        // New tracking fields
+        executionPattern: document.getElementById('executionPattern')?.value || '',
+        executionTomorrow: document.getElementById('executionTomorrow')?.value || '',
+        awarenessFocus: document.getElementById('awarenessFocus')?.value || ''
+      };
+
+      // Validate
+      if (!data.accountabilityWhy || !data.todayWin || !data.tomorrowFocus) {
+        showToast('Please complete all fields');
+        return;
+      }
+
+      // Remove old evening entry for today
+      const today = new Date().toDateString();
+      entries = entries.filter(e => !(e.type === 'evening' && new Date(e.date).toDateString() === today));
+
+      entries.push(data);
+      saveToStorage();
+
+      // Save principles tracking
+      savePrinciplesTracking();
+
+      // Update execution score (add evening bonus)
+      calculateExecutionScore();
+      saveTrackingData();
+      saveToHistory();
+
+      // Update streaks
+      updateStreaks();
+
+      showToast('Evening complete. Rest well.');
+      updateStats();
+      updateLiveScores();
+      scheduleNextNotifications();
+
+      // Clear form
+      eveningDidIt = null;
+      document.getElementById('didItYes').classList.remove('selected');
+      document.getElementById('didItNo').classList.remove('selected');
+      document.getElementById('accountabilityWhy').value = '';
+      document.getElementById('todayWin').value = '';
+      document.getElementById('tomorrowFocus').value = '';
+      document.getElementById('principlesReflection').value = '';
+      document.getElementById('executionPattern').value = '';
+      document.getElementById('executionTomorrow').value = '';
+      document.getElementById('awarenessFocus').value = '';
+      selectedPrinciples = [];
+      initPrinciplesCheckboxes();
+    };
+
+    // ===== INITIALIZE TRACKING =====
+
+    function initTracking() {
+      loadTrackingData();
+      renderMorningTimeBlocks();
+      updateBlockCount();
+      updateLiveScores();
+      updateStreaks();
+      updateBadgesDisplay();
+
+      // Check for auto-status updates every minute
+      setInterval(() => {
+        if (document.getElementById('track').classList.contains('active')) {
+          renderTrackTimeBlocks();
+        }
+        updateLiveScores();
+      }, 60000);
+
+      console.log('Tracking system initialized');
+    }
+
+    // ===== END EXECUTION & PRESENCE TRACKING SYSTEM =====
+
     loadFromStorage();
     init();
+    initTracking();
   </script>
 </body>
 </html>
