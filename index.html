@@ -1328,10 +1328,18 @@
       }
     }
   </style>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
   <div class="app-container">
     <header class="header">
+      <div id="syncStatus" style="position: absolute; top: 20px; right: 20px; font-size: 0.85rem; color: var(--text-secondary); display: none;">
+        <span id="syncIcon">☁️</span> <span id="syncText">Synced</span>
+      </div>
       <h1>IDENTITY FORGE</h1>
       <p class="tagline">Your life matters. Your time is limited. Your future self is watching.</p>
     </header>
@@ -1368,8 +1376,37 @@
       <button class="nav-tab" onclick="switchView('settings')">Settings</button>
     </nav>
     
+    <!-- LOGIN VIEW -->
+    <div id="login" class="view active">
+      <div class="section" style="max-width: 500px; margin: 100px auto; text-align: center;">
+        <div style="margin-bottom: 40px;">
+          <h1 style="font-size: 3rem; margin-bottom: 16px; background: linear-gradient(135deg, var(--accent) 0%, #ffb347 50%, #ffd180 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">IDENTITY FORGE</h1>
+          <p style="font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 40px;">
+            Your life. Your rules. Your transformation.
+          </p>
+        </div>
+
+        <button class="btn" onclick="signInWithGoogle()" style="display: flex; align-items: center; justify-content: center; gap: 12px; margin: 0 auto;">
+          <svg width="24" height="24" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+            <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          </svg>
+          Sign in with Google
+        </button>
+
+        <div style="margin-top: 40px; padding: 24px; background: var(--bg-elevated); border-radius: 12px; border: 1px solid var(--border);">
+          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+            <strong style="color: var(--text-primary);">Your data syncs across all devices</strong><br>
+            Sign in once, access anywhere. Your progress is always backed up and secure.
+          </p>
+        </div>
+      </div>
+    </div>
+
     <!-- MORNING VIEW -->
-    <div id="morning" class="view active">
+    <div id="morning" class="view">
       <div class="section">
         <div class="section-header">
           <span class="section-icon">🔥</span>
@@ -1580,6 +1617,36 @@
     
     <!-- SETTINGS VIEW -->
     <div id="settings" class="view">
+      <!-- Account Section -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">👤</span>
+          <h2 class="section-title">Account</h2>
+        </div>
+
+        <div id="userInfo" class="question-block">
+          <label class="question-label">Signed in as:</label>
+          <div style="padding: 16px; background: var(--bg-elevated); border-radius: 8px; border: 1px solid var(--border); margin-bottom: 16px;">
+            <div id="userEmail" style="font-weight: 600; margin-bottom: 8px;">Loading...</div>
+            <div id="lastSynced" style="font-size: 0.85rem; color: var(--text-secondary);">Synced with cloud</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <label class="question-label">Migrate Local Data</label>
+          <p class="question-hint">Upload your existing localStorage data to cloud</p>
+          <button class="btn" onclick="migrateLocalDataToFirebase()" style="background: var(--bg-elevated); color: var(--text-primary); border: 1px solid var(--border);">
+            Import Local Data to Cloud
+          </button>
+        </div>
+
+        <div class="question-block">
+          <button class="btn" onclick="signOut()" style="background: transparent; color: var(--warning); border: 1px solid var(--warning);">
+            Sign Out
+          </button>
+        </div>
+      </div>
+
       <div class="section">
         <div class="section-header">
           <span class="section-icon">⚙️</span>
@@ -1846,6 +1913,47 @@
   <div class="toast" id="toast"></div>
   
   <script>
+    // ===== FIREBASE CONFIGURATION =====
+    const firebaseConfig = {
+      apiKey: "AIzaSyDOpPd6VIHLB8moCVGPoeoMPM-8dw6hxa4",
+      authDomain: "identity-forge-a7651.firebaseapp.com",
+      projectId: "identity-forge-a7651",
+      storageBucket: "identity-forge-a7651.firebasestorage.app",
+      messagingSenderId: "112698545602",
+      appId: "1:112698545602:web:251b97c25de3ccf5eef25b"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Enable offline persistence
+    db.enablePersistence()
+      .catch((err) => {
+        if (err.code == 'failed-precondition') {
+          console.log('Multiple tabs open, persistence enabled in first tab only');
+        } else if (err.code == 'unimplemented') {
+          console.log('Browser does not support persistence');
+        }
+      });
+
+    let currentUser = null;
+
+    // Auth state listener
+    auth.onAuthStateChanged((user) => {
+      currentUser = user;
+      if (user) {
+        console.log('User signed in:', user.email);
+        onUserSignedIn(user);
+      } else {
+        console.log('User signed out');
+        onUserSignedOut();
+      }
+    });
+
+    // ===== END FIREBASE CONFIGURATION =====
+
     // App Version - Update this timestamp when making changes
     const APP_VERSION = 'v2025-12-15 01:00';
 
@@ -1953,19 +2061,253 @@
     let morningReminderTime = '07:00';
     let eveningReminderTime = '21:00';
     let notificationCheckInterval = null;
-    
+
+    // ===== FIREBASE AUTHENTICATION FUNCTIONS =====
+
+    // Sign in with Google
+    async function signInWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      try {
+        await auth.signInWithPopup(provider);
+        showToast('Signed in successfully!');
+      } catch (error) {
+        console.error('Sign in error:', error);
+        showToast('Sign in failed: ' + error.message);
+      }
+    }
+
+    // Sign out
+    async function signOut() {
+      try {
+        await auth.signOut();
+        showToast('Signed out');
+      } catch (error) {
+        console.error('Sign out error:', error);
+      }
+    }
+
+    // When user signs in
+    function onUserSignedIn(user) {
+      // Hide login view, show app
+      document.getElementById('login').classList.remove('active');
+      document.getElementById('morning').classList.add('active');
+
+      // Show sync status, header, nav tabs, and stats bar
+      document.getElementById('syncStatus').style.display = 'block';
+      document.querySelector('.header').style.display = 'block';
+      document.querySelector('.stats-bar').style.display = 'grid';
+      document.querySelector('.nav-tabs').style.display = 'grid';
+
+      // Load user data from Firestore
+      loadUserDataFromFirebase(user.uid);
+
+      // Show user email in settings
+      updateUserInfoInSettings(user);
+    }
+
+    // When user signs out
+    function onUserSignedOut() {
+      // Show login view, hide app
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById('login').classList.add('active');
+
+      // Hide sync status, header, nav tabs, and stats bar
+      document.getElementById('syncStatus').style.display = 'none';
+      document.querySelector('.header').style.display = 'none';
+      document.querySelector('.stats-bar').style.display = 'none';
+      document.querySelector('.nav-tabs').style.display = 'none';
+
+      // Clear entries array
+      entries = [];
+    }
+
+    // ===== FIRESTORE DATA FUNCTIONS =====
+
+    // Load data from Firestore
+    async function loadUserDataFromFirebase(userId) {
+      updateSyncStatus('syncing');
+
+      try {
+        // Load entries
+        const entriesDoc = await db.collection('users').doc(userId).collection('data').doc('entries').get();
+        if (entriesDoc.exists) {
+          entries = entriesDoc.data().items || [];
+        }
+
+        // Load settings
+        const settingsDoc = await db.collection('users').doc(userId).collection('data').doc('settings').get();
+        if (settingsDoc.exists) {
+          const settings = settingsDoc.data();
+          notificationsEnabled = settings.notificationsEnabled || false;
+          morningReminderTime = settings.morningReminderTime || '07:00';
+          eveningReminderTime = settings.eveningReminderTime || '21:00';
+        }
+
+        // Load principles data
+        const principlesDoc = await db.collection('users').doc(userId).collection('data').doc('principles').get();
+        if (principlesDoc.exists) {
+          principlesData = principlesDoc.data() || { tracking: [] };
+        }
+
+        // Update UI
+        updateStats();
+        loadNotificationSettings();
+        initPrinciplesUI();
+        checkEveningAvailability();
+        startNotificationChecker();
+        scheduleNextNotifications();
+        updateSyncStatus('synced');
+
+        console.log('User data loaded from Firebase');
+      } catch (error) {
+        console.error('Firebase load error:', error);
+        updateSyncStatus('error');
+        showToast('Could not load cloud data');
+
+        // Fallback to localStorage
+        loadFromStorage();
+        loadPrinciplesData();
+        updateStats();
+        loadNotificationSettings();
+        initPrinciplesUI();
+        checkEveningAvailability();
+        startNotificationChecker();
+        scheduleNextNotifications();
+      }
+    }
+
+    // Save entries to Firebase
+    async function saveEntriesToFirebase() {
+      if (!currentUser) return;
+
+      updateSyncStatus('syncing');
+
+      try {
+        await db.collection('users').doc(currentUser.uid).collection('data').doc('entries').set({
+          items: entries,
+          lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        updateSyncStatus('synced');
+      } catch (error) {
+        console.error('Error saving entries:', error);
+        updateSyncStatus('error');
+      }
+    }
+
+    // Save settings to Firebase
+    async function saveSettingsToFirebase() {
+      if (!currentUser) return;
+
+      try {
+        await db.collection('users').doc(currentUser.uid).collection('data').doc('settings').set({
+          notificationsEnabled,
+          morningReminderTime,
+          eveningReminderTime,
+          lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      } catch (error) {
+        console.error('Error saving settings:', error);
+      }
+    }
+
+    // Save principles data to Firebase
+    async function savePrinciplesDataToFirebase() {
+      if (!currentUser) return;
+
+      try {
+        await db.collection('users').doc(currentUser.uid).collection('data').doc('principles').set({
+          ...principlesData,
+          lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      } catch (error) {
+        console.error('Error saving principles data:', error);
+      }
+    }
+
+    // Update sync status indicator
+    function updateSyncStatus(status) {
+      const icon = document.getElementById('syncIcon');
+      const text = document.getElementById('syncText');
+
+      if (!icon || !text) return;
+
+      switch(status) {
+        case 'syncing':
+          icon.textContent = '🔄';
+          text.textContent = 'Syncing...';
+          break;
+        case 'synced':
+          icon.textContent = '☁️';
+          text.textContent = 'Synced';
+          break;
+        case 'error':
+          icon.textContent = '⚠️';
+          text.textContent = 'Offline';
+          break;
+      }
+    }
+
+    // Migration function - import localStorage data to Firebase
+    async function migrateLocalDataToFirebase() {
+      if (!currentUser) {
+        showToast('Sign in first');
+        return;
+      }
+
+      if (!confirm('Upload your local data to cloud? This will merge with any existing cloud data.')) {
+        return;
+      }
+
+      updateSyncStatus('syncing');
+      showToast('Migrating data...');
+
+      try {
+        // Load from localStorage
+        loadFromStorage();
+
+        // Upload to Firebase
+        await saveEntriesToFirebase();
+        await saveSettingsToFirebase();
+        await savePrinciplesDataToFirebase();
+
+        updateSyncStatus('synced');
+        showToast('Migration complete!');
+      } catch (error) {
+        console.error('Migration error:', error);
+        updateSyncStatus('error');
+        showToast('Migration failed');
+      }
+    }
+
+    // Update user info display in settings
+    function updateUserInfoInSettings(user) {
+      const emailEl = document.getElementById('userEmail');
+      if (emailEl && user) {
+        emailEl.textContent = user.email;
+      }
+    }
+
+    // ===== END FIREBASE FUNCTIONS =====
+
     // Initialize
     function init() {
       console.log(`🔥 Identity Forge ${APP_VERSION} - App loaded successfully`);
+
+      // Hide app elements initially (will be shown after sign-in)
+      document.querySelector('.header').style.display = 'none';
+      document.querySelector('.stats-bar').style.display = 'none';
+      document.querySelector('.nav-tabs').style.display = 'none';
+
+      // Setup UI elements that don't depend on user data
       setupSliders();
       loadDailyContent();
-      loadPrinciplesData();
-      initPrinciplesUI();
-      updateStats();
-      checkEveningAvailability();
-      loadNotificationSettings();
-      startNotificationChecker();
-      scheduleNextNotifications();
+
+      // Update app version display in settings
+      const appVersionEl = document.getElementById('appVersion');
+      if (appVersionEl) appVersionEl.textContent = APP_VERSION;
+
+      // Note: Data-dependent functions (updateStats, checkEveningAvailability, etc.)
+      // are called from onUserSignedIn() after Firebase loads user data
     }
     
     // Setup slider value displays
@@ -2087,17 +2429,18 @@
       
       entries.push(data);
       saveToStorage();
+      saveEntriesToFirebase(); // Sync to Firebase
       showToast('Morning complete. Make it count.');
       updateStats();
       scheduleNextNotifications(); // Reschedule evening notification
-      
+
       // Clear form
       document.getElementById('truthResponse').value = '';
       document.getElementById('foundationalResponse').value = '';
       document.getElementById('identityDeclaration').value = '';
       document.getElementById('proofAction').value = '';
     }
-    
+
     // Save evening
     function saveEvening() {
       const todayMorning = getTodayEntries().morning;
@@ -2137,6 +2480,7 @@
 
       entries.push(data);
       saveToStorage();
+      saveEntriesToFirebase(); // Sync to Firebase
 
       // Save principles tracking
       savePrinciplesTracking();
@@ -2526,6 +2870,7 @@
       morningReminderTime = document.getElementById('morningTime').value;
       eveningReminderTime = document.getElementById('eveningTime').value;
       saveToStorage();
+      saveSettingsToFirebase(); // Sync to Firebase
       scheduleNextNotifications(); // Reschedule with new times
       showToast('Reminder times saved. Notifications rescheduled for ' + morningReminderTime + ' and ' + eveningReminderTime);
     }
@@ -2791,6 +3136,7 @@
     function savePrinciplesData() {
       try {
         localStorage.setItem('principlesData', JSON.stringify(principlesData));
+        savePrinciplesDataToFirebase(); // Sync to Firebase
       } catch (e) {
         console.error('Failed to save principles data:', e);
       }
@@ -3536,7 +3882,8 @@
 
     // ===== END GROUND CHECK =====
 
-    loadFromStorage();
+    // Initialize app - data loading is handled by Firebase auth state listener
+    // loadFromStorage() is called automatically when user is not signed in or as fallback
     init();
   </script>
 </body>
